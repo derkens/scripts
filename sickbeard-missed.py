@@ -20,6 +20,7 @@ mis= str(t['data']['missed'])
 if mis == "[]" :
     exit()
 
+
 else:
     for index, string in enumerate(down):
         show = str(mis2['missed'][index]['show_name'])
