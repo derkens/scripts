@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #<derkens@gmail.com>
 #Notifies you if there are any 'missed' episodes

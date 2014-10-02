@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #<derkens@gmail.com>
 #show cancelled? this script notifies you and put the show in 'pause' (after the last ep oc.)
