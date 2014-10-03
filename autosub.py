@@ -34,7 +34,8 @@ pathvid = os.path.dirname(vidandpath)
 #muxing vid and sub in new file (vid.nl.mkv)
 subprocess.call(['mkvmerge', '-o', outputfileandpath, '--language', '-1:eng', vidandpath , '--language', '0:nld', subandpath])
 
-''' the conversion to prevent 'strange' chars is not neccesary anymore on my system.
+'''
+the conversion to prevent 'strange' chars is not neccesary anymore on my system.
 # convert sub to utf-8
 #subprocess.call(['iconv', '-c', '-f', 'ISO-8859-1', '-t', 'UTF-8', subandpath, '-o', newsubandpath])
 #os.remove(subandpath)
