@@ -10,10 +10,18 @@ import requests, json, urllib, httplib
 
 sickbeardip = "only sickbeard ip here"
 sickbeardapikey =  "sickbeard api key here"
+use_pushover = 0
 pushovertoken = "your app token here"
 pushoveruser = "your user key here"
 msgsuffix = " is cancelled"
+use_nma = 0
+nma_api = ""
+nma_priority = 0
+app = "SickBeard"
 
+if use_nma == 1:
+    import pynma
+	
 payload = {'cmd': 'shows', 'sort': 'name', 'paused': '0'}
 t = requests.get("http://"+sickbeardip+"/sickbeard//api/"+sickbeardapikey+"/?", params=payload)
 t = t.json()
@@ -29,6 +37,7 @@ for i in end :
         tvdbid = str(r['data']['results'][0]['tvdbid'])
         payload = {'cmd': 'show.pause', 'tvdbid': tvdbid, 'pause': 1}
         s = requests.get("http://"+sickbeardip+"/sickbeard//api/"+sickbeardapikey+"/?", params=payload)
+		if use_pushover == 1
         conn = httplib.HTTPSConnection("api.pushover.net:443")
         conn.request("POST", "/1/messages.json",
             urllib.urlencode({
@@ -38,6 +47,9 @@ for i in end :
                 "title" : 'Sick Beard',
             }), { "Content-type": "application/x-www-form-urlencoded" })
         conn.getresponse()
+		if use_nma == 1
+			p = pynma.PyNMA(nma_api)
+            p.push(app, show+msgsuffix, show+msgsuffix, 0, 1, nma_priority )
     else:
         exit()
 
