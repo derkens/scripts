@@ -49,5 +49,5 @@ else:
         			conn.getresponse()
 		if use_nma == 1
 			p = pynma.PyNMA(nma_api)
-            			p.push(app, pushtitle, pushmsg, 0, 1, nma_priority )
+            		p.push(app, pushtitle, pushmsg, 0, 1, nma_priority )
 
