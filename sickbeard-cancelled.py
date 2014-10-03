@@ -37,6 +37,7 @@ for i in end :
         tvdbid = str(r['data']['results'][0]['tvdbid'])
         payload = {'cmd': 'show.pause', 'tvdbid': tvdbid, 'pause': 1}
         s = requests.get("http://"+sickbeardip+"/sickbeard//api/"+sickbeardapikey+"/?", params=payload)
+		if use_pushover == 1
         conn = httplib.HTTPSConnection("api.pushover.net:443")
         conn.request("POST", "/1/messages.json",
             urllib.urlencode({
