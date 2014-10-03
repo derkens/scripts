@@ -15,18 +15,17 @@ pushoveruser = "your user key here"
 payload = {'cmd': 'future', 'type': 'missed' }
 t = requests.get("http://"+sickbeardip+"/sickbeard//api/"+sickbeardapikey+"/?", params=payload)
 t = t.json()
-mis2 = list(t['data'])
-mis= str(t['data']['missed'])
+mis= list(t['data']['missed'])
 if mis == "[]" :
     exit()
 
 
 else:
     for index, string in enumerate(down):
-        show = str(mis2['missed'][index]['show_name'])
-        seas = str(mis2['missed'][index]['season'])
-        epis = str(mis2['missed'][index]['episode'])
-        epname = str(mis2['missed'][index]['ep_name'])
+        show = str(mis[index]['show_name'])
+        seas = str(mis[index]['season'])
+        epis = str(mis[index]['episode'])
+        epname = str(mis[index]['ep_name'])
         pushtitle = 'Sick Beard - gemist'
         pushmsg = '!'+show+' '+seas+'x'+epis+' '+epname
         print pushmsg
