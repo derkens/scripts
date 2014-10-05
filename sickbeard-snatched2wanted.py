@@ -24,7 +24,7 @@ except ImportError:
     import configparser
     import urllib.request as urllib2
     from urllib.parse import urlencode
-	
+
 # Default values
 host = "localhost"
 port = "8081"
@@ -64,16 +64,16 @@ else:
 		if not api_key:
 			print ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
 			sys.exit(1)
-		
+
 		try:
 			ssl = int(config.get("SickBeard", "ssl"))
-			use_pushover = config.get("Pushover", "use_pushover")
+			use_pushover = int(config.get("Pushover", "use_pushover"))
 			app_token = config.get("Pushover", "app_token")
 			user_key = config.get("Pushover", "user_key")
-			use_nma = config.get("NMA", "use_nma")
+			use_nma = int(config.get("NMA", "use_nma"))
 			nma_api = config.get("NMA", "nma_api")
 			nma_priority = config.get("NMA", "nma_priority")
-			
+
 		except (configparser.NoOptionError, ValueError):
 			pass
 
@@ -93,7 +93,7 @@ else:
 		print ("Could not read configuration file: " + str(e))
 		# There was a config_file, don't use default values but exit
 		sys.exit(1)
-			
+
 if ssl:
 	protocol = "https://"
 else:

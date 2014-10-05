@@ -22,7 +22,7 @@ except ImportError:
     import configparser
     import urllib.request as urllib2
     from urllib.parse import urlencode
-	
+
 # Default values
 host = "localhost"
 port = "8081"
@@ -61,16 +61,16 @@ else:
 		if not api_key:
 			print ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
 			sys.exit(1)
-		
+
 		try:
 			ssl = int(config.get("SickBeard", "ssl"))
-			use_pushover = config.get("Pushover", "use_pushover")
+			use_pushover = int(config.get("Pushover", "use_pushover"))
 			app_token = config.get("Pushover", "app_token")
 			user_key = config.get("Pushover", "user_key")
-			use_nma = config.get("NMA", "use_nma")
+			use_nma = int(config.get("NMA", "use_nma"))
 			nma_api = config.get("NMA", "nma_api")
 			nma_priority = config.get("NMA", "nma_priority")
-			
+
 		except (configparser.NoOptionError, ValueError):
 			pass
 
@@ -90,7 +90,7 @@ else:
 		print ("Could not read configuration file: " + str(e))
 		# There was a config_file, don't use default values but exit
 		sys.exit(1)
-			
+
 if ssl:
 	protocol = "https://"
 else:
@@ -99,11 +99,14 @@ else:
 url = protocol + host + ":" + port + web_root + "api/" + api_key + "/?"
 
 print ("Opening URL: " + url)
-	
+
 params = urlencode({'cmd': 'shows', 'sort': 'name', 'paused': '0'})
 t = urllib2.urlopen(url, params).read()
 t = json.loads(t)
 end = filter( lambda x: x['status']=='Ended', t['data'].values() )
+if end == []:
+	print("Nothing to be done, exiting")
+	exit()
 for i in end :
 	show = i['show_name']
 	stat = i['status']
@@ -119,8 +122,8 @@ for i in end :
 			conn = httplib.HTTPSConnection("api.pushover.net:443")
 			conn.request("POST", "/1/messages.json",
 				urllib.urlencode({
-					"token": pushovertoken,
-					"user": pushoveruser,
+					"token": app_token,
+					"user": user_key,
 					"message": show+msgsuffix,
 					"title" : 'Sick Beard',
 				}), { "Content-type": "application/x-www-form-urlencoded" })
@@ -130,7 +133,5 @@ for i in end :
 			from lib.pynma import pynma
 			p = pynma.PyNMA(nma_api)
 			p.push(app, show+msgsuffix, show+msgsuffix, 0, 1, nma_priority )
-else:
-	print("Nothing to be done, exiting")
-	exit()
+
 
