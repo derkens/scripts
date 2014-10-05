@@ -7,7 +7,7 @@
 #
 #todo:
 
-import requests, httplib, urllib
+import httplib, urllib, urllib2, json
 
 sickbeardip = "only sickbeard ip address"
 
@@ -24,16 +24,17 @@ prio = "2"
 if nma == "yes":
     import pynma
 
-
-payload = {'cmd': 'history', 'type': 'downloaded', 'limit': 20 }
-t = requests.get("http://"+sickbeardip+"/sickbeard//api/"+sickbeardapikey+"/?", params=payload)
-t = t.json()
+url = "http://"+sickbeardip+"/sickbeard//api/"+sickbeardapikey+"/?"
+params = urllib.urlencode({ 'cmd': 'history', 'type': 'downloaded', 'limit': 20 })
+t = urllib2.urlopen(url, params).read()
+t = json.loads(t)
 down = list(t['data'])
 
-payload2 = {'cmd': 'history', 'type': 'snatched', 'limit': 20 }
-u = requests.get("http://"+sickbeardip+"/sickbeard//api/"+sickbeardapikey+"/?", params=payload2)
-u = u.json()
+params = urllib.urlencode({ 'cmd': 'history', 'type': 'snatched', 'limit': 20 })
+u = urllib2.urlopen(url, params).read()
+u = json.loads(u)
 snat = list(u['data'])
+
 y = []
 z = []
 
@@ -54,17 +55,17 @@ for index, string in enumerate(onlysnat):
     season = str(temp2[1])
     epis = str(temp2[2])
     tvdbid = str(temp2[3])
-    payload3 = {'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epis }
-    w = requests.get("http://"+sickbeardip+"/sickbeard//api/"+sickbeardapikey+"/?", params=payload3)
-    w = w.json()
+    params = urllib.urlencode({'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epis, })
+    w = urllib2.urlopen(url, params).read()
+    w = json.loads(w)
     epstatus = str(w['data']['status'])
     epname = str(w['data']['name'])
     if epstatus == "Downloaded":
         pass
     else:
-        payload4 = {'cmd': 'episode.setstatus', 'tvdbid': tvdbid, 'season': season, 'episode': epis, 'status': 'wanted' }
-        q = requests.get("http://"+sickbeardip+"/sickbeard//api/"+sickbeardapikey+"/?", params=payload4)
-        q = q.json()
+        params = urllib.urlencode({'cmd': 'episode.setstatus', 'tvdbid': tvdbid, 'season': season, 'episode': epis, 'status': 'wanted' })
+        q = urllib2.urlopen(url, params).read()
+        q = json.loads(q)
         message = showname+' '+season+'x'+epis+' '+epname+' is op wanted gezet, Check Sabnzbd...'
         if pushover == "yes":
 
