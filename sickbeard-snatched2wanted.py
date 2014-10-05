@@ -7,7 +7,7 @@
 #
 #todo:
 
-import httplib, urllib
+import httplib, urllib, urllib2
 
 sickbeardip = "only sickbeard ip address"
 
