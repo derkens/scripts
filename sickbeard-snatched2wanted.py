@@ -7,7 +7,7 @@
 #
 #todo:
 
-import httplib, urllib, urllib2
+import httplib, urllib, urllib2, json
 
 sickbeardip = "only sickbeard ip address"
 
