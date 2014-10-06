@@ -45,12 +45,12 @@ config_filename = os.path.join(os.path.dirname(sys.argv[0]), "settings.cfg")
 
 if not os.path.isfile(config_filename):
 	logger.error (config_filename + " doesn\'t exist")
-	logger.error ("copy /rename " + config_filename + ".sample and edit\n")
+	logger.error ("copy /rename " + config_filename + ".sample and edit")
 	sys.exit(1)
 
 else:
 	try:
-		logging.info ("\n Loading config from " + config_filename + "\n")
+		logging.info ("Loading config from " + config_filename + "\n")
 
 		with open(config_filename, "r") as fp:
 			config.readfp(fp)
@@ -100,7 +100,7 @@ else:
 
 url = protocol + host + ":" + port + web_root + "api/" + api_key + "/?"
 
-logging.info ("Opening URL: " + url + "\n")
+logging.info ("Opening URL: " + url)
 
 params = urlencode({ 'cmd': 'future', 'type': 'missed' })
 t = urllib2.urlopen(url, params).read()
