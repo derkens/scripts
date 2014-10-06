@@ -50,7 +50,7 @@ if not os.path.isfile(config_filename):
 
 else:
 	try:
-		logging.info ("Loading config from " + config_filename + "\n")
+		logging.info ("Loading config from " + config_filename)
 
 		with open(config_filename, "r") as fp:
 			config.readfp(fp)
@@ -107,7 +107,7 @@ t = urllib2.urlopen(url, params).read()
 t = json.loads(t)
 logging.debug(t)
 mis= list(t['data']['missed'])
-logging.debug(mis)
+logging.debug("Dumping mis for debug " + mis)
 if mis == "[]" :
 	logging.info("Nothing to be done, exiting")
 	exit()
@@ -121,7 +121,7 @@ else:
 		epname = str(mis[index]['ep_name']) ; logging.debug("episode name = " + epname)
 		pushtitle = 'Sick Beard - gemist'
 		pushmsg = '!'+show+' '+seas+'x'+epis+' '+epname
-		logging.debug(pushmsg)
+		logging.debug("Dumping pushmsg for debug " + pushmsg)
 		if use_pushover == 1:
 			logging.info ("Sending Pushover notification...")
 			conn = httplib.HTTPSConnection("api.pushover.net:443")
