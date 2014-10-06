@@ -141,7 +141,7 @@ os.remove(vidandpath)
 os.rename(outputfileandpath, finalfileandpath)
 #change final permissions
 os.chmod(finalfileandpath, 0775)
-os.chmod(subandpath, 0775)
+#os.chmod(subandpath, 0775)
 
 #aquire tvdbid from sickbeard
 params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': show})
@@ -164,7 +164,7 @@ if vidandpath.endswith('.mkv') :
         "params":{"sort": {"order": "ascending", "method": "title"}, "filter": {"operator": "contains", "field": "title", "value": epname}, "properties": ["file"]},
         "id" : 1
     }
-    req = urllib2.Request('http://'+xbmcip+':'+xbmcport+'/jsonrpc')
+    req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
     req.add_header('Content-Type', 'application/json')
     r2 = urllib2.urlopen(req, json.dumps(data))
     r2 = r2.read()
@@ -177,7 +177,7 @@ if vidandpath.endswith('.mkv') :
         "params":{"episodeid" : xbmcepid },
         "id" : 1
     }
-    req = urllib2.Request('http://'+xbmcip+':'+xbmcport+'/jsonrpc')
+    req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
     req.add_header('Content-Type', 'application/json')
     r3 = urllib2.urlopen(req, json.dumps(data))
     r3 = r3.read()
@@ -191,10 +191,10 @@ try:
     data = {
         "jsonrpc":"2.0",
         "method":"VideoLibrary.Scan",
-        "params":{"directory":localstorage},
+        "params":{"directory":pathvid},
         "id" : 1
     }
-    req = urllib2.Request('http://'+xbmcip+':'+xbmcport+'/jsonrpc')
+    req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
     req.add_header('Content-Type', 'application/json')
     response = urllib2.urlopen(req, json.dumps(data))
     status = ""
