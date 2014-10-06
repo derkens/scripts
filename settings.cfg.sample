@@ -23,10 +23,11 @@ port=8081
 api_key=
 web_root=/
 ssl=0
+app_token=OKCXmkvHN1syU2e8xvpefTnyvVWGv5
+# took app token from sickbeard, if U use your own, replace
 
 [Pushover]
 use_pushover=0
-app_token=
 user_key=
 
 [NMA]
@@ -37,3 +38,6 @@ nma_priority=
 [Kodi]
 host=
 port=
+
+[Autosub]
+app_token=

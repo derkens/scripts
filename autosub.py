@@ -61,7 +61,6 @@ else:
 		api_key = config.get("SickBeard", "api_key")
 		kodi_host = config.get("Kodi", "host")
 		kodi_port = config.get("Kodi", "port")
-		local_storage = config.get("General", "local_storage")
 
 		if not api_key:
 			print ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
@@ -71,14 +70,10 @@ else:
 			print ("Kodi host or port setting is empty, please fill this field in settings.cfg")
 			sys.exit(1)
 
-		if not local_storage:
-			print ("Local Storage setting is empty, please fill this field in settings.cfg")
-			sys.exit(1)
-
 		try:
 			ssl = int(config.get("SickBeard", "ssl"))
 			use_pushover = int(config.get("Pushover", "use_pushover"))
-			app_token = config.get("Pushover", "app_token")
+			app_token = config.get("Autosub", "app_token")
 			user_key = config.get("Pushover", "user_key")
 			use_nma = int(config.get("NMA", "use_nma"))
 			nma_api = config.get("NMA", "nma_api")
