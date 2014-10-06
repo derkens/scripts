@@ -136,7 +136,7 @@ os.remove(vidandpath)
 os.rename(outputfileandpath, finalfileandpath)
 #change final permissions
 os.chmod(finalfileandpath, 0775)
-#os.chmod(subandpath, 0775)
+os.chmod(subandpath, 0775)
 
 #aquire tvdbid from sickbeard
 params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': show})
