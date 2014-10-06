@@ -10,7 +10,9 @@
 import os.path
 import sys
 import httplib, urllib, urllib2, json, logging
-from lib.logger.logger import LogFormatter
+import logging.config
+
+logging.config.fileConfig("lib/logger/logging.conf")
 # Try importing Python 2 modules using new names
 try:
     import ConfigParser as configparser
