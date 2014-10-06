@@ -44,8 +44,8 @@ config = configparser.RawConfigParser()
 config_filename = os.path.join(os.path.dirname(sys.argv[0]), "settings.cfg")
 
 if not os.path.isfile(config_filename):
-	logger.error (config_filename + " doesn\'t exist")
-	logger.error ("copy /rename " + config_filename + ".sample and edit")
+	logging.error (config_filename + " doesn\'t exist")
+	logging.error ("copy /rename " + config_filename + ".sample and edit")
 	sys.exit(1)
 
 else:
