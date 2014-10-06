@@ -44,8 +44,8 @@ config = configparser.RawConfigParser()
 config_filename = os.path.join(os.path.dirname(sys.argv[0]), "settings.cfg")
 
 if not os.path.isfile(config_filename):
-	logging.error (config_filename + " doesn\'t exist")
-	logging.error ("copy /rename " + config_filename + ".sample and edit\n")
+	logger.error (config_filename + " doesn\'t exist")
+	logger.error ("copy /rename " + config_filename + ".sample and edit\n")
 	sys.exit(1)
 
 else:
@@ -59,8 +59,6 @@ else:
 		host = config.get("SickBeard", "host")
 		port = config.get("SickBeard", "port")
 		api_key = config.get("SickBeard", "api_key")
-		loglev = config.get("General", "loglevel")
-		logging.root.setLevel(loglev)
 
 		if not api_key:
 			logging.error ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
