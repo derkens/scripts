@@ -107,7 +107,7 @@ t = urllib2.urlopen(url, params).read()
 t = json.loads(t)
 logging.debug(t)
 mis= list(t['data']['missed'])
-logging.debug("Dumping mis for debug " + mis)
+logging.debug(mis)
 if mis == "[]" :
 	logging.info("Nothing to be done, exiting")
 	exit()
