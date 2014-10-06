@@ -10,6 +10,8 @@
 import os.path
 import sys
 import httplib, urllib, urllib2, json
+import logging, logging.config
+logging.config.fileConfig("lib/logger/logging.conf")
 
 # Try importing Python 2 modules using new names
 try:
@@ -42,13 +44,13 @@ config = configparser.RawConfigParser()
 config_filename = os.path.join(os.path.dirname(sys.argv[0]), "settings.cfg")
 
 if not os.path.isfile(config_filename):
-	print ("ERROR: " + config_filename + " doesn\'t exist")
-	print ("copy /rename " + config_filename + ".sample and edit\n")
+	logging.error (config_filename + " doesn\'t exist")
+	logging.error ("copy /rename " + config_filename + ".sample and edit")
 	sys.exit(1)
 
 else:
 	try:
-		print ("Loading config from " + config_filename + "\n")
+		logging.info ("Loading config from " + config_filename)
 
 		with open(config_filename, "r") as fp:
 			config.readfp(fp)
@@ -59,7 +61,7 @@ else:
 		api_key = config.get("SickBeard", "api_key")
 
 		if not api_key:
-			print ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
+			logging.error ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
 			sys.exit(1)
 
 		try:
@@ -87,7 +89,7 @@ else:
 
 	except EnvironmentError:
 		e = sys.exc_info()[1]
-		print ("Could not read configuration file: " + str(e))
+		logging.error ("Could not read configuration file: " + str(e))
 		# There was a config_file, don't use default values but exit
 		sys.exit(1)
 
@@ -98,27 +100,33 @@ else:
 
 url = protocol + host + ":" + port + web_root + "api/" + api_key + "/?"
 
-print ("Opening URL: " + url)
+logging.info ("Opening URL: " + url)
 
 params = urlencode({'cmd': 'shows', 'sort': 'name', 'paused': '0'})
 t = urllib2.urlopen(url, params).read()
 t = json.loads(t)
+logging.debug(t)
 end = filter( lambda x: x['status']=='Ended', t['data'].values() )
+logging.debug(end)
 if end == []:
-	print("Nothing to be done, exiting")
+	logging.info("Nothing to be done, exiting")
 	exit()
 for i in end :
-	show = i['show_name']
-	stat = i['status']
-	net = i['next_ep_airdate']
+	show = i['show_name'] ; logging.debug("Showname = " + show)
+	stat = i['status'] ; logging.debug("Show status = " + stat)
+	net = i['next_ep_airdate'] ; logging.debug("Next episode date = " + net)
 	if net == '':
 		params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': show})
 		r = urllib2.urlopen(url, params).read()
 		r = json.loads(r)
+		logging.debug(r)
 		tvdbid = str(r['data']['results'][0]['tvdbid'])
+		logging.debug(tvdbid)
 		params = urlencode({'cmd': 'show.pause', 'tvdbid': tvdbid, 'pause': 1})
 		s = urllib2.urlopen(url, params).read()
+		logging.debug(s)
 		if use_pushover == 1:
+			logging.info ("Sending Pushover notification...")
 			conn = httplib.HTTPSConnection("api.pushover.net:443")
 			conn.request("POST", "/1/messages.json",
 				urllib.urlencode({
@@ -129,7 +137,7 @@ for i in end :
 				}), { "Content-type": "application/x-www-form-urlencoded" })
 			conn.getresponse()
 		if use_nma == 1:
-			print ("Sending NMA notification...")
+			logging.info ("Sending NMA notification...")
 			from lib.pynma import pynma
 			p = pynma.PyNMA(nma_api)
 			p.push(app, show+msgsuffix, show+msgsuffix, 0, 1, nma_priority )
