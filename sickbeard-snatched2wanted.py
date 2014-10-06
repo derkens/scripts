@@ -68,7 +68,7 @@ else:
 		try:
 			ssl = int(config.get("SickBeard", "ssl"))
 			use_pushover = int(config.get("Pushover", "use_pushover"))
-			app_token = config.get("Sickbeard", "app_token")
+			app_token = config.get("SickBeard", "app_token")
 			user_key = config.get("Pushover", "user_key")
 			use_nma = int(config.get("NMA", "use_nma"))
 			nma_api = config.get("NMA", "nma_api")
