@@ -15,7 +15,8 @@
 # ssl=0             # http (ssl=0) (for https use ssl=1)
 
 [General]
-
+loglevel=INFO
+#DEBUG WARN ERROR INFO
 
 [SickBeard]
 host=localhost
