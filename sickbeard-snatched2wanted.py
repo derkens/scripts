@@ -12,7 +12,22 @@
 import os.path
 import sys
 import httplib, urllib, urllib2, json
+import logging, logging.config
+logging.config.fileConfig("lib/logger/logging.conf")
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-v", "--verbose", help="increase output verbosity",
+							action="store_true")
+args = parser.parse_args()
+
+logger1 = logging.getLogger("logger1")
+logger2 = logging.getLogger("logger2")
+
+if args.verbose:
+	logging = logger2
+else:
+	logging = logger1
 # Try importing Python 2 modules using new names
 try:
     import ConfigParser as configparser
@@ -45,13 +60,13 @@ config = configparser.RawConfigParser()
 config_filename = os.path.join(os.path.dirname(sys.argv[0]), "settings.cfg")
 
 if not os.path.isfile(config_filename):
-	print ("ERROR: " + config_filename + " doesn\'t exist")
-	print ("copy /rename " + config_filename + ".sample and edit\n")
+	logging.error (config_filename + " doesn\'t exist")
+	logging.error ("copy /rename " + config_filename + ".sample and edit")
 	sys.exit(1)
 
 else:
 	try:
-		print ("Loading config from " + config_filename + "\n")
+		logging.info ("Loading config from " + config_filename)
 
 		with open(config_filename, "r") as fp:
 			config.readfp(fp)
@@ -62,7 +77,7 @@ else:
 		api_key = config.get("SickBeard", "api_key")
 
 		if not api_key:
-			print ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
+			logging.error ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
 			sys.exit(1)
 
 		try:
@@ -90,7 +105,7 @@ else:
 
 	except EnvironmentError:
 		e = sys.exc_info()[1]
-		print ("Could not read configuration file: " + str(e))
+		logging.error ("Could not read configuration file: " + str(e))
 		# There was a config_file, don't use default values but exit
 		sys.exit(1)
 
@@ -101,18 +116,17 @@ else:
 
 url = protocol + host + ":" + port + web_root + "api/" + api_key + "/?"
 
-print ("Opening URL: " + url)
-
-#url = "http://"+sickbeardip+":8081/api/"+sickbeardapikey+"/?"
+logging.info ("Opening URL: " + url)
 params = urlencode({ 'cmd': 'history', 'type': 'downloaded', 'limit': 20 })
 t = urllib2.urlopen(url, params).read()
 t = json.loads(t)
 down = list(t['data'])
-
+logging.debug (down)
 params = urlencode({ 'cmd': 'history', 'type': 'snatched', 'limit': 20 })
 u = urllib2.urlopen(url, params).read()
 u = json.loads(u)
 snat = list(u['data'])
+logging.debug(snat)
 
 y = []
 z = []
@@ -126,14 +140,14 @@ for index, string in enumerate(snat):
 	z.append(snat2)
 
 onlysnat = list(set(z) - set(y))
-
+logging.debug(onlysnat)
 for index, string in enumerate(onlysnat):
 	temp1 = str(onlysnat[index])
 	temp2 = temp1.rsplit('_')
-	showname = str(temp2[0])
-	season = str(temp2[1])
-	epis = str(temp2[2])
-	tvdbid = str(temp2[3])
+	showname = str(temp2[0]) ; logging.debug("showname: " + showname)
+	season = str(temp2[1]) ; logging.debug("season: " + season)
+	epis = str(temp2[2]) ; logging.debug("episode: " + epis)
+	tvdbid = str(temp2[3]) ; logging.debug("tvdbid: " + tvdbid)
 	params = urllib.urlencode({'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epis, })
 	w = urllib2.urlopen(url, params).read()
 	w = json.loads(w)
@@ -144,11 +158,11 @@ for index, string in enumerate(onlysnat):
 	else:
 		params = urllib.urlencode({'cmd': 'episode.setstatus', 'tvdbid': tvdbid, 'season': season, 'episode': epis, 'status': 'wanted' })
 		q = urllib2.urlopen(url, params).read()
-		q = json.loads(q)
+		q = json.loads(q) ; logging.debug(q)
 		message = showname+' '+season+'x'+epis+' '+epname+' is op wanted gezet, Check Sabnzbd...'
-		print message
+		logging.info (message)
 		if use_pushover == 1:
-			print ("Sending Pushover notification...")
+			logging.info ("Sending Pushover notification...")
 			conn = httplib.HTTPSConnection("api.pushover.net:443")
 			conn.request("POST", "/1/messages.json",
 				urllib.urlencode({
@@ -159,11 +173,11 @@ for index, string in enumerate(onlysnat):
 				}), { "Content-type": "application/x-www-form-urlencoded" })
 			conn.getresponse()
 		if use_nma == 1:
-			print ("Sending NMA notification...")
+			logging.info ("Sending NMA notification...")
 			from lib.pynma import pynma
 			p = pynma.PyNMA(nma_api)
 			p.push(app, topic, message, 0, 1, nma_priority )
 		else:
 			pass
 else:
-	print ("Nothing to be done, exiting")
+	logging.info ("Nothing to be done, exiting")
