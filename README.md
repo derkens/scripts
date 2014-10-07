@@ -30,4 +30,5 @@ what it does, it gets a list from the api out of the history with status *'Downl
 both limited to 20 items for now
 It crosschecks both lists and it remove items from the *'snatched'* list whom are also present on the *'downloaded'* list.
 The remaining items are checked one at a time for episode status for security (one at a time for this is a SickBeard api limitation)
-After that the remaining episode that have status 'snatched', are put to wanted. This also triggers a backlog search.
+After that the remaining episode that have status *'snatched'*, are put to wanted. This also triggers a backlog search.
+Currently the only notifiers to choose are [www.pushover.com](pushover) and [www.notifymyandroid.com](notify my android)
