@@ -11,8 +11,22 @@ import os.path
 import sys
 import httplib, urllib, urllib2, json, logging
 import logging.config
-
 logging.config.fileConfig("lib/logger/logging.conf")
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-v", "--verbose", help="increase output verbosity",
+							action="store_true")
+args = parser.parse_args()
+
+logger1 = logging.getLogger("logger1")
+logger2 = logging.getLogger("logger2")
+
+if args.verbose:
+	logging = logger2
+else:
+	logging = logger1
+
 # Try importing Python 2 modules using new names
 try:
     import ConfigParser as configparser
@@ -59,6 +73,8 @@ else:
 		host = config.get("SickBeard", "host")
 		port = config.get("SickBeard", "port")
 		api_key = config.get("SickBeard", "api_key")
+		lvl = config.get("General", "loglevel")
+		logger1.setLevel(lvl)
 
 		if not api_key:
 			logging.error ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
