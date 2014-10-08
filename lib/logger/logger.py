@@ -8,7 +8,7 @@
 # URL: http://code.google.com/p/sickbeard/
 
 import logging, logging.config
-logging.config.fileConfig("logging.conf")
+logging.config.fileConfig("lib/logger/logging.conf")
 import argparse
 
 parser = argparse.ArgumentParser()

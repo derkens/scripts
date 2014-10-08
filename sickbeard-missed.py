@@ -10,7 +10,7 @@
 import os.path
 import sys
 import httplib, urllib, urllib2, json
-import lib.logger
+import lib.logger.logger as logger
 
 # Try importing Python 2 modules using new names
 try:
@@ -43,13 +43,13 @@ config = configparser.RawConfigParser()
 config_filename = os.path.join(os.path.dirname(sys.argv[0]), "settings.cfg")
 
 if not os.path.isfile(config_filename):
-	logging.error (config_filename + " doesn\'t exist")
-	logging.error ("copy /rename " + config_filename + ".sample and edit")
+	logger.logging.error (config_filename + " doesn\'t exist")
+	logger.logging.error ("copy /rename " + config_filename + ".sample and edit")
 	sys.exit(1)
 
 else:
 	try:
-		logging.info ("Loading config from " + config_filename)
+		logger.logging.info ("Loading config from " + config_filename)
 
 		with open(config_filename, "r") as fp:
 			config.readfp(fp)
@@ -59,10 +59,10 @@ else:
 		port = config.get("SickBeard", "port")
 		api_key = config.get("SickBeard", "api_key")
 		lvl = config.get("General", "loglevel")
-		logger1.setLevel(lvl)
+		logger.logger1.setLevel(lvl)
 
 		if not api_key:
-			logging.error ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
+			logger.logging.error ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
 			sys.exit(1)
 
 		try:
@@ -90,7 +90,7 @@ else:
 
 	except EnvironmentError:
 		e = sys.exc_info()[1]
-		logging.error ("Could not read configuration file: " + str(e))
+		logger.logging.error ("Could not read configuration file: " + str(e))
 		# There was a config_file, don't use default values but exit
 		sys.exit(1)
 
@@ -101,30 +101,30 @@ else:
 
 url = protocol + host + ":" + port + web_root + "api/" + api_key + "/?"
 
-logging.info ("Opening URL: " + url)
+logger.logging.info ("Opening URL: " + url)
 
 params = urlencode({ 'cmd': 'future', 'type': 'missed' })
 t = urllib2.urlopen(url, params).read()
 t = json.loads(t)
-logging.debug(t)
+logger.logging.debug(t)
 mis= list(t['data']['missed'])
-logging.debug(mis)
+logger.logging.debug(mis)
 if mis == "[]" :
-	logging.info("Nothing to be done, exiting")
+	logger.logging.info("Nothing to be done, exiting")
 	exit()
 
 
 else:
 	for index, string in enumerate(mis):
-		show = str(mis[index]['show_name']) ; logging.debug("show = " + show)
-		seas = str(mis[index]['season']) ; logging.debug("season = " + seas)
-		epis = str(mis[index]['episode']) ; logging.debug("episode = " + epis)
-		epname = str(mis[index]['ep_name']) ; logging.debug("episode name = " + epname)
+		show = str(mis[index]['show_name']) ; logger.logging.debug("show = " + show)
+		seas = str(mis[index]['season']) ; logger.logging.debug("season = " + seas)
+		epis = str(mis[index]['episode']) ; logger.logging.debug("episode = " + epis)
+		epname = str(mis[index]['ep_name']) ; logger.logging.debug("episode name = " + epname)
 		pushtitle = 'Sick Beard - gemist'
 		pushmsg = '!'+show+' '+seas+'x'+epis+' '+epname
-		logging.debug("Dumping pushmsg for debug " + pushmsg)
+		logger.logging.debug("Dumping pushmsg for debug " + pushmsg)
 		if use_pushover == 1:
-			logging.info ("Sending Pushover notification...")
+			logger.logging.info ("Sending Pushover notification...")
 			conn = httplib.HTTPSConnection("api.pushover.net:443")
 			conn.request("POST", "/1/messages.json",
 				urllib.urlencode({
@@ -135,7 +135,7 @@ else:
 				}), { "Content-type": "application/x-www-form-urlencoded" })
 			conn.getresponse()
 		if use_nma == 1:
-			logging.info ("Sending NMA notification...")
+			logger.logging.info ("Sending NMA notification...")
 			from lib.pynma import pynma
 			p = pynma.PyNMA(nma_api)
 			p.push(app, pushtitle, pushmsg, 0, 1, nma_priority )
