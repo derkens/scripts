@@ -12,7 +12,7 @@ import sys
 import httplib, urllib, urllib2, json
 import lib.logger.logger as logger
 import lib.config as config
-import.lib.emailer as emailer
+import lib.emailer as emailer
 
 if config.ssl:
 	protocol = "https://"
