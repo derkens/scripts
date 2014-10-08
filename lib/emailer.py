@@ -5,6 +5,7 @@ def SendEmail(title):
   import getpass, socket
   import traceback
   import lib.logger.logger as logger
+  import lib.config as config
 
   # Import the email modules we'll need
   from email.mime.text import MIMEText
