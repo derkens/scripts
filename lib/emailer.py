@@ -1,8 +1,9 @@
-def SendEmail(user, title):
+def SendEmail(title):
 
   # Import smtplib for the actual sending function
   import smtplib
   import getpass, socket
+  import traceback
 
   # Import the email modules we'll need
   from email.mime.text import MIMEText
@@ -18,12 +19,34 @@ def SendEmail(user, title):
   # me == the sender's email address
   # you == the recipient's email address
   msg['Subject'] = title .format(textfile)
-  msg['From'] = getpass.getuser() + '@' + socket.gethostname()
-  msg['To'] = user
+  msg['From'] = config.from_address
+  msg['To'] = config.to_address
 
-  # Send the message via our own SMTP server, but don't include the
-  # envelope header.
-  s = smtplib.SMTP('localhost')
-  s.sendmail(me, [you], msg.as_string())
-  s.quit()
-  return
+  try:
+    # Open the SMTP connection, via SSL if requested
+    log.debug("Connecting to host %s on port %s" % (config.smtp_server, config.smtp_port))
+    log.debug("SMTP over SSL %s", ("enabled" if config.smtp_ssl == 1 else "disabled"))
+    mailserver = smtplib.SMTP_SSL(config.smtp_server, config.smtp_port) if config.smtp_ssl == 1 else smtplib.SMTP(config.smtp_server, config.smtp_port)
+
+    if config.smtp_starttls:
+      log.debug("Using StartTLS to initiate the connection with the SMTP server")
+      mailserver.starttls()
+
+      # Say hello to the server
+      mailserver.ehlo()
+
+      # Check too see if an login attempt should be attempted
+      if len(smtp_user) > 0:
+        log.debug("Logging on to SMTP server using username \'%s\'%s", (config.smtp_user, " and a password" if len(config.smtp_pass) > 0 else ""))
+        mailserver.login(config.smtp_user, config.smtp_pass)
+
+        # Send the e-mail
+        log.debug("Sending the email")
+        mailserver.sendmail(config.from_address, splitString(config.to_address), message.as_string())
+
+        # Close the SMTP connection
+        mailserver.quit()
+
+        return True
+    except:
+      log.error('E-mail failed: %s', traceback.format_exc())
