@@ -40,12 +40,12 @@ nma_priority=
 use_email=0
 from_address=
 to_address=
-ssl=0
+ssl=1
 smtp_server=
 smtp_user=
 smtp_pass=
 smtp_port=25
-starttls=
+starttls=0
 
 [Kodi]
 host=
