@@ -15,7 +15,7 @@ def SendEmail(title):
   textfile = "Output.txt"
   fp = open(textfile, 'rb')
   # Create a text/plain message
-  message = MIMEText(fp.read(), _charset = Env.get('encoding'))
+  message = MIMEText(fp.read(), _charset = 'UTF-8')
   fp.close()
 
   # Make the basic message
