@@ -28,7 +28,7 @@ def SendEmail(title):
 
   try:
     # Open the SMTP connection, via SSL if requested
-    logger.logging.debug("Connecting to host {} on port {}".format((config.smtp_server, config.smtp_port)))
+    logger.logging.debug("Connecting to host {1} on port {2}".format((config.smtp_server, config.smtp_port)))
     logger.logging.debug("SMTP over SSL %s", ("enabled" if config.smtp_ssl == 1 else "disabled"))
     mailserver = smtplib.SMTP_SSL(config.smtp_server, config.smtp_port) if config.smtp_ssl == 1 else smtplib.SMTP(config.smtp_server, config.smtp_port)
 
