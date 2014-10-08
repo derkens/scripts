@@ -9,7 +9,8 @@ def SendEmail(user, title):
 
   # Open a plain text file for reading.  For this example, assume that
   # the text file contains only ASCII characters.
-  fp = open("Output.txt", 'rb')
+  textfile = "Output.txt"
+  fp = open(textfile, 'rb')
   # Create a text/plain message
   msg = MIMEText(fp.read())
   fp.close()
