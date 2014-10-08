@@ -67,3 +67,4 @@ else:
 		if config.use_email == 1:
 			logger.logging.info ("Sending Email notification...")
 			emailer.SendEmail(config.email, pushtitle)
+			os.remove("Output.txt")
