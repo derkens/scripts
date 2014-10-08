@@ -68,7 +68,6 @@ else:
 			kodi_host = config.get("Kodi", "host")
 			kodi_port = config.get("Kodi", "port")
 			use_email = int(config.get("Email", "use_email"))
-			email = config.get("Email", "email")
 			from_address = config.get("Email", "from_address")
 			to_address = config.get("Email", "to_address")
 			smtp_ssl = config.get("Email", "ssl")
