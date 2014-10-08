@@ -69,7 +69,15 @@ else:
 			kodi_port = config.get("Kodi", "port")
 			use_email = int(config.get("Email", "use_email"))
 			email = config.get("Email", "email")
-
+			from_address = config.get("Email", "from_address")
+			to_address = config.get("Email", "to_address")
+			smtp_ssl = config.get("Email", "ssl")
+			smtp_server = config.get("Email", "smtp_server")
+			smtp_user = config.get("Email", "smtp_user")
+			smtp_pass = config.get("Email", "smtp_pass")
+			smtp_port = config.get("Email", "smtp_port")
+			starttls = config.get("Email", "starttls")
+			
 		except (configparser.NoOptionError, ValueError):
 			pass
 
