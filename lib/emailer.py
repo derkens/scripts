@@ -34,23 +34,23 @@ def SendEmail(title):
       logger.logging.debug("Using StartTLS to initiate the connection with the SMTP server")
       mailserver.starttls()
 
-      # Say hello to the server
-      mailserver.ehlo()
+    # Say hello to the server
+    mailserver.ehlo()
 
-      # Check too see if an login attempt should be attempted
-      if len(smtp_user) > 0:
-        logger.logging.debug("Logging on to SMTP server using username \'%s\'%s", (config.smtp_user, " and a password" if len(config.smtp_pass) > 0 else ""))
-        mailserver.login(config.smtp_user, config.smtp_pass)
+    # Check too see if an login attempt should be attempted
+    if len(smtp_user) > 0:
+      logger.logging.debug("Logging on to SMTP server using username \'%s\'%s", (config.smtp_user, " and a password" if len(config.smtp_pass) > 0 else ""))
+      mailserver.login(config.smtp_user, config.smtp_pass)
 
-        # Send the e-mail
-        logger.logging.debug("Sending the email")
-        mailserver.sendmail(config.from_address, splitString(config.to_address), message.as_string())
+      # Send the e-mail
+      logger.logging.debug("Sending the email")
+      mailserver.sendmail(config.from_address, splitString(config.to_address), message.as_string())
 
-        # Close the SMTP connection
-        mailserver.quit()
-        
-        logger.logging.info('Email notification sent')
+      # Close the SMTP connection
+      mailserver.quit()
+      
+      logger.logging.info('Email notification sent')
 
-        return True
+    return True
   except:
     logger.logging.error('E-mail failed: %s', traceback.format_exc())
