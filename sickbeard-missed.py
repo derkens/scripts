@@ -13,16 +13,16 @@ import httplib, urllib, urllib2, json
 import lib.logger.logger as logger
 import lib.config as config
 
-if ssl:
+if config.ssl:
 	protocol = "https://"
 else:
 	protocol = "http://"
 
-url = protocol + host + ":" + port + web_root + "api/" + api_key + "/?"
+url = protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
 
 logger.logging.info ("Opening URL: " + url)
 
-params = urlencode({ 'cmd': 'future', 'type': 'missed' })
+params = config.urlencode({ 'cmd': 'future', 'type': 'missed' })
 t = urllib2.urlopen(url, params).read()
 t = json.loads(t)
 logger.logging.debug(t)
@@ -47,8 +47,8 @@ else:
 			conn = httplib.HTTPSConnection("api.pushover.net:443")
 			conn.request("POST", "/1/messages.json",
 				urllib.urlencode({
-					"token": app_token,
-					"user": user_key,
+					"token": config.app_token,
+					"user": config.user_key,
 					"message": pushmsg,
 					"title" : pushtitle,
 				}), { "Content-type": "application/x-www-form-urlencoded" })
@@ -56,5 +56,5 @@ else:
 		if config.use_nma == 1:
 			logger.logging.info ("Sending NMA notification...")
 			from lib.pynma import pynma
-			p = pynma.PyNMA(nma_api)
-			p.push(app, pushtitle, pushmsg, 0, 1, nma_priority )
+			p = pynma.PyNMA(config.nma_api)
+			p.push(config.app, pushtitle, pushmsg, 0, 1, config.nma_priority )
