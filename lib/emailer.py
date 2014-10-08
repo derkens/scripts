@@ -20,8 +20,8 @@ def SendEmail(title):
 
   # Make the basic message
   message['Subject'] = title
-  message['From'] = from_address
-  message['To'] = to_address
+  message['From'] = config.from_address
+  message['To'] = config.to_address
   message['Date'] = formatdate(localtime = 1)
   message['Message-ID'] = make_msgid()
 
