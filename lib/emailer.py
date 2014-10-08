@@ -25,12 +25,12 @@ def SendEmail(title):
 
   try:
     # Open the SMTP connection, via SSL if requested
-    logger.debug("Connecting to host %s on port %s" % (config.smtp_server, config.smtp_port))
-    logger.debug("SMTP over SSL %s", ("enabled" if config.smtp_ssl == 1 else "disabled"))
+    logger.logging.debug("Connecting to host %s on port %s" % (config.smtp_server, config.smtp_port))
+    logger.logging.debug("SMTP over SSL %s", ("enabled" if config.smtp_ssl == 1 else "disabled"))
     mailserver = smtplib.SMTP_SSL(config.smtp_server, config.smtp_port) if config.smtp_ssl == 1 else smtplib.SMTP(config.smtp_server, config.smtp_port)
 
     if config.smtp_starttls:
-      logger.debug("Using StartTLS to initiate the connection with the SMTP server")
+      logger.logging.debug("Using StartTLS to initiate the connection with the SMTP server")
       mailserver.starttls()
 
       # Say hello to the server
@@ -38,16 +38,18 @@ def SendEmail(title):
 
       # Check too see if an login attempt should be attempted
       if len(smtp_user) > 0:
-        logger.debug("Logging on to SMTP server using username \'%s\'%s", (config.smtp_user, " and a password" if len(config.smtp_pass) > 0 else ""))
+        logger.logging.debug("Logging on to SMTP server using username \'%s\'%s", (config.smtp_user, " and a password" if len(config.smtp_pass) > 0 else ""))
         mailserver.login(config.smtp_user, config.smtp_pass)
 
         # Send the e-mail
-        logger.debug("Sending the email")
+        logger.logging.debug("Sending the email")
         mailserver.sendmail(config.from_address, splitString(config.to_address), message.as_string())
 
         # Close the SMTP connection
         mailserver.quit()
+        
+        logger.logging.info('Email notification sent')
 
         return True
     except:
-      logger.error('E-mail failed: %s', traceback.format_exc())
+      logger.logging.error('E-mail failed: %s', traceback.format_exc())
