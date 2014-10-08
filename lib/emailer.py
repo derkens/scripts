@@ -45,7 +45,7 @@ def SendEmail(title):
 
       # Send the e-mail
       logger.logging.debug("Sending the email")
-      mailserver.sendmail(config.from_address, splitString(config.to_address), message.as_string())
+      mailserver.sendmail(config.from_address, config.to_address, message.as_string())
 
       # Close the SMTP connection
       mailserver.quit()
