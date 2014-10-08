@@ -51,5 +51,5 @@ def SendEmail(title):
         logger.logging.info('Email notification sent')
 
         return True
-    except:
+    except
       logger.logging.error('E-mail failed: %s', traceback.format_exc())
