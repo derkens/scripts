@@ -38,7 +38,14 @@ nma_priority=
 
 [Email]
 use_email=0
-email=
+from_address=
+to_address=
+ssl=0
+smtp_server=
+smtp_user=
+smtp_pass=
+smtp_port=25
+starttls=
 
 [Kodi]
 host=
