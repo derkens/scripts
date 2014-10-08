@@ -12,6 +12,7 @@ import sys
 import httplib, urllib, urllib2, json
 import lib.logger.logger as logger
 import lib.config as config
+import.lib.emailer as emailer
 
 if config.ssl:
 	protocol = "https://"
@@ -58,3 +59,11 @@ else:
 			from lib.pynma import pynma
 			p = pynma.PyNMA(config.nma_api)
 			p.push(config.app, pushtitle, pushmsg, 0, 1, config.nma_priority )
+		if config.use_email == 1:
+			text_file = open("Output.txt", "w")
+			text_file.write(pushmsg)
+			text_file.close()
+	else:
+		if config.use_email == 1:
+			logger.logging.info ("Sending Email notification...")
+			emailer.SendEmail(config.email, pushtitle)
