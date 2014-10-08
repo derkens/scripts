@@ -70,12 +70,12 @@ else:
 			use_email = int(config.get("Email", "use_email"))
 			from_address = str(config.get("Email", "from_address"))
 			to_address = str(config.get("Email", "to_address"))
-			smtp_ssl = config.get("Email", "ssl")
+			smtp_ssl = int(config.get("Email", "ssl"))
 			smtp_server = config.get("Email", "smtp_server")
 			smtp_user = str(config.get("Email", "smtp_user"))
 			smtp_pass = str(config.get("Email", "smtp_pass"))
 			smtp_port = config.get("Email", "smtp_port")
-			starttls = config.get("Email", "starttls")
+			starttls = int(config.get("Email", "starttls"))
 			
 		except (configparser.NoOptionError, ValueError):
 			pass
