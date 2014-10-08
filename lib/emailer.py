@@ -30,7 +30,7 @@ def SendEmail(title):
     logger.logging.debug("SMTP over SSL %s", ("enabled" if config.smtp_ssl == 1 else "disabled"))
     mailserver = smtplib.SMTP_SSL(config.smtp_server, config.smtp_port) if config.smtp_ssl == 1 else smtplib.SMTP(config.smtp_server, config.smtp_port)
 
-    if config.smtp_starttls:
+    if config.starttls:
       logger.logging.debug("Using StartTLS to initiate the connection with the SMTP server")
       mailserver.starttls()
 
