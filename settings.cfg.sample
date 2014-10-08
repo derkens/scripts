@@ -36,6 +36,10 @@ use_nma=0
 nma_api=
 nma_priority=
 
+[Email]
+use_email=0
+email=
+
 [Kodi]
 host=
 port=
