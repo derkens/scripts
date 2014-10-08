@@ -41,7 +41,7 @@ def SendEmail(title):
 
     # Check too see if an login attempt should be attempted
     if len(config.smtp_user) > 0:
-      logger.logging.debug("Logging on to SMTP server using username %s %s", (config.smtp_user, " and a password" if len(config.smtp_pass) > 0 else ""))
+      logger.logging.debug("Logging on to SMTP server using username %s %s" % (config.smtp_user, " and a password" if len(config.smtp_pass) > 0 else ""))
       mailserver.login(config.smtp_user, config.smtp_pass)
 
       # Send the e-mail
