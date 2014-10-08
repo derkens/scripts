@@ -38,7 +38,7 @@ def SendEmail(title):
     mailserver.ehlo()
 
     # Check too see if an login attempt should be attempted
-    if len(smtp_user) > 0:
+    if len(config.smtp_user) > 0:
       logger.logging.debug("Logging on to SMTP server using username \'%s\'%s", (config.smtp_user, " and a password" if len(config.smtp_pass) > 0 else ""))
       mailserver.login(config.smtp_user, config.smtp_pass)
 
