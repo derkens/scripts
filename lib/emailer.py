@@ -15,14 +15,15 @@ def SendEmail(title):
   textfile = "Output.txt"
   fp = open(textfile, 'rb')
   # Create a text/plain message
-  msg = MIMEText(fp.read())
+  message = MIMEText(fp.read(), _charset = Env.get('encoding'))
   fp.close()
 
-  # me == the sender's email address
-  # you == the recipient's email address
-  msg['Subject'] = title .format(textfile)
-  msg['From'] = config.from_address
-  msg['To'] = config.to_address
+  # Make the basic message
+  message['Subject'] = title
+  message['From'] = from_address
+  message['To'] = to_address
+  message['Date'] = formatdate(localtime = 1)
+  message['Message-ID'] = make_msgid()
 
   try:
     # Open the SMTP connection, via SSL if requested
