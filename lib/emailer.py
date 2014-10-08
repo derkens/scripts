@@ -17,7 +17,7 @@ def SendEmail(user, title):
   # me == the sender's email address
   # you == the recipient's email address
   msg['Subject'] = title % textfile
-  msg['From'] = getpass.getuser()@socket.gethostname()
+  msg['From'] = getpass.getuser() + '@' + socket.gethostname()
   msg['To'] = user
 
   # Send the message via our own SMTP server, but don't include the
