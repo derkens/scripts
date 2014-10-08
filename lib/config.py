@@ -67,7 +67,7 @@ else:
 			nma_priority = config.get("NMA", "nma_priority")
 			kodi_host = config.get("Kodi", "host")
 			kodi_port = config.get("Kodi", "port")
-			use_email = config.get("Email", "use_email")
+			use_email = int(config.get("Email", "use_email"))
 			email = config.get("Email", "email")
 
 		except (configparser.NoOptionError, ValueError):
