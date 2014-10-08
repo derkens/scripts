@@ -1,3 +1,7 @@
+import os.path
+import sys
+import httplib, urllib, urllib2, json
+
 # Try importing Python 2 modules using new names
 try:
     import ConfigParser as configparser
