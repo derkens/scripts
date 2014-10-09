@@ -19,6 +19,9 @@ if config.ssl:
 else:
 	protocol = "http://"
 
+if config.use_email == 1:
+	text_file = open("Output.txt", "w")
+
 url = protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
 
 logger.logging.info ("Opening URL: " + url)
@@ -66,11 +69,11 @@ else:
             			logger.logging.error ("NMA Notification failed: " + error)
 
 		if config.use_email == 1:
-			text_file = open("Output.txt", "w")
-			text_file.write(pushmsg)
-			text_file.close()
+			text_file.write(pushmsg + "\n")
+
 	else:
 		if config.use_email == 1:
+			text_file.close()
 			logger.logging.info ("Sending Email notification...")
 			emailer.SendEmail(pushtitle)
 			os.remove("Output.txt")
