@@ -47,7 +47,7 @@ else:
 		pushmsg = '!'+show+' '+seas+'x'+epis+' '+epname
 		logger.logging.debug("Dumping pushmsg for debug " + pushmsg)
 		if config.use_pushover == 1:
-			logger.logging.info ("Sending Pushover notification...")
+			logger.logging.debug ("Sending Pushover notification...")
 			conn = httplib.HTTPSConnection("api.pushover.net:443")
 			conn.request("POST", "/1/messages.json",
 				urllib.urlencode({
@@ -57,7 +57,12 @@ else:
 					"title" : pushtitle,
 					"device" : config.push_device,
 				}), { "Content-type": "application/x-www-form-urlencoded" })
-			conn.getresponse()
+			r = conn.getresponse()
+			r = json.loads(r.read())
+			if r["status"] == 1 :
+				logger.logging.info("Pushover notification sent succesfully")
+			else:
+				logger.logging.error("Pushover failed with following error" + str(r["errors"]))
 		if config.use_nma == 1:
 			logger.logging.info ("Sending NMA notification...")
 			from lib.pynma import pynma
