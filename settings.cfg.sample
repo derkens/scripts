@@ -30,6 +30,7 @@ app_token=OKCXmkvHN1syU2e8xvpefTnyvVWGv5
 [Pushover]
 use_pushover=0
 user_key=
+push_device=
 
 [NMA]
 use_nma=0

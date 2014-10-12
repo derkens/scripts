@@ -55,6 +55,7 @@ else:
 					"user": config.user_key,
 					"message": pushmsg,
 					"title" : pushtitle,
+					"device" : config.push_device,
 				}), { "Content-type": "application/x-www-form-urlencoded" })
 			conn.getresponse()
 		if config.use_nma == 1:

@@ -60,6 +60,7 @@ else:
 		try:
 			ssl = int(config.get("SickBeard", "ssl"))
 			use_pushover = int(config.get("Pushover", "use_pushover"))
+			push_device = config.get("Pushover" , "push_device")
 			app_token = config.get("SickBeard", "app_token")
 			user_key = config.get("Pushover", "user_key")
 			use_nma = int(config.get("NMA", "use_nma"))
@@ -76,7 +77,7 @@ else:
 			smtp_pass = str(config.get("Email", "smtp_pass"))
 			smtp_port = config.get("Email", "smtp_port")
 			starttls = int(config.get("Email", "starttls"))
-			
+
 		except (configparser.NoOptionError, ValueError):
 			pass
 
