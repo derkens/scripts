@@ -31,6 +31,7 @@ app_token=OKCXmkvHN1syU2e8xvpefTnyvVWGv5
 use_pushover=0
 user_key=
 push_device=
+#leave blank for all devices
 
 [NMA]
 use_nma=0
