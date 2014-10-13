@@ -1,5 +1,5 @@
 These are some personal scripts I've *cut and pasted* and *trial'd and error'd* together.
-Using this as backup and share site
+Using this as backup and share site.
 
 *note: The autosub script is very personal and probably won't work for you..'*
 
