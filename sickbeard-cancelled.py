@@ -50,7 +50,7 @@ for i in end :
 		s = urllib2.urlopen(url, params).read()
 		logging.debug(s)
 		if config.use_pushover == 1:
-			logger.logging.info ("Sending Pushover notification...")
+			logger.logging.debug ("Sending Pushover notification...")
 			conn = httplib.HTTPSConnection("api.pushover.net:443")
 			conn.request("POST", "/1/messages.json",
 				urllib.urlencode({
@@ -59,11 +59,25 @@ for i in end :
 					"message": show+msgsuffix,
 					"title" : 'Sick Beard',
 				}), { "Content-type": "application/x-www-form-urlencoded" })
-			conn.getresponse()
+			r = conn.getresponse()
+			r = json.loads(r.read())
+			if r["status"] == 1 :
+				logger.logging.info("Pushover notification sent succesfully")
+			else:
+				logger.logging.error("Pushover failed with following error" + str(r["errors"]))
 		if use_nma == 1:
 			logger.logging.info ("Sending NMA notification...")
 			from lib.pynma import pynma
 			p = pynma.PyNMA(config.nma_api)
-			p.push(config.app, show+msgsuffix, show+msgsuffix, 0, 1, config.nma_priority )
-
+			res = p.push(config.app, pushtitle, pushmsg, 0, 1, config.nma_priority )
+			if res[config.nma_api][u'code'] == u'200':
+				logger.logging.info ("NMA Notification succesfully send")
+			else:
+            			error = res[config.nma_api]['message'].encode('ascii')
+            			logger.logging.error ("NMA Notification failed: " + error)
+        if config.use_email == 1:
+			text_file.close()
+			logger.logging.info ("Sending Email notification...")
+			emailer.SendEmail(pushtitle)
+			os.remove("Output.txt")
 
