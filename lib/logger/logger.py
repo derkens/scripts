@@ -7,8 +7,10 @@
 # Author: Nic Wolfe <nic@wolfeden.ca>
 # URL: http://code.google.com/p/sickbeard/
 
+import os, sys
 import logging, logging.config
-logging.config.fileConfig("lib/logger/logging.conf")
+logconfpath = os.path.dirname(sys.argv[0]) + "/lib/logger/logging.conf"
+logging.config.fileConfig(logconfpath)
 import argparse
 
 parser = argparse.ArgumentParser()
