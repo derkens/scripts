@@ -9,7 +9,7 @@
 
 import os, sys
 import logging, logging.config
-logconfpath = os.path.dirname(sys.argv[0]) + "/lib/logger/logging.conf"
+logconfpath = os.path.join(os.path.dirname(sys.argv[0]), "lib/logger/logging.conf")
 logging.config.fileConfig(logconfpath)
 import argparse
 
