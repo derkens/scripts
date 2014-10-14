@@ -15,7 +15,6 @@ import httplib, urllib, urllib2, json
 import lib.logger.logger as logger
 import lib.config as config
 import lib.emailer as emailer
-from urllib import urlencode
 
 if config.ssl:
 	protocol = "https://"
@@ -25,12 +24,12 @@ else:
 url = protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
 
 logger.logging.info ("Opening URL: " + url)
-params = urlencode({ 'cmd': 'history', 'type': 'downloaded', 'limit': 20 })
+params = config.urlencode({ 'cmd': 'history', 'type': 'downloaded', 'limit': 20 })
 t = urllib2.urlopen(url, params).read()
 t = json.loads(t)
 down = list(t['data'])
 logger.logging.debug (down)
-params = urlencode({ 'cmd': 'history', 'type': 'snatched', 'limit': 20 })
+params = config.urlencode({ 'cmd': 'history', 'type': 'snatched', 'limit': 20 })
 u = urllib2.urlopen(url, params).read()
 u = json.loads(u)
 snat = list(u['data'])
