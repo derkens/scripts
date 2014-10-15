@@ -62,7 +62,7 @@ for index, string in enumerate(onlysnat):
 	w = json.loads(w)
 	epstatus = str(w['data']['status'])
 	epname = str(w['data']['name'])
-	if epstatus == "Downloaded":
+	if epstatus != "Snatched":
 		pass
 	else:
 		params = urllib.urlencode({'cmd': 'episode.setstatus', 'tvdbid': tvdbid, 'season': season, 'episode': epis, 'status': 'wanted' })
