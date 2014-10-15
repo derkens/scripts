@@ -56,7 +56,7 @@ for i in end :
 				urllib.urlencode({
 					"token": config.app_token,
 					"user": config.user_key,
-					"message": show+"is possibly cancelled",
+					"message": show+" is possibly cancelled",
 					"title" : 'Sick Beard',
 					"device" : config.push_device,
 				}), { "Content-type": "application/x-www-form-urlencoded" })
@@ -75,8 +75,8 @@ for i in end :
 			if res[config.nma_api][u'code'] == u'200':
 				logger.logging.info ("NMA Notification succesfully send")
 			else:
-						error = res[config.nma_api]['message'].encode('ascii')
-						logger.logging.error ("NMA Notification failed: " + error)
+				error = res[config.nma_api]['message'].encode('ascii')
+				logger.logging.error ("NMA Notification failed: " + error)
 		if config.use_email == 1:
 			text_file.close()
 			logger.logging.info ("Sending Email notification...")

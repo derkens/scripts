@@ -94,8 +94,8 @@ for index, string in enumerate(onlysnat):
 			if 	res[config.nma_api][u'code'] == u'200':
 					logger.logging.info ("NMA Notification succesfully send")
 			else:
-					error = res[config.nma_api]['message'].encode('ascii')
-					logger.logging.error ("NMA Notification failed: " + error)
+				error = res[config.nma_api]['message'].encode('ascii')
+				logger.logging.error ("NMA Notification failed: " + error)
 		if config.use_email == 1:
 			text_file = open("Output.txt", "w")
 			text_file.write(message + "\n")
