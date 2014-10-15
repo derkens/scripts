@@ -56,12 +56,9 @@ for i in end :
 				urllib.urlencode({
 					"token": config.app_token,
 					"user": config.user_key,
-<<<<<<< HEAD
 					"message": show+" is possibly cancelled",
-=======
-					"message": show+msgsuffix,
->>>>>>> parent of e1c8835... small notification fixes
 					"title" : 'Sick Beard',
+					"device" : config.push_device,
 				}), { "Content-type": "application/x-www-form-urlencoded" })
 			r = conn.getresponse()
 			r = json.loads(r.read())
@@ -69,7 +66,7 @@ for i in end :
 				logger.logging.info("Pushover notification sent succesfully")
 			else:
 				logger.logging.error("Pushover failed with following error" + str(r["errors"]))
-		if use_nma == 1:
+		if config.use_nma == 1:
 			pushtitle = "SickBeard"
 			logger.logging.info ("Sending NMA notification...")
 			from lib.pynma import pynma
