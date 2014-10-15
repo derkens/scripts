@@ -32,7 +32,7 @@ t = json.loads(t)
 logger.logging.debug(t)
 mis= list(t['data']['missed'])
 logger.logging.debug(mis)
-if mis == "[]" :
+if str(mis) == "[]" :
 	logger.logging.info("Nothing to be done, exiting")
 	exit()
 
