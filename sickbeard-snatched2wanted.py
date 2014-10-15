@@ -48,6 +48,8 @@ for index, string in enumerate(snat):
 
 onlysnat = list(set(z) - set(y))
 logger.logging.debug("onlysnat: " + str(onlysnat))
+if config.use_email == 1:
+	text_file = open("Output.txt", "w+")
 for index, string in enumerate(onlysnat):
 	temp1 = str(onlysnat[index])
 	temp2 = temp1.rsplit('_')
@@ -107,4 +109,4 @@ else:
 		text_file.close()
 		logger.logging.info ("Sending Email notification...")
 		emailer.SendEmail(pushtitle)
-		os.remove("Output.txt")
+os.remove("Output.txt")
