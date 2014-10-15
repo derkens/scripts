@@ -47,7 +47,7 @@ for index, string in enumerate(snat):
 	z.append(snat2)
 
 onlysnat = list(set(z) - set(y))
-logger.logging.debug(onlysnat)
+logger.logging.debug("onlysnat: " + str(onlysnat))
 for index, string in enumerate(onlysnat):
 	temp1 = str(onlysnat[index])
 	temp2 = temp1.rsplit('_')
@@ -97,9 +97,14 @@ for index, string in enumerate(onlysnat):
 				error = res[config.nma_api]['message'].encode('ascii')
 				logger.logging.error ("NMA Notification failed: " + error)
 		if config.use_email == 1:
-			text_file = open("Output.txt", "w")
 			text_file.write(message + "\n")
-			text_file.close()
-			logger.logging.info ("Sending Email notification...")
-			emailer.SendEmail(pushtitle)
-			os.remove("Output.txt")
+		else:
+			pass
+if not 'message' in locals():
+	logger.logging.info("Nothing to be done, exiting")
+else:
+	if config.use_email == 1:
+		text_file.close()
+		logger.logging.info ("Sending Email notification...")
+		emailer.SendEmail(pushtitle)
+		os.remove("Output.txt")
