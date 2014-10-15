@@ -32,6 +32,7 @@ t = json.loads(t)
 logger.logging.debug(t)
 end = filter( lambda x: x['status']=='Ended', t['data'].values() )
 logger.logging.debug(end)
+pushtitle = "SickBeard - Cancelled"
 if end == []:
 	logger.logging.info("Nothing to be done, exiting")
 	exit()
