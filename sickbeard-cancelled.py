@@ -80,8 +80,10 @@ for i in end :
 				logger.logging.error ("NMA Notification failed: " + error)
 		if config.use_email == 1:
 			text_file.write(show + " is possibly cancelled\n")
-			text_file.close()
-			logger.logging.info ("Sending Email notification...")
-			emailer.SendEmail(pushtitle)
-			os.remove("Output.txt")
+
+if config.use_email == 1:
+	text_file.close()
+	logger.logging.info ("Sending Email notification...")
+	emailer.SendEmail(pushtitle)
+	os.remove("Output.txt")
 
