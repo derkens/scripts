@@ -91,7 +91,7 @@ for index, string in enumerate(onlysnat):
 		if config.use_nma == 1:
 			logger.logging.debug ("Sending NMA notification...")
 			from lib.pynma import pynma
-			p = pynma.PyNMA(nma_api)
+			p = pynma.PyNMA(config.nma_api)
 			res = p.push(config.app, pushtitle, message, 0, 1, config.nma_priority )
 			if 	res[config.nma_api][u'code'] == u'200':
 					logger.logging.info ("NMA Notification succesfully send")
