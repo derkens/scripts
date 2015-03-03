@@ -72,7 +72,7 @@ for i in end :
 			logger.logging.info ("Sending NMA notification...")
 			from lib.pynma import pynma
 			p = pynma.PyNMA(config.nma_api)
-			res = p.push(config.app, pushtitle, pushmsg, 0, 1, config.nma_priority )
+			res = p.push(config.app, pushtitle, show+" is possibly cancelled", 0, 1, config.nma_priority )
 			if res[config.nma_api][u'code'] == u'200':
 				logger.logging.info ("NMA Notification succesfully send")
 			else:
