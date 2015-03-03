@@ -78,6 +78,11 @@ else:
 			use_nma = int(config.get("NMA", "use_nma"))
 			nma_api = config.get("NMA", "nma_api")
 			nma_priority = config.get("NMA", "nma_priority")
+			use_pushbullet = int(config.get("Pushbullet", "use_pushbullet"))
+			ptoken = config.get("Pushbullet", "ptoken")
+			channeltag = config.get("Pushbullet", "channeltag")
+			deviceid = config.get("Pushbullet", "deviceid")
+			subschanneltag = config.get("Autosub", "channeltag")
 
 		except (configparser.NoOptionError, ValueError):
 			pass
@@ -216,7 +221,23 @@ finally:
 			"sound": "Piano Bar",
 		}), { "Content-type": "application/x-www-form-urlencoded" })
 		conn.getresponse()
-
+	if use_pushbullet == 1:
+		data = urllib.urlencode({
+			'type': 'note',
+			'title': show,
+			'body': pushmsg,
+			'device_id': deviceid,
+			'channel_tag': subchanneltag
+			})
+		auth = base64.encodestring('%s:' % ptoken).replace('\n', '')
+		req = urllib2.Request('https://api.pushbullet.com/v2/pushes', data)
+		req.add_header('Authorization', 'Basic %s' % auth)
+		response = urllib2.urlopen(req)
+		res = json.load(response)
+		if 'error' in res:
+			print ("Pushbullet notification failed")
+		else:
+			print ("Pushbullet notification sucesfully sent")
 	if use_nma == 1:
 		print ("Sending NMA notification...")
 		from lib.pynma import pynma
