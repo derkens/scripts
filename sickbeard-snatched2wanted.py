@@ -112,10 +112,10 @@ for index, string in enumerate(onlysnat):
 			req.add_header('Authorization', 'Basic %s' % auth)
 			response = urllib2.urlopen(req)
 			res = json.load(response)
-			if res['sender_name']:
-				logger.logging.info ("Pushbullet notification sent succesfully")
+			if 'error' in res:
+				logger.logging.info ("Pushbullet notification failed")
 			else:
-				logger.logging.error ("Pushbullet notification failed")
+				logger.logging.error ("Pushbullet notification sent succesfully")
 		if config.use_email == 1:
 			text_file.write(message + "\n")
 		else:
