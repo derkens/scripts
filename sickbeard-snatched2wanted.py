@@ -118,8 +118,6 @@ for index, string in enumerate(onlysnat):
 				logger.logging.error ("Pushbullet notification failed")
 		if config.use_email == 1:
 			text_file.write(show + " is possibly cancelled\n")
-		if config.use_email == 1:
-			text_file.write(message + "\n")
 		else:
 			pass
 if not 'message' in locals():

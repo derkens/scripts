@@ -98,8 +98,7 @@ for i in end :
 				logger.logging.error ("Pushbullet notification failed")
 		if config.use_email == 1:
 			text_file.write(show + " is possibly cancelled\n")
-		if config.use_email == 1:
-			text_file.write(show + " is possibly cancelled\n")
+
 
 if config.use_email == 1:
 	text_file.close()
