@@ -77,7 +77,10 @@ else:
 			smtp_pass = str(config.get("Email", "smtp_pass"))
 			smtp_port = config.get("Email", "smtp_port")
 			starttls = int(config.get("Email", "starttls"))
-
+			use_pushbullet = int(config.get("Pushbullet", "use_pushbullet"))
+			ptoken = config.get("Pushbullet", "ptoken")
+			channeltag = config.get("Pushbullet", "channeltag")
+			deviceid = config.get("Pushbullet", "deviceid")
 		except (configparser.NoOptionError, ValueError):
 			pass
 

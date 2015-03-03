@@ -14,14 +14,14 @@ First you should edit settings.cfg.sample and save to settings.cfg.
 When this script is run, it will collect the episodes SickBeard missed, as it shows in 'Coming Episodes'.
 It will only notify you of shows you missed, it won't take any action.
 You can put this script in crontab or systemd timer and run it daily after your normal download timeframe.
-Currently the only notifiers to choose are [pushover](http://www.pushover.net), [notify my android](http://www.notifymyandroid.com) and e-mail
+Currently the only notifiers to choose are [pushover](http://www.pushover.net), [notify my android](http://www.notifymyandroid.com), [pushbullet](http://www.pushbullet.com) and e-mail
 
 #sickbeard-cancelled#
 
 When this script is run, it will checkout the status of shows in the SickBeard showlist through the API (only not paused shows).
 When it encounters shows as ended, it will check if the last episode is aired (eg. no next airdate).
 It will then put the show on pause, to prevent it beiing checked again next time the script is executed.
-Currently the only notifiers to choose are [pushover](http://www.pushover.net), [notify my android](http://www.notifymyandroid.com) and e-mail
+Currently the only notifiers to choose are [pushover](http://www.pushover.net), [notify my android](http://www.notifymyandroid.com), [pushbullet](http://www.pushbullet.com) and e-mail
 
 #sickbeard-snatched2wanted#
 
@@ -31,4 +31,4 @@ both limited to 20 items for now
 It crosschecks both lists and it remove items from the *'snatched'* list whom are also present on the *'downloaded'* list.
 The remaining items are checked one at a time for episode status for security (one at a time for this is a SickBeard api limitation)
 After that the remaining episode that have status *'snatched'*, are put to wanted. This also triggers a backlog search.
-Currently the only notifiers to choose are [pushover](http://www.pushover.net), [notify my android](http://www.notifymyandroid.com) and e-mail
+Currently the only notifiers to choose are [pushover](http://www.pushover.net), [notify my android](http://www.notifymyandroid.com), [pushbullet](http://www.pushbullet.com) and e-mail

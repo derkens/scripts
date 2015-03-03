@@ -13,6 +13,7 @@ import httplib, urllib, urllib2, json
 import lib.logger.logger as logger
 import lib.config as config
 import lib.emailer as emailer
+import base64
 
 if config.ssl:
 	protocol = "https://"
@@ -78,6 +79,25 @@ for i in end :
 			else:
 				error = res[config.nma_api]['message'].encode('ascii')
 				logger.logging.error ("NMA Notification failed: " + error)
+		if config.use_pushbullet == 1:
+			data = urllib.urlencode({
+				'type': 'note',
+				'title': pushtitle,
+				'body': show+" is possibly cancelled",
+				'device_id': config.deviceid,
+				'channel_tag': config.channeltag
+				})
+			auth = base64.encodestring('%s:' % config.ptoken).replace('\n', '')
+			req = urllib2.Request('https://api.pushbullet.com/v2/pushes', data)
+			req.add_header('Authorization', 'Basic %s' % auth)
+			response = urllib2.urlopen(req)
+			res = json.load(response)
+			if res['sender_name']:
+				logger.logging.info ("Pushbullet notification sent succesfully")
+			else:
+				logger.logging.error ("Pushbullet notification failed")
+		if config.use_email == 1:
+			text_file.write(show + " is possibly cancelled\n")
 		if config.use_email == 1:
 			text_file.write(show + " is possibly cancelled\n")
 

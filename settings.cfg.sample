@@ -38,6 +38,12 @@ use_nma=0
 nma_api=
 nma_priority=
 
+[Pushbullet]
+use_pushbullet=0
+ptoken=
+channeltag=
+deviceid=
+
 [Email]
 use_email=0
 from_address=
