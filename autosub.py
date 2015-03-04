@@ -12,6 +12,7 @@
 import os
 import sys
 import httplib, urllib, urllib2, json, subprocess
+import base64
 
 # Try importing Python 2 modules using new names
 try:
@@ -82,7 +83,7 @@ else:
 			ptoken = config.get("Pushbullet", "ptoken")
 			channeltag = config.get("Pushbullet", "channeltag")
 			deviceid = config.get("Pushbullet", "deviceid")
-			subschanneltag = config.get("Autosub", "channeltag")
+			subchanneltag = config.get("Autosub", "channeltag")
 
 		except (configparser.NoOptionError, ValueError):
 			pass
