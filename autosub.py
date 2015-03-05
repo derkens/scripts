@@ -16,15 +16,15 @@ import base64
 
 # Try importing Python 2 modules using new names
 try:
-    import ConfigParser as configparser
-    import urllib2
-    from urllib import urlencode
+	import ConfigParser as configparser
+	import urllib2
+	from urllib import urlencode
 
 # On error import Python 3 modules
 except ImportError:
-    import configparser
-    import urllib.request as urllib2
-    from urllib.parse import urlencode
+	import configparser
+	import urllib.request as urllib2
+	from urllib.parse import urlencode
 
 # Default values
 host = "localhost"
@@ -159,50 +159,50 @@ epname= str(t['data']['name'])
 
 # remove and update episode in xbmc (filename did not change so automatic update does not work)
 if vidandpath.endswith('.mkv') :
-    data = {
-        "jsonrpc":"2.0",
-        "method":"VideoLibrary.GetEpisodes",
-        "params":{"sort": {"order": "ascending", "method": "title"}, "filter": {"operator": "contains", "field": "title", "value": epname}, "properties": ["file"]},
-        "id" : 1
-    }
-    req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
-    req.add_header('Content-Type', 'application/json')
-    r2 = urllib2.urlopen(req, json.dumps(data))
-    r2 = r2.read()
-    r2 = json.loads(r2)
-    xbmcepid = r2['result']['episodes'][0]['episodeid']
+	data = {
+		"jsonrpc":"2.0",
+		"method":"VideoLibrary.GetEpisodes",
+		"params":{"sort": {"order": "ascending", "method": "title"}, "filter": {"operator": "contains", "field": "title", "value": epname}, "properties": ["file"]},
+		"id" : 1
+	}
+	req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
+	req.add_header('Content-Type', 'application/json')
+	r2 = urllib2.urlopen(req, json.dumps(data))
+	r2 = r2.read()
+	r2 = json.loads(r2)
+	xbmcepid = r2['result']['episodes'][0]['episodeid']
 
-    data = {
-        "jsonrpc":"2.0",
-        "method":"VideoLibrary.RemoveEpisode",
-        "params":{"episodeid" : xbmcepid },
-        "id" : 1
-    }
-    req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
-    req.add_header('Content-Type', 'application/json')
-    r3 = urllib2.urlopen(req, json.dumps(data))
-    r3 = r3.read()
-    r3 = json.loads(r3)
+	data = {
+		"jsonrpc":"2.0",
+		"method":"VideoLibrary.RemoveEpisode",
+		"params":{"episodeid" : xbmcepid },
+		"id" : 1
+	}
+	req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
+	req.add_header('Content-Type', 'application/json')
+	r3 = urllib2.urlopen(req, json.dumps(data))
+	r3 = r3.read()
+	r3 = json.loads(r3)
 
 else :
-    pass
+	pass
 
 #update xbmc (only the path)
 try:
-    data = {
-        "jsonrpc":"2.0",
-        "method":"VideoLibrary.Scan",
-        "params":{"directory":pathvid},
-        "id" : 1
-    }
-    req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
-    req.add_header('Content-Type', 'application/json')
-    response = urllib2.urlopen(req, json.dumps(data))
-    status = ""
+	data = {
+		"jsonrpc":"2.0",
+		"method":"VideoLibrary.Scan",
+		"params":{"directory":pathvid},
+		"id" : 1
+	}
+	req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
+	req.add_header('Content-Type', 'application/json')
+	response = urllib2.urlopen(req, json.dumps(data))
+	status = ""
 
 except:
-    print ("Can't reach Kodi")
-    status = "!"
+	print ("Can't reach Kodi")
+	status = "!"
 
 finally:
 
