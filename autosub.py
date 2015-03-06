@@ -226,7 +226,7 @@ finally:
 		data = urllib.urlencode({
 			'type': 'note',
 			'title': show,
-			'body': epname+" ("+season+"x"+epis")",
+			'body': epname+" ("+season+"x"+epis+")",
 			'device_id': deviceid,
 			'channel_tag': subchanneltag
 			})
