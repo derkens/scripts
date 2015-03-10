@@ -11,7 +11,7 @@
 
 import os
 import sys
-import httplib, urllib, urllib2, json, subprocess
+import httplib, urllib, urllib2, json, subprocess, re
 import base64
 
 # Try importing Python 2 modules using new names
@@ -126,8 +126,16 @@ outputfileandpath = subandpathnoext+".nl.mkv"
 finalfileandpath = subandpathnoext+".mkv"
 pathvid = os.path.dirname(vidandpath)
 
+getname = re.compile('Series/(.*?)/Season')
+m = getname.search(subandpath)
+if m:
+   findshow = m.group(1)
+print getname
+print m
+
 #muxing vid and sub in new file (vid.nl.mkv)
 subprocess.call(['mkvmerge', '-o', outputfileandpath, '--language', '-1:eng', vidandpath , '--language', '0:nld', subandpath])
+
 
 '''
 the conversion to prevent 'strange' chars is not neccesary anymore on my system.
@@ -145,7 +153,7 @@ os.chmod(finalfileandpath, 0775)
 os.chmod(subandpath, 0775)
 
 #aquire tvdbid from sickbeard
-params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': show})
+params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': findshow})
 r = urllib2.urlopen(url, params).read()
 r = json.loads(r)
 tvdbid = str(r['data']['results'][0]['tvdbid'])
@@ -209,7 +217,7 @@ finally:
 	if use_pushover == 1:
 		print ("Sending Pushover notification...")
 		pushurl= "http://thetvdb.com/?tab=series&id="+tvdbid+"&lid=13"
-		pushmsg= show+' '+season+'x'+epis+' '+epname+' '+status
+		pushmsg= findshow+' '+season+'x'+epis+' '+epname+' '+status
 
 		conn = httplib.HTTPSConnection("api.pushover.net:443")
 		conn.request("POST", "/1/messages.json",
@@ -225,7 +233,7 @@ finally:
 	if use_pushbullet == 1:
 		data = urllib.urlencode({
 			'type': 'note',
-			'title': show,
+			'title': findshow,
 			'body': epname+" ("+season+"x"+epis+")",
 			'device_id': deviceid,
 			'channel_tag': subchanneltag
