@@ -58,8 +58,8 @@ for i in end :
 				urllib.urlencode({
 					"token": config.app_token,
 					"user": config.user_key,
-					"message": show+" is possibly cancelled",
-					"title" : 'Sick Beard',
+					"message": "is possibly cancelled",
+					"title" : show,
 					"device" : config.push_device,
 				}), { "Content-type": "application/x-www-form-urlencoded" })
 			r = conn.getresponse()
@@ -68,12 +68,11 @@ for i in end :
 				logger.logging.info("Pushover notification sent succesfully")
 			else:
 				logger.logging.error("Pushover failed with following error" + str(r["errors"]))
-		if config.use_nma == 1:
-			pushtitle = "SickBeard"
+		if config.use_nma == 1
 			logger.logging.info ("Sending NMA notification...")
 			from lib.pynma import pynma
 			p = pynma.PyNMA(config.nma_api)
-			res = p.push(config.app, pushtitle, show+" is possibly cancelled", 0, 1, config.nma_priority )
+			res = p.push(config.app, show, "is possibly cancelled", 0, 1, config.nma_priority )
 			if res[config.nma_api][u'code'] == u'200':
 				logger.logging.info ("NMA Notification succesfully send")
 			else:
@@ -82,8 +81,8 @@ for i in end :
 		if config.use_pushbullet == 1:
 			data = urllib.urlencode({
 				'type': 'note',
-				'title': pushtitle,
-				'body': show+" is possibly cancelled",
+				'title': show,
+				'body': "is possibly cancelled",
 				'device_id': config.deviceid,
 				'channel_tag': config.channeltag
 				})
@@ -103,6 +102,6 @@ for i in end :
 if config.use_email == 1:
 	text_file.close()
 	logger.logging.info ("Sending Email notification...")
-	emailer.SendEmail(pushtitle)
+	emailer.SendEmail(show)
 	os.remove("Output.txt")
 

@@ -69,9 +69,9 @@ for index, string in enumerate(onlysnat):
 		params = urllib.urlencode({'cmd': 'episode.setstatus', 'tvdbid': tvdbid, 'season': season, 'episode': epis, 'status': 'wanted' })
 		q = urllib2.urlopen(url, params).read()
 		q = json.loads(q) ; logger.logging.debug(q)
-		message = showname+' '+season+'x'+epis+' '+epname+' is op wanted gezet, Check Sabnzbd...'
+		message = season+'x'+epis+' '+epname+' is op wanted gezet.'
 		logger.logging.info (message)
-		pushtitle = 'SickBeard - 2wanted'
+		pushtitle = show
 		if config.use_pushover == 1:
 			logger.logging.debug ("Sending Pushover notification...")
 			conn = httplib.HTTPSConnection("api.pushover.net:443")
