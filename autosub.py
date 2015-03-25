@@ -217,7 +217,7 @@ finally:
 	if use_pushover == 1:
 		print ("Sending Pushover notification...")
 		pushurl= "http://thetvdb.com/?tab=series&id="+tvdbid+"&lid=13"
-		pushmsg= epname+" ("+season+"x"+epis+") "+status
+		pushmsg= "<i><b>"+epname+"</b> ("+season+"x"+epis+") </i>"+status
 
 		conn = httplib.HTTPSConnection("api.pushover.net:443")
 		conn.request("POST", "/1/messages.json",
@@ -228,6 +228,7 @@ finally:
 			"title": findshow,
 			"url": pushurl,
 			"url_title": show,
+			"html": "1"
 			"sound": "Piano Bar",
 		}), { "Content-type": "application/x-www-form-urlencoded" })
 		conn.getresponse()
