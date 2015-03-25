@@ -69,7 +69,7 @@ for index, string in enumerate(onlysnat):
 		params = urllib.urlencode({'cmd': 'episode.setstatus', 'tvdbid': tvdbid, 'season': season, 'episode': epis, 'status': 'wanted' })
 		q = urllib2.urlopen(url, params).read()
 		q = json.loads(q) ; logger.logging.debug(q)
-		message = season+'x'+epis+' '+epname+' is op wanted gezet.'
+		message = "<i><b>"+epname+"</b> ("+season+"x"+epis+") </i> set to wanted."
 		logger.logging.info (message)
 		pushtitle = show
 		if config.use_pushover == 1:

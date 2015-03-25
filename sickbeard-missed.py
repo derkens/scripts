@@ -45,7 +45,7 @@ else:
 		epis = str(mis[index]['episode']) ; logger.logging.debug("episode = " + epis)
 		epname = str(mis[index]['ep_name']) ; logger.logging.debug("episode name = " + epname)
 		pushtitle = '! '+show
-		pushmsg = seas+'x'+epis+' '+epname
+		pushmsg = "<i><b>"+epname+"</b> ("+season+"x"+epis+") </i>"
 		logger.logging.debug("Dumping pushmsg for debug " + pushmsg)
 		if config.use_pushover == 1:
 			logger.logging.debug ("Sending Pushover notification...")
