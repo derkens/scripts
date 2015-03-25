@@ -217,7 +217,7 @@ finally:
 	if use_pushover == 1:
 		print ("Sending Pushover notification...")
 		pushurl= "http://thetvdb.com/?tab=series&id="+tvdbid+"&lid=13"
-		pushmsg= findshow+' '+season+'x'+epis+' '+epname+' '+status
+		pushmsg= epname+" ("+season+"x"+epis+") "+status
 
 		conn = httplib.HTTPSConnection("api.pushover.net:443")
 		conn.request("POST", "/1/messages.json",
@@ -225,6 +225,7 @@ finally:
 			"token": app_token,
 			"user": user_key,
 			"message": pushmsg,
+			"title": findshow,
 			"url": pushurl,
 			"url_title": show,
 			"sound": "Piano Bar",
