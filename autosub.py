@@ -228,7 +228,7 @@ finally:
 			"title": findshow,
 			"url": pushurl,
 			"url_title": show,
-			"html": "1"
+			"html": "1",
 			"sound": "Piano Bar",
 		}), { "Content-type": "application/x-www-form-urlencoded" })
 		conn.getresponse()
