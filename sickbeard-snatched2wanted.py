@@ -71,7 +71,7 @@ for index, string in enumerate(onlysnat):
 		q = json.loads(q) ; logger.logging.debug(q)
 		message = "<i><b>"+epname+"</b> ("+season+"x"+epis+") </i> set to wanted."
 		logger.logging.info (message)
-		pushtitle = show
+		pushtitle = showname
 		if config.use_pushover == 1:
 			logger.logging.debug ("Sending Pushover notification...")
 			conn = httplib.HTTPSConnection("api.pushover.net:443")
@@ -81,6 +81,7 @@ for index, string in enumerate(onlysnat):
 					"user": config.user_key,
 					"message": message,
 					"title" : pushtitle,
+					"html" : "1",
 					"push_device" : config.push_device,
 				}), { "Content-type": "application/x-www-form-urlencoded" })
 			r = conn.getresponse()
