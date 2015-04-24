@@ -43,7 +43,7 @@ for i in end :
 	net = i['next_ep_airdate'] ; logger.logging.debug("Next episode date = " + net)
 	if net == '':
 		params = config.urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': show})
-		r = urllib2.urlopen(url, params).read()
+		r = urllib2.urlopen(url + params).read()
 		r = json.loads(r)
 		logger.logging.debug(r)
 		tvdbid = str(r['data']['results'][0]['tvdbid'])
