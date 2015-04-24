@@ -59,7 +59,7 @@ for index, string in enumerate(onlysnat):
 	epis = str(temp2[2]) ; logger.logging.debug("episode: " + epis)
 	tvdbid = str(temp2[3]) ; logger.logging.debug("tvdbid: " + tvdbid)
 	params = urllib.urlencode({'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epis, })
-	w = urllib2.urlopen(url, params).read()
+	w = urllib2.urlopen(url + params).read()
 	w = json.loads(w)
 	epstatus = str(w['data']['status'])
 	epname = str(w['data']['name'])
