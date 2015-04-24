@@ -28,7 +28,7 @@ url = protocol + config.host + ":" + config.port + config.web_root + "api/" + co
 logger.logging.info ("Opening URL: " + url)
 
 params = config.urlencode({'cmd': 'shows', 'sort': 'name', 'paused': '0'})
-t = urllib2.urlopen(url, params).read()
+t = urllib2.urlopen(url + params).read()
 t = json.loads(t)
 logger.logging.debug(t)
 end = filter( lambda x: x['status']=='Ended', t['data'].values() )
@@ -49,7 +49,7 @@ for i in end :
 		tvdbid = str(r['data']['results'][0]['tvdbid'])
 		logger.logging.debug(tvdbid)
 		params = config.urlencode({'cmd': 'show.pause', 'tvdbid': tvdbid, 'pause': 1})
-		s = urllib2.urlopen(url, params).read()
+		s = urllib2.urlopen(url + params).read()
 		logger.logging.debug(s)
 		if config.use_pushover == 1:
 			logger.logging.debug ("Sending Pushover notification...")
@@ -68,7 +68,7 @@ for i in end :
 				logger.logging.info("Pushover notification sent succesfully")
 			else:
 				logger.logging.error("Pushover failed with following error" + str(r["errors"]))
-		if config.use_nma == 1
+		if config.use_nma == 1:
 			logger.logging.info ("Sending NMA notification...")
 			from lib.pynma import pynma
 			p = pynma.PyNMA(config.nma_api)

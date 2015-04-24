@@ -26,12 +26,12 @@ url = protocol + config.host + ":" + config.port + config.web_root + "api/" + co
 
 logger.logging.info ("Opening URL: " + url)
 params = config.urlencode({ 'cmd': 'history', 'type': 'downloaded', 'limit': 20 })
-t = urllib2.urlopen(url, params).read()
+t = urllib2.urlopen(url + params).read()
 t = json.loads(t)
 down = list(t['data'])
 logger.logging.debug (down)
 params = config.urlencode({ 'cmd': 'history', 'type': 'snatched', 'limit': 20 })
-u = urllib2.urlopen(url, params).read()
+u = urllib2.urlopen(url + params).read()
 u = json.loads(u)
 snat = list(u['data'])
 logger.logging.debug(snat)
@@ -67,7 +67,7 @@ for index, string in enumerate(onlysnat):
 		pass
 	else:
 		params = urllib.urlencode({'cmd': 'episode.setstatus', 'tvdbid': tvdbid, 'season': season, 'episode': epis, 'status': 'wanted' })
-		q = urllib2.urlopen(url, params).read()
+		q = urllib2.urlopen(url + params).read()
 		q = json.loads(q) ; logger.logging.debug(q)
 		message = "<i><b>"+epname+"</b> ("+season+"x"+epis+") </i> set to wanted."
 		logger.logging.info (message)

@@ -28,7 +28,7 @@ url = protocol + config.host + ":" + config.port + config.web_root + "api/" + co
 logger.logging.info ("Opening URL: " + url)
 
 params = config.urlencode({ 'cmd': 'future', 'type': 'missed' })
-t = urllib2.urlopen(url, params).read()
+t = urllib2.urlopen(url + params).read()
 t = json.loads(t)
 logger.logging.debug(t)
 mis= list(t['data']['missed'])
