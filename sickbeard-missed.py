@@ -43,9 +43,9 @@ else:
 		show = str(mis[index]['show_name']) ; logger.logging.debug("show = " + show)
 		seas = str(mis[index]['season']) ; logger.logging.debug("season = " + seas)
 		epis = str(mis[index]['episode']) ; logger.logging.debug("episode = " + epis)
-		epname = str(mis[index]['ep_name']) ; logger.logging.debug("episode name = " + epname)
+		epname = mis[index]['ep_name'].encode('utf-8') ; logger.logging.debug("episode name = " + epname)
 		pushtitle = '! '+show
-		pushmsg = "<i><b>"+epname+"</b> ("+season+"x"+epis+") </i>"
+		pushmsg = "<i><b>"+epname+"</b> ("+seas+"x"+epis+") </i>"
 		logger.logging.debug("Dumping pushmsg for debug " + pushmsg)
 		if config.use_pushover == 1:
 			logger.logging.debug ("Sending Pushover notification...")
@@ -57,6 +57,7 @@ else:
 					"message": pushmsg,
 					"title" : pushtitle,
 					"device" : config.push_device,
+					"html": "1"
 				}), { "Content-type": "application/x-www-form-urlencoded" })
 			r = conn.getresponse()
 			r = json.loads(r.read())
