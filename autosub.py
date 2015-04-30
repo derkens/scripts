@@ -126,7 +126,7 @@ outputfileandpath = subandpathnoext+".nl.mkv"
 finalfileandpath = subandpathnoext+".mkv"
 pathvid = os.path.dirname(vidandpath)
 
-getname = re.compile('Series/(.*?)/Season')
+getname = re.compile('series/(.*?)/Season')
 m = getname.search(subandpath)
 if m:
    findshow = m.group(1)
@@ -154,14 +154,14 @@ os.chmod(subandpath, 0775)
 
 #aquire tvdbid from sickbeard
 params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': findshow})
-r = urllib2.urlopen(url, params).read()
+r = urllib2.urlopen(url + params).read()
 r = json.loads(r)
 tvdbid = str(r['data']['results'][0]['tvdbid'])
 
 
 #aquire episode name from sickbeard
 params = urlencode({'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epis})
-t = urllib2.urlopen(url, params).read()
+t = urllib2.urlopen(url + params).read()
 t = json.loads(t)
 epname= str(t['data']['name'])
 

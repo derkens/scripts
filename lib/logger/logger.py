@@ -11,17 +11,21 @@ import os, sys
 import logging, logging.config
 logconfpath = os.path.join(os.path.dirname(sys.argv[0]), "lib/logger/logging.conf")
 logging.config.fileConfig(logconfpath)
-import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-v", "--verbose", help="increase output verbosity",
-							action="store_true")
-args = parser.parse_args()
+import ConfigParser as configparser
+
+config = configparser.RawConfigParser()
+config_filename = os.path.join(os.path.dirname(sys.argv[0]), "settings.cfg")
+
+with open(config_filename, "r") as fp:
+	config.readfp(fp)
+
+lvl = config.get("General", "loglevel")
 
 logger1 = logging.getLogger("logger1")
 logger2 = logging.getLogger("logger2")
 
-if args.verbose:
+if lvl == "DEBUG":
 	logging = logger2
 else:
 	logging = logger1
