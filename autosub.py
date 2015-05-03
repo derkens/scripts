@@ -163,7 +163,7 @@ tvdbid = str(r['data']['results'][0]['tvdbid'])
 params = urlencode({'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epis})
 t = urllib2.urlopen(url + params).read()
 t = json.loads(t)
-epname= str(t['data']['name'])
+epname= t['data']['name'].encode('utf-8')
 
 # remove and update episode in xbmc (filename did not change so automatic update does not work)
 if vidandpath.endswith('.mkv') :
