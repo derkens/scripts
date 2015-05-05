@@ -126,7 +126,7 @@ outputfileandpath = subandpathnoext+".nl.mkv"
 finalfileandpath = subandpathnoext+".mkv"
 pathvid = os.path.dirname(vidandpath)
 
-getname = re.compile('series/(.*?)/Season')
+getname = re.compile('.eries/(.*?)/Season')
 m = getname.search(subandpath)
 if m:
    findshow = m.group(1)
@@ -153,11 +153,17 @@ os.chmod(finalfileandpath, 0775)
 os.chmod(subandpath, 0775)
 
 #aquire tvdbid from sickbeard
-params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': findshow})
-r = urllib2.urlopen(url + params).read()
-r = json.loads(r)
-tvdbid = str(r['data']['results'][0]['tvdbid'])
-
+try:
+	params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': findshow})
+	r = urllib2.urlopen(url + params).read()
+	r = json.loads(r)
+	tvdbid = str(r['data']['results'][0]['tvdbid'])
+except IndexError:
+	findshow = findshow.replace(" ",": ", 1)
+	params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': findshow})
+	r = urllib2.urlopen(url + params).read()
+	r = json.loads(r)
+	tvdbid = str(r['data']['results'][0]['tvdbid'])
 
 #aquire episode name from sickbeard
 params = urlencode({'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epis})
@@ -166,35 +172,37 @@ t = json.loads(t)
 epname= t['data']['name'].encode('utf-8')
 
 # remove and update episode in xbmc (filename did not change so automatic update does not work)
-if vidandpath.endswith('.mkv') :
-	data = {
-		"jsonrpc":"2.0",
-		"method":"VideoLibrary.GetEpisodes",
-		"params":{"sort": {"order": "ascending", "method": "title"}, "filter": {"operator": "contains", "field": "title", "value": epname}, "properties": ["file"]},
-		"id" : 1
-	}
-	req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
-	req.add_header('Content-Type', 'application/json')
-	r2 = urllib2.urlopen(req, json.dumps(data))
-	r2 = r2.read()
-	r2 = json.loads(r2)
-	xbmcepid = r2['result']['episodes'][0]['episodeid']
+try:
+	if vidandpath.endswith('.mkv') :
+		data = {
+			"jsonrpc":"2.0",
+			"method":"VideoLibrary.GetEpisodes",
+			"params":{"sort": {"order": "ascending", "method": "title"}, "filter": {"operator": "contains", "field": "title", "value": epname}, "properties": ["file"]},
+			"id" : 1
+		}
+		req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
+		req.add_header('Content-Type', 'application/json')
+		r2 = urllib2.urlopen(req, json.dumps(data))
+		r2 = r2.read()
+		r2 = json.loads(r2)
+		xbmcepid = r2['result']['episodes'][0]['episodeid']
 
-	data = {
-		"jsonrpc":"2.0",
-		"method":"VideoLibrary.RemoveEpisode",
-		"params":{"episodeid" : xbmcepid },
-		"id" : 1
-	}
-	req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
-	req.add_header('Content-Type', 'application/json')
-	r3 = urllib2.urlopen(req, json.dumps(data))
-	r3 = r3.read()
-	r3 = json.loads(r3)
+		data = {
+			"jsonrpc":"2.0",
+			"method":"VideoLibrary.RemoveEpisode",
+			"params":{"episodeid" : xbmcepid },
+			"id" : 1
+		}
+		req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
+		req.add_header('Content-Type', 'application/json')
+		r3 = urllib2.urlopen(req, json.dumps(data))
+		r3 = r3.read()
+		r3 = json.loads(r3)
 
-else :
+	else :
+		pass
+except:
 	pass
-
 #update xbmc (only the path)
 try:
 	data = {
