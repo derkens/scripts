@@ -39,9 +39,11 @@ if not os.path.isfile(config_filename):
 	logger.logging.error ("copy /rename " + config_filename + ".sample and edit")
 	sys.exit(1)
 
+
 else:
 	try:
 		logger.logging.info ("Loading config from " + config_filename)
+		os.chmod(os.path.join(os.path.dirname(sys.argv[0]), "SickBeardSuite.log"), 0775)
 
 		with open(config_filename, "r") as fp:
 			config.readfp(fp)
@@ -81,6 +83,8 @@ else:
 			ptoken = config.get("Pushbullet", "ptoken")
 			channeltag = config.get("Pushbullet", "channeltag")
 			deviceid = config.get("Pushbullet", "deviceid")
+			asapp_token = config.get("Autosub", "app_token")
+			aschanneltag = config.get("Autosub", "channeltag")
 		except (configparser.NoOptionError, ValueError):
 			pass
 

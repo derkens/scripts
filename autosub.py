@@ -12,107 +12,15 @@
 import os
 import sys
 import httplib, urllib, urllib2, json, subprocess, re
+import lib.logger.logger as logger
+import lib.config as config
+import lib.emailer as emailer
 import base64
 
-# Try importing Python 2 modules using new names
-try:
-	import ConfigParser as configparser
-	import urllib2
-	from urllib import urlencode
-
-# On error import Python 3 modules
-except ImportError:
-	import configparser
-	import urllib.request as urllib2
-	from urllib.parse import urlencode
-
-# Default values
-host = "localhost"
-port = "8081"
-api_key = ""
-ssl = 0
-web_root = "/"
-app = "SickBeard"
-
-default_url = host + ":" + port + web_root
-if ssl:
-	default_url = "https://" + default_url
+if config.ssl:
+	protocol = 'https://'
 else:
-	default_url = "http://" + default_url
-
-# Get values from config_file
-config = configparser.RawConfigParser()
-config_filename = os.path.join(os.path.dirname(sys.argv[0]), "settings.cfg")
-
-if not os.path.isfile(config_filename):
-	print ("ERROR: " + config_filename + " doesn\'t exist")
-	print ("copy /rename " + config_filename + ".sample and edit\n")
-	sys.exit(1)
-
-else:
-	try:
-		print ("Loading config from " + config_filename + "\n")
-
-		with open(config_filename, "r") as fp:
-			config.readfp(fp)
-
-		# Replace default values with config_file values
-		host = config.get("SickBeard", "host")
-		port = config.get("SickBeard", "port")
-		api_key = config.get("SickBeard", "api_key")
-		kodi_host = config.get("Kodi", "host")
-		kodi_port = config.get("Kodi", "port")
-
-		if not api_key:
-			print ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
-			sys.exit(1)
-
-		if not kodi_host or not kodi_port:
-			print ("Kodi host or port setting is empty, please fill this field in settings.cfg")
-			sys.exit(1)
-
-		try:
-			ssl = int(config.get("SickBeard", "ssl"))
-			use_pushover = int(config.get("Pushover", "use_pushover"))
-			app_token = config.get("Autosub", "app_token")
-			user_key = config.get("Pushover", "user_key")
-			use_nma = int(config.get("NMA", "use_nma"))
-			nma_api = config.get("NMA", "nma_api")
-			nma_priority = config.get("NMA", "nma_priority")
-			use_pushbullet = int(config.get("Pushbullet", "use_pushbullet"))
-			ptoken = config.get("Pushbullet", "ptoken")
-			channeltag = config.get("Pushbullet", "channeltag")
-			deviceid = config.get("Pushbullet", "deviceid")
-			subchanneltag = config.get("Autosub", "channeltag")
-
-		except (configparser.NoOptionError, ValueError):
-			pass
-
-		try:
-			web_root = config.get("SickBeard", "web_root")
-			if not web_root.startswith("/"):
-				web_root = "/" + web_root
-
-			if not web_root.endswith("/"):
-				web_root = web_root + "/"
-
-		except configparser.NoOptionError:
-			pass
-
-	except EnvironmentError:
-		e = sys.exc_info()[1]
-		print ("Could not read configuration file: " + str(e))
-		# There was a config_file, don't use default values but exit
-		sys.exit(1)
-
-if ssl:
-	protocol = "https://"
-else:
-	protocol = "http://"
-
-url = protocol + host + ":" + port + web_root + "api/" + api_key + "/?"
-
-print ("Opening URL: " + url)
+	protocol = 'http://'
 
 #first, define needed variables
 subandpath= sys.argv[1]
@@ -122,131 +30,147 @@ epis = sys.argv[6]
 season = sys.argv[5]
 newsubandpath= subandpath+'.utf8'
 subandpathnoext = sys.argv[1] [:-7]
-outputfileandpath = subandpathnoext+".nl.mkv"
-finalfileandpath = subandpathnoext+".mkv"
+outputfileandpath = subandpathnoext+'.nl.mkv'
+finalfileandpath = subandpathnoext+'.mkv'
 pathvid = os.path.dirname(vidandpath)
 
 getname = re.compile('.eries/(.*?)/Season')
 m = getname.search(subandpath)
 if m:
    findshow = m.group(1)
-print getname
-print m
+
+logger.logging.info ("Found showname: " + findshow)
 
 #muxing vid and sub in new file (vid.nl.mkv)
-subprocess.call(['mkvmerge', '-o', outputfileandpath, '--language', '-1:eng', vidandpath , '--language', '0:nld', subandpath])
+p = subprocess.Popen(['mkvmerge', '-o', outputfileandpath, '--language', '-1:eng', vidandpath , '--language', '0:nld', subandpath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+stdout, stderr = p.communicate()
+if stdout:
+    logger.logging.debug(stdout)
+if stderr:
+    logger.logging.error(stderr)
 
-
-'''
-the conversion to prevent 'strange' chars is not neccesary anymore on my system.
+#the conversion to prevent 'strange' chars is not neccesary anymore on my system.
 # convert sub to utf-8
 #subprocess.call(['iconv', '-c', '-f', 'ISO-8859-1', '-t', 'UTF-8', subandpath, '-o', newsubandpath])
 #os.remove(subandpath)
 #os.rename(newsubandpath, subandpath)
-'''
-#remove original video (without the subs)
+
 os.remove(vidandpath)
-#put the new file where the old file was (else subs keep downloading)
 os.rename(outputfileandpath, finalfileandpath)
-#change final permissions
 os.chmod(finalfileandpath, 0775)
 os.chmod(subandpath, 0775)
 
 #aquire tvdbid from sickbeard
+url = protocol + config.host + ':' + config.port + config.web_root + 'api/' + config.api_key + '/?'
+logger.logging.info ("Opening connection to Sickbeard / Sickrage")
+
 try:
-	params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': findshow})
+	params = urllib.urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': findshow})
 	r = urllib2.urlopen(url + params).read()
+	logger.logging.debug ("Opening URL: " + url + params)
 	r = json.loads(r)
 	tvdbid = str(r['data']['results'][0]['tvdbid'])
 except IndexError:
 	findshow = findshow.replace(" ",": ", 1)
-	params = urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': findshow})
+	params = urllib.urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': findshow})
 	r = urllib2.urlopen(url + params).read()
+	logger.logging.debug ("Opening URL: " + url + params)
 	r = json.loads(r)
 	tvdbid = str(r['data']['results'][0]['tvdbid'])
 
 #aquire episode name from sickbeard
-params = urlencode({'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epis})
+params = urllib.urlencode({'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epis})
 t = urllib2.urlopen(url + params).read()
+logger.logging.debug ("Opening URL: " + url + params)
 t = json.loads(t)
 epname= t['data']['name'].encode('utf-8')
+logger.logging.debug ("Episode name is: " + epname)
 
 # remove and update episode in xbmc (filename did not change so automatic update does not work)
 try:
 	if vidandpath.endswith('.mkv') :
 		data = {
-			"jsonrpc":"2.0",
-			"method":"VideoLibrary.GetEpisodes",
-			"params":{"sort": {"order": "ascending", "method": "title"}, "filter": {"operator": "contains", "field": "title", "value": epname}, "properties": ["file"]},
+			'jsonrpc':"2.0",
+			'method':"VideoLibrary.GetEpisodes",
+			'params':{"sort": {'order': "ascending", 'method': "title"}, "filter": {'operator': "contains", 'field': "title", 'value': epname}, 'properties': ["file"]},
 			"id" : 1
 		}
-		req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
+		req = urllib2.Request('http://' + config.kodi_host + ':' + config.kodi_port + '/jsonrpc')
 		req.add_header('Content-Type', 'application/json')
 		r2 = urllib2.urlopen(req, json.dumps(data))
 		r2 = r2.read()
 		r2 = json.loads(r2)
 		xbmcepid = r2['result']['episodes'][0]['episodeid']
+		logger.logging.debug ("Episode id in Kodi is: " + str(xbmcepid))
 
 		data = {
-			"jsonrpc":"2.0",
-			"method":"VideoLibrary.RemoveEpisode",
-			"params":{"episodeid" : xbmcepid },
-			"id" : 1
+			'jsonrpc':"2.0",
+			'method':"VideoLibrary.RemoveEpisode",
+			'params':{'episodeid' : xbmcepid },
+			'id' : 1
 		}
-		req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
+		req = urllib2.Request('http://' + config.kodi_host + ':' + config.kodi_port + '/jsonrpc')
 		req.add_header('Content-Type', 'application/json')
 		r3 = urllib2.urlopen(req, json.dumps(data))
 		r3 = r3.read()
 		r3 = json.loads(r3)
+		logger.logging.info ("Removing episode from kodi library: " + r3['result'])
 
 	else :
+		logger.logging.debug ("Episode was not an .mkv")
 		pass
 except:
+	logger.logging.debug ("Episode removal from Kodi failed")
 	pass
 #update xbmc (only the path)
 try:
 	data = {
-		"jsonrpc":"2.0",
-		"method":"VideoLibrary.Scan",
-		"params":{"directory":pathvid},
-		"id" : 1
+		'jsonrpc':"2.0",
+		'method':"VideoLibrary.Scan",
+		'params':{'directory':pathvid},
+		'id' : 1
 	}
-	req = urllib2.Request('http://'+kodi_host+':'+kodi_port+'/jsonrpc')
+	req = urllib2.Request('http://' + config.kodi_host + ':' + config.kodi_port + '/jsonrpc')
 	req.add_header('Content-Type', 'application/json')
 	response = urllib2.urlopen(req, json.dumps(data))
 	status = ""
+	logger.logging.debug ("Scanning episode to kodi library: " + r3['result'])
 
 except:
-	print ("Can't reach Kodi")
+	logger.logging.debug ("Can't reach Kodi")
 	status = "!"
 
 finally:
-
-	if use_pushover == 1:
-		print ("Sending Pushover notification...")
-		pushurl= "http://thetvdb.com/?tab=series&id="+tvdbid+"&lid=13"
+	if config.use_pushover == 1:
+		logger.logging.debug ("Sending Pushover notification...")
+		pushurl= 'http://thetvdb.com/?tab=series&id=' + tvdbid + '&lid=13'
 		pushmsg= "<i><b>"+epname+"</b> ("+season+"x"+epis+") </i>"+status
 
-		conn = httplib.HTTPSConnection("api.pushover.net:443")
-		conn.request("POST", "/1/messages.json",
+		conn = httplib.HTTPSConnection('api.pushover.net:443')
+		conn.request('POST', '/1/messages.json',
 		urllib.urlencode({
-			"token": app_token,
-			"user": user_key,
-			"message": pushmsg,
-			"title": findshow,
-			"url": pushurl,
-			"url_title": show,
-			"html": "1",
-			"sound": "Piano Bar",
-		}), { "Content-type": "application/x-www-form-urlencoded" })
-		conn.getresponse()
-	if use_pushbullet == 1:
+			'token': config.asapp_token,
+			'user': config.user_key,
+			'message': pushmsg,
+			'title': findshow,
+			'url': pushurl,
+			'url_title': show,
+			'html': "1",
+			'sound': "Piano Bar",
+		}), { 'Content-type': 'application/x-www-form-urlencoded' })
+		r = conn.getresponse()
+		r = json.loads(r.read())
+		if r['status'] == 1 :
+			logger.logging.info("Pushover notification sent succesfully")
+		else:
+			logger.logging.error("Pushover failed with following error" + str(r['errors']))
+	if config.use_pushbullet == 1:
 		data = urllib.urlencode({
-			'type': 'note',
+			'type': "note",
 			'title': findshow,
 			'body': epname+" ("+season+"x"+epis+")",
-			'device_id': deviceid,
-			'channel_tag': subchanneltag
+			'device_id': config.deviceid,
+			'channel_tag': config.aschanneltag
 			})
 		auth = base64.encodestring('%s:' % ptoken).replace('\n', '')
 		req = urllib2.Request('https://api.pushbullet.com/v2/pushes', data)
@@ -254,11 +178,11 @@ finally:
 		response = urllib2.urlopen(req)
 		res = json.load(response)
 		if 'error' in res:
-			print ("Pushbullet notification failed")
+			logger.logging.error ("Pushbullet notification failed")
 		else:
-			print ("Pushbullet notification sucesfully sent")
-	if use_nma == 1:
-		print ("Sending NMA notification...")
+			logger.logging.info ("Pushbullet notification sucesfully sent")
+	if config.use_nma == 1:
+		logger.logging.info ("Sending NMA notification...")
 		from lib.pynma import pynma
 		p = pynma.PyNMA(nma_api)
 		p.push(app, show, pushmsg, 0, 1, nma_priority )
