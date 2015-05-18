@@ -1,6 +1,7 @@
 import os.path
 import sys
 import stat
+import grp, pwd, os
 import httplib, urllib, urllib2, json
 import lib.logger.logger as logger
 
@@ -44,8 +45,12 @@ if not os.path.isfile(config_filename):
 else:
 	try:
 		logger.logging.info ("Loading config from " + config_filename)
-		if not oct(stat.S_IMODE(os.stat(os.path.join(os.path.dirname(sys.argv[0]), "SickBeardSuite.log")).st_mode)) == 0775:
+		if not oct(stat.S_IMODE(os.stat(os.path.join(os.path.dirname(sys.argv[0]), "SickBeardSuite.log")).st_mode)) == "0775":
 			os.chmod(os.path.join(os.path.dirname(sys.argv[0]), "SickBeardSuite.log"), 0775)
+			uid = int(stat.S_IMODE(os.stat("SickBeardSuite.log").st_uid))
+			gid = grp.getgrnam("users").gr_gid
+			if not int(stat.S_IMODE(os.stat("SickBeardSuite.log").st_gid)) == gid:
+				os.chown(os.path.join(os.path.dirname(sys.argv[0]), "SickBeardSuite.log"), uid, gid)
 
 		with open(config_filename, "r") as fp:
 			config.readfp(fp)
