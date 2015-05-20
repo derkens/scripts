@@ -35,7 +35,7 @@ mis= list(t['data']['missed'])
 logger.logging.debug(mis)
 if str(mis) == "[]" :
 	logger.logging.info("Nothing to be done, exiting")
-	exit()
+
 
 
 else:
@@ -101,3 +101,6 @@ else:
 			logger.logging.info ("Sending Email notification...")
 			emailer.SendEmail(pushtitle)
 			os.remove("Output.txt")
+
+from lib.misc import access_log_for_all
+access_log_for_all()

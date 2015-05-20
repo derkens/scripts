@@ -44,14 +44,6 @@ if not os.path.isfile(config_filename):
 
 else:
 	try:
-
-		if not oct(stat.S_IMODE(os.stat(os.path.join(os.path.dirname(sys.argv[0]), "SickBeardSuite.log")).st_mode)) == "0775":
-			os.chmod(os.path.join(os.path.dirname(sys.argv[0]), "SickBeardSuite.log"), 0775)
-			uid = int(stat.S_IMODE(os.stat("SickBeardSuite.log").st_uid))
-			gid = grp.getgrnam("users").gr_gid
-			if not int(stat.S_IMODE(os.stat("SickBeardSuite.log").st_gid)) == gid:
-				os.chown(os.path.join(os.path.dirname(sys.argv[0]), "SickBeardSuite.log"), uid, gid)
-
 		with open(config_filename, "r") as fp:
 			config.readfp(fp)
 

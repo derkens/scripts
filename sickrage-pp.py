@@ -95,5 +95,9 @@ else:
 		emailer.SendEmail(pushtitle)
 		os.remove("Output.txt")
 
+from lib.misc import access_log_for_all
+access_log_for_all()
+
 print showname
 print pushmsg
+

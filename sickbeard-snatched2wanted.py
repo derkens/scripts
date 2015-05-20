@@ -130,3 +130,6 @@ else:
 		emailer.SendEmail(pushtitle)
 if config.use_email == 1:
 	os.remove("Output.txt")
+
+from lib.misc import access_log_for_all
+access_log_for_all()

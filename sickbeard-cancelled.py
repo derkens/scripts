@@ -36,7 +36,7 @@ logger.logging.debug(end)
 pushtitle = "SickBeard - Cancelled"
 if end == []:
 	logger.logging.info("Nothing to be done, exiting")
-	exit()
+
 for i in end :
 	show = i['show_name'] ; logger.logging.debug("Showname = " + show)
 	stat = i['status'] ; logger.logging.debug("Show status = " + stat)
@@ -105,3 +105,5 @@ if config.use_email == 1:
 	emailer.SendEmail(show)
 	os.remove("Output.txt")
 
+from lib.misc import access_log_for_all
+access_log_for_all()

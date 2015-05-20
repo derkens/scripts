@@ -186,3 +186,6 @@ finally:
 		from lib.pynma import pynma
 		p = pynma.PyNMA(nma_api)
 		p.push(app, show, pushmsg, 0, 1, nma_priority )
+
+from lib.misc import access_log_for_all
+access_log_for_all()
