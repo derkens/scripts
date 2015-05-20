@@ -4,7 +4,7 @@
 
 import os, sys
 import logging, logging.config
-logconfpath = os.path.join(os.path.dirname(sys.argv[0]), "lib2/logger/logging.conf")
+logconfpath = os.path.join(os.path.dirname(sys.argv[0]), "lib/logger/logging.conf")
 logging.config.fileConfig(logconfpath)
 
 logging = logging.getLogger("logger")
