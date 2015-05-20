@@ -44,7 +44,7 @@ if not os.path.isfile(config_filename):
 
 else:
 	try:
-		logger.logging.info ("Loading config from " + config_filename)
+
 		if not oct(stat.S_IMODE(os.stat(os.path.join(os.path.dirname(sys.argv[0]), "SickBeardSuite.log")).st_mode)) == "0775":
 			os.chmod(os.path.join(os.path.dirname(sys.argv[0]), "SickBeardSuite.log"), 0775)
 			uid = int(stat.S_IMODE(os.stat("SickBeardSuite.log").st_uid))
@@ -60,8 +60,8 @@ else:
 		port = config.get("SickBeard", "port")
 		api_key = config.get("SickBeard", "api_key")
 		lvl = config.get("General", "loglevel")
-		logger.logger1.setLevel(lvl)
-
+		logger.logging.setLevel(lvl)
+		logger.logging.info ("Loading config from " + config_filename)
 		if not api_key:
 			logger.logging.error ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
 			sys.exit(1)
