@@ -4,6 +4,7 @@
 #  misc.py
 #
 import logging
+import lib.logger.logger as logger
 import stat
 import os
 
