@@ -5,7 +5,7 @@
 #
 # torrent removal and notification
 
-import urllib, json, httplib, os
+import urllib, json, httplib, os, sys
 import lib.logger.logger as logger
 import lib.config as config
 import lib.emailer as emailer
