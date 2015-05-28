@@ -10,7 +10,7 @@ import lib.logger.logger as logger
 import lib.config as config
 import lib.emailer as emailer
 import base64
-
+path = "/transmission/rpc/"
 # in case of torrent, remove processed torrent from transmission list
 origpath = sys.argv[2]
 if config.tordir in origpath:
