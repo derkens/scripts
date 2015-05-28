@@ -84,6 +84,9 @@ else:
 			deviceid = config.get("Pushbullet", "deviceid")
 			asapp_token = config.get("Autosub", "app_token")
 			aschanneltag = config.get("Autosub", "channeltag")
+			tm_host = config.get("transmission", "host")
+			tm_port = config.get("transmission", "port")
+			tordir = config.get("transmission", "tordir")
 		except (configparser.NoOptionError, ValueError):
 			pass
 

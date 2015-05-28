@@ -74,3 +74,8 @@ port=
 app_token=
 #pushbullet: (optional)
 channel_tag=
+
+[transmission]
+host=localhost
+port=9091
+tordir= ;location where transmission puts your downloads
