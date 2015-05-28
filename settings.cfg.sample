@@ -76,6 +76,7 @@ app_token=
 channel_tag=
 
 [transmission]
+deletetorrents=0
 host=localhost
 port=9091
 tordir= ;location where transmission puts your downloads

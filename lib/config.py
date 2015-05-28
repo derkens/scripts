@@ -87,6 +87,7 @@ else:
 			tm_host = config.get("Transmission", "host")
 			tm_port = config.get("Transmission", "port")
 			tordir = str(config.get("Transmission", "tordir"))
+			deltorrent = int(config.get("Transmission", "deletetorrents"))
 
 		except (configparser.NoOptionError, ValueError):
 			logger.logging.exception("exception:")

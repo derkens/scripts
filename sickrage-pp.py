@@ -13,47 +13,48 @@ import base64
 path = "/transmission/rpc/"
 # in case of torrent, remove processed torrent from transmission list
 origpath = sys.argv[2]
-if config.tordir in origpath:
-	torname = os.path.split(os.path.dirname(origpath))[1]
-	if torname in config.tordir:
-		torname =  os.path.basename(origpath)
-		logger.logging.debug("found name of torrent: " + torname)
+if config.deltorrent
+	if config.tordir in origpath:
+		torname = os.path.split(os.path.dirname(origpath))[1]
+		if torname in config.tordir:
+			torname =  os.path.basename(origpath)
+			logger.logging.debug("found name of torrent: " + torname)
 
-	conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
-	conn.request("GET", path)
-	response = conn.getresponse()
-	response_data = response.read()
-	response.close()
-	conn.close()
-	session_id = str(response_data).split("X-Transmission-Session-Id: ")[-1].split("</code></p>")[0]
-	headers = {'x-transmission-session-id': str(session_id)}
-	logger.logging.debug("connection to transmission for session id")
+		conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
+		conn.request("GET", path)
+		response = conn.getresponse()
+		response_data = response.read()
+		response.close()
+		conn.close()
+		session_id = str(response_data).split("X-Transmission-Session-Id: ")[-1].split("</code></p>")[0]
+		headers = {'x-transmission-session-id': str(session_id)}
+		logger.logging.debug("connection to transmission for session id")
 
-	fields = ['name', 'id']
-	query = json.dumps({'method': 'torrent-get', 'arguments': {'fields': fields}}).encode('utf-8')
+		fields = ['name', 'id']
+		query = json.dumps({'method': 'torrent-get', 'arguments': {'fields': fields}}).encode('utf-8')
 
-	conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
-	conn.request("POST", path, query, headers)
-	response = conn.getresponse()
-	response_raw = response.read()
-	response.close()
-	conn.close()
-	response = json.loads(response_raw.decode("utf-8"))
-	for index, string in enumerate(response['arguments']['torrents']):
-		if str(response['arguments']['torrents'][index]['name']) == torname:
-			torid = str(response['arguments']['torrents'][index]['id'])
-			torid = int(torid)
-			logger.logging.debug("transmission torrent id found: " + str(torid))
+		conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
+		conn.request("POST", path, query, headers)
+		response = conn.getresponse()
+		response_raw = response.read()
+		response.close()
+		conn.close()
+		response = json.loads(response_raw.decode("utf-8"))
+		for index, string in enumerate(response['arguments']['torrents']):
+			if str(response['arguments']['torrents'][index]['name']) == torname:
+				torid = str(response['arguments']['torrents'][index]['id'])
+				torid = int(torid)
+				logger.logging.debug("transmission torrent id found: " + str(torid))
 
-	query = json.dumps({'method': 'torrent-remove', 'arguments': {'ids': torid}}).encode('utf-8')
-	conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
-	conn.request("POST", path, query, headers)
-	response = conn.getresponse()
-	response_raw = response.read()
-	response.close()
-	conn.close()
-	response = json.loads(response_raw.decode("utf-8"))
-	logger.logging.debug("removing torrent from transmisson list with id: " + str(torid))
+		query = json.dumps({'method': 'torrent-remove', 'arguments': {'ids': torid}}).encode('utf-8')
+		conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
+		conn.request("POST", path, query, headers)
+		response = conn.getresponse()
+		response_raw = response.read()
+		response.close()
+		conn.close()
+		response = json.loads(response_raw.decode("utf-8"))
+		logger.logging.debug("removing torrent from transmisson list with id: " + str(torid))
 
 
 if config.ssl:
