@@ -13,7 +13,7 @@ import base64
 path = "/transmission/rpc/"
 # in case of torrent, remove processed torrent from transmission list
 origpath = sys.argv[2]
-if config.deltorrent
+if config.deltorrent:
 	if config.tordir in origpath:
 		torname = os.path.split(os.path.dirname(origpath))[1]
 		if torname in config.tordir:
