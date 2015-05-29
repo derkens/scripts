@@ -82,8 +82,9 @@ params = urllib.urlencode({ 'cmd': 'episode', 'tvdbid': tvdbid , 'season': seaso
 t = urllib.urlopen(url + params).read()
 t = json.loads(t)
 epname = t['data']['name'].encode('utf-8')
-pushmsg = "<i><b>"+epname+"</b> ("+str(season)+"x"+str(epnum)+") </i>"
-pushtitle = showname
+
+from lib.misc import replace
+pushtitle, pushmsg = replace(showname,season,epnum,epname)
 
 if config.use_pushover == 1:
 	logger.logging.debug ("Sending Pushover notification...")

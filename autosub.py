@@ -24,7 +24,7 @@ subandpath= sys.argv[1]
 vidandpath= sys.argv[2]
 lang = sys.argv[3]
 show = sys.argv[4]
-epis = sys.argv[6]
+epnum = sys.argv[6]
 season = sys.argv[5]
 subandpathnoext = sys.argv[1] [:-7]
 outputfileandpath = subandpathnoext+'.nl.mkv'
@@ -61,7 +61,7 @@ res = api.sick_call(params)
 if 'indexerid'in res['data'][showname]: sickid = res['data'][showname]['indexerid'] ; indexerid = 'indexerid'
 else: sickid = tvdbid ; indexerid = 'tvdbid'
 
-params = {'cmd': 'episode', indexerid: sickid, 'season': season, 'episode': epis}
+params = {'cmd': 'episode', indexerid: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
 epname = res['data']['name']
 logger.logging.debug ("Episode name is: " + epname)
@@ -98,19 +98,9 @@ if config.use_kodi and config.muxing:
 		logger.logging.debug ("Can't reach Kodi")
 		status = "!"
 
-pushtitle = config.push_title
-pushtitle = pushtitle.replace("{SHOW}", findshow)
-pushtitle = pushtitle.replace("{SEASON}", season)
-pushtitle = pushtitle.replace("{EPIS}", epis)
-pushtitle = pushtitle.replace("{EPNAME}", epname)
-pushtitle = pushtitle.replace("{LANG}", lang)
+from lib.misc import replace
+pushtitle, pushmsg = replace(showname,season,epnum,epname,lang)
 
-pushmsg = config.push_msg
-pushmsg = pushmsg.replace("{SHOW}", findshow)
-pushmsg = pushmsg.replace("{SEASON}", season)
-pushmsg = pushmsg.replace("{EPIS}", epis)
-pushmsg = pushmsg.replace("{EPNAME}", epname)
-pushmsg = pushmsg.replace("{LANG}", lang)
 if config.use_pushover:
 	if not config.asapp_token:
 		config.asapp_token = config.app_token
@@ -120,7 +110,7 @@ if config.use_pushbullet == 1:
 	data = urllib.urlencode({
 		'type': "note",
 		'title': findshow,
-		'body': epname+" ("+season+"x"+epis+")",
+		'body': epname+" ("+season+"x"+epnum+")",
 		'device_id': config.deviceid,
 		'channel_tag': config.aschanneltag
 		})

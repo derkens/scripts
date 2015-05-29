@@ -5,6 +5,7 @@
 #
 import logging
 import lib.logger.logger as logger
+import lib.config as config
 import stat
 import os
 
@@ -26,3 +27,24 @@ def access_log_for_all():
 	if not oct(stat.S_IMODE(os.stat(find_logfile()).st_mode)) == "0777":
 		logger.logging.debug ("Changing logfile permissions")
 		os.chmod(log_file, 0777)
+
+def replace(*args):
+	lang = ""
+	if len(args) == 4:
+		showname,season,epnum,epname = args
+	if len(args) == 5:
+		showname,season,epnum,epname,lang = args
+	pushtitle = config.push_title
+	pushtitle = pushtitle.replace("{SHOW}", showname)
+	pushtitle = pushtitle.replace("{SEASON}", season)
+	pushtitle = pushtitle.replace("{EPIS}", epnum)
+	pushtitle = pushtitle.replace("{EPNAME}", epname)
+	pushtitle = pushtitle.replace("{LANG}", lang)
+
+	pushmsg = config.push_msg
+	pushmsg = pushmsg.replace("{SHOW}", showname)
+	pushmsg = pushmsg.replace("{SEASON}", season)
+	pushmsg = pushmsg.replace("{EPIS}", epnum)
+	pushmsg = pushmsg.replace("{EPNAME}", epname)
+	pushmsg = pushmsg.replace("{LANG}", lang)
+	return pushtitle, pushmsg
