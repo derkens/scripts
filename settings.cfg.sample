@@ -75,7 +75,7 @@ muxing=0 ;use muxing to integrate sub and video in .mkv this also disables kodi 
 #pushover: (optional)
 app_token=
 #pushbullet: (optional)
-channel_tag=
+channeltag=
 
 [transmission]
 deletetorrents=0
