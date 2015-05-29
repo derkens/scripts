@@ -112,7 +112,9 @@ pushmsg = pushmsg.replace("{EPIS}", epis)
 pushmsg = pushmsg.replace("{EPNAME}", epname)
 pushmsg = pushmsg.replace("{LANG}", lang)
 if config.use_pushover:
-	push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)
+	if not config.asapp_token:
+		config.asapp_token = config.app_token
+	push_info = (config.user_key, config.asapp_token, config.push_device, pushtitle, pushmsg)
 	api.pushover(push_info)
 if config.use_pushbullet == 1:
 	data = urllib.urlencode({
