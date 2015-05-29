@@ -22,6 +22,7 @@ import lib.api as api
 #first, define needed variables
 subandpath= sys.argv[1]
 vidandpath= sys.argv[2]
+lang = sys.argv[3]
 show = sys.argv[4]
 epis = sys.argv[6]
 season = sys.argv[5]
@@ -97,8 +98,19 @@ if config.use_kodi and config.muxing:
 		logger.logging.debug ("Can't reach Kodi")
 		status = "!"
 
-pushtitle = showname
-pushmsg= "<i><b>"+epname+"</b> ("+season+"x"+epis+") </i>"
+pushtitle = config.push_title
+pushtitle = pushtitle.replace("{SHOW}", findshow)
+pushtitle = pushtitle.replace("{SEASON}", season)
+pushtitle = pushtitle.replace("{EPIS}", epis)
+pushtitle = pushtitle.replace("{EPNAME}", epname)
+pushtitle = pushtitle.replace("{LANG}", lang)
+
+pushmsg = config.push_msg
+pushmsg = pushmsg.replace("{SHOW}", findshow)
+pushmsg = pushmsg.replace("{SEASON}", season)
+pushmsg = pushmsg.replace("{EPIS}", epis)
+pushmsg = pushmsg.replace("{EPNAME}", epname)
+pushmsg = pushmsg.replace("{LANG}", lang)
 if config.use_pushover:
 	push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)
 	api.pushover(push_info)

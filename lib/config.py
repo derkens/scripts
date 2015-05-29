@@ -62,6 +62,8 @@ else:
 			ssl = int(config.get("SickBeard", "ssl"))
 			use_pushover = int(config.get("Pushover", "use_pushover"))
 			push_device = config.get("Pushover" , "push_device")
+			push_title = str(config.get("Pushover" , "push_title"))
+			push_msg = str(config.get("Pushover" , "push_msg"))
 			app_token = config.get("SickBeard", "app_token")
 			user_key = config.get("Pushover", "user_key")
 			use_nma = int(config.get("NMA", "use_nma"))
