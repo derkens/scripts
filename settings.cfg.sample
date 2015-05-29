@@ -37,6 +37,8 @@ user_key=
 #optional:
 push_device=
 #specify device (pushover.net)leave blank for all devices
+push_title=Download Finished
+push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME} - {LANG}
 
 [NMA]
 use_nma=0
