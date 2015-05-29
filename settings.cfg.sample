@@ -77,7 +77,7 @@ app_token=
 #pushbullet: (optional)
 channeltag=
 
-[transmission]
+[Transmission]
 deletetorrents=0
 host=localhost
 port=9091
