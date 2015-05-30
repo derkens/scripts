@@ -9,15 +9,12 @@
 # Author: Nic Wolfe <nic@wolfeden.ca>
 # URL: http://code.google.com/p/sickbeard/
 
-import os
-import sys
-import httplib, urllib, urllib2, json, subprocess, re
+import os, sys, subprocess, re
 import lib.logger.logger as logger
 import lib.config as config
 import lib.emailer as emailer
-import base64
 import lib.api as api
-#import lib.misc
+import lib.misc as misc
 
 #first, define needed variables
 subandpath= sys.argv[1]
@@ -98,36 +95,20 @@ if config.use_kodi and config.muxing:
 		logger.logging.debug ("Can't reach Kodi")
 		status = "!"
 
-from lib.misc import replace
-pushtitle, pushmsg = replace(showname,season,epnum,epname,lang)
+pushtitle, pushmsg = misc.replace(showname,season,epnum,epname,lang)
 
 if config.use_pushover:
 	if not config.asapp_token:
 		config.asapp_token = config.app_token
 	push_info = (config.user_key, config.asapp_token, config.push_device, pushtitle, pushmsg)
 	api.pushover(push_info)
-if config.use_pushbullet == 1:
-	data = urllib.urlencode({
-		'type': "note",
-		'title': findshow,
-		'body': epname+" ("+season+"x"+epnum+")",
-		'device_id': config.deviceid,
-		'channel_tag': config.aschanneltag
-		})
-	auth = base64.encodestring('%s:' % ptoken).replace('\n', '')
-	req = urllib2.Request('https://api.pushbullet.com/v2/pushes', data)
-	req.add_header('Authorization', 'Basic %s' % auth)
-	response = urllib2.urlopen(req)
-	res = json.load(response)
-	if 'error' in res:
-		logger.logging.error ("Pushbullet notification failed")
-	else:
-		logger.logging.info ("Pushbullet notification sucesfully sent")
-if config.use_nma == 1:
+if config.use_pushbullet:
+	push_info = pushtitle, pushmsg, config.deviceid, config.aschanneltag
+	api.pushbullet(push_info)
+if config.use_nma:
 	logger.logging.info ("Sending NMA notification...")
 	from lib.pynma import pynma
 	p = pynma.PyNMA(nma_api)
 	p.push(app, show, pushmsg, 0, 1, nma_priority )
 
-from lib.misc import access_log_for_all
-access_log_for_all()
+misc.access_log_for_all()

@@ -5,11 +5,13 @@
 #
 # torrent removal and notification
 
-import urllib, json, httplib, os, sys
+import json, httplib, os, sys
 import lib.logger.logger as logger
 import lib.config as config
 import lib.emailer as emailer
-import base64
+import lib.api as api
+import lib.misc as misc
+
 path = "/transmission/rpc/"
 # in case of torrent, remove processed torrent from transmission list
 origpath = sys.argv[2]
@@ -57,54 +59,31 @@ if config.deltorrent:
 		logger.logging.debug("removing torrent from transmisson list with id: " + str(torid))
 
 
-if config.ssl:
-	protocol = "https://"
-else:
-	protocol = "http://"
 
-if config.use_email == 1:
+if config.use_email:
 	text_file = open("Output.txt", "w")
 
-url = protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
+url = config.protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
 
 logger.logging.info ("Opening URL: " + url)
 
-params = urllib.urlencode({ 'cmd': 'history', 'limit': 1 , 'type': 'downloaded' })
-t = urllib.urlopen(url + params).read()
-t = json.loads(t)
-
+params = { 'cmd': 'history', 'limit': 1 , 'type': 'downloaded' }
+t = api.sick_call(params)
 showname= t['data'][0]['show_name'].encode('utf-8')
 tvdbid= t['data'][0]['tvdbid']
 season= t['data'][0]['season']
 epnum= t['data'][0]['episode']
 
-params = urllib.urlencode({ 'cmd': 'episode', 'tvdbid': tvdbid , 'season': season, 'episode': epnum })
-t = urllib.urlopen(url + params).read()
-t = json.loads(t)
+params = { 'cmd': 'episode', 'tvdbid': tvdbid , 'season': season, 'episode': epnum }
+t = api.sick_call(params)
 epname = t['data']['name'].encode('utf-8')
 
-from lib.misc import replace
-pushtitle, pushmsg = replace(showname,season,epnum,epname)
+pushtitle, pushmsg = misc.replace(showname,season,epnum,epname)
 
-if config.use_pushover == 1:
-	logger.logging.debug ("Sending Pushover notification...")
-	conn = httplib.HTTPSConnection("api.pushover.net:443")
-	conn.request("POST", "/1/messages.json",
-		urllib.urlencode({
-			"token": config.app_token,
-			"user": config.user_key,
-			"message": pushmsg,
-			"title" : pushtitle,
-			"device" : config.push_device,
-			"html": "1"
-		}), { "Content-type": "application/x-www-form-urlencoded" })
-	r = conn.getresponse()
-	r = json.loads(r.read())
-	if r["status"] == 1 :
-		logger.logging.info("Pushover notification sent succesfully")
-	else:
-		logger.logging.error("Pushover failed with following error" + str(r["errors"]))
-if config.use_nma == 1:
+if config.use_pushover:
+	push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)
+	api.pushover(push_info)
+if config.use_nma:
 	logger.logging.info ("Sending NMA notification...")
 	from lib.pynma import pynma
 	p = pynma.PyNMA(config.nma_api)
@@ -114,32 +93,17 @@ if config.use_nma == 1:
 	else:
 		error = res[config.nma_api]['message'].encode('ascii')
 		logger.logging.error ("NMA Notification failed: " + error)
-if config.use_pushbullet == 1:
-	data = urllib.urlencode({
-		'type': 'note',
-		'title': pushtitle,
-		'body': pushmsg,
-		'device_id': config.deviceid,
-		'channel_tag': config.channeltag
-		})
-	auth = base64.encodestring('%s:' % config.ptoken).replace('\n', '')
-	req = urllib2.Request('https://api.pushbullet.com/v2/pushes', data)
-	req.add_header('Authorization', 'Basic %s' % auth)
-	response = urllib2.urlopen(req)
-	res = json.load(response)
-	if 'error' in res:
-		logger.logging.info ("Pushbullet notification failed")
-	else:
-		logger.logging.error ("Pushbullet notification sent succesfully")
-if config.use_email == 1:
+if config.use_pushbullet:
+	push_info = pushtitle, pushmsg, config.deviceid, config.channeltag
+	api.pushbullet(push_info)
+if config.use_email:
 	text_file.write(pushmsg + "\n")
 
 else:
-	if config.use_email == 1:
+	if config.use_email:
 		text_file.close()
 		logger.logging.info ("Sending Email notification...")
 		emailer.SendEmail(pushtitle)
 		os.remove("Output.txt")
 
-from lib.misc import access_log_for_all
-access_log_for_all()
+misc.access_log_for_all()

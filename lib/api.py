@@ -4,7 +4,7 @@
 #  api.py
 #
 import xml.etree.cElementTree as etree
-import logging, stat, pwd , grp, os, httplib, urllib, json, urllib2
+import logging, stat, pwd , grp, os, httplib, urllib, json, urllib2, base64
 import lib.logger.logger as logger
 import lib.config as config
 
@@ -56,4 +56,22 @@ def pushover(push_info):
 		logger.logging.info("Pushover notification sent succesfully")
 	else:
 		logger.logging.error("Pushover failed with following error" + str(res["errors"]))
+def pushbullet(push_info):
+	pushtitle, pushmsg, config.deviceid, config.channeltag = push_info
+	data = urllib.urlencode({
+		'type': "note",
+		'title': pushtitle,
+		'body': pushmsg,
+		'device_id': config.deviceid,
+		'channel_tag': config.channeltag
+		})
+	auth = base64.encodestring('%s:' % config.ptoken).replace('\n', '')
+	req = urllib2.Request('https://api.pushbullet.com/v2/pushes', data)
+	req.add_header('Authorization', 'Basic %s' % auth)
+	response = urllib2.urlopen(req)
+	res = json.load(response)
+	if 'error' in res:
+		logger.logging.error ("Pushbullet notification failed")
+	else:
+		logger.logging.info ("Pushbullet notification sucesfully sent")
 
