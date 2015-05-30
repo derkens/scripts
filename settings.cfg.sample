@@ -20,23 +20,26 @@
 loglevel=INFO
 #DEBUG WARN ERROR INFO
 
-[SickBeard]
+[SickBeard] ; or Sickrage info
 #mandatory:
 host=localhost
 port=8081
 api_key=
 web_root=/
 ssl=0
-app_token=OKCXmkvHN1syU2e8xvpefTnyvVWGv5
-#(pushover) took app token from sickbeard, if U use your own, replace
+app_token=OKCXmkvHN1syU2e8xvpefTnyvVWGv5 ;pushover app token, this is the sickbeard default.
 
 [Pushover]
 use_pushover=0
 #mandatory:
 user_key=
 #optional:
-push_device=
-#specify device (pushover.net)leave blank for all devices
+push_device= ;specify your device, leave blank for all devices
+#######
+# custom notification format, this supports simple html tags (https://pushover.net/api#html)
+# fields of choice are: {SHOW} (tv show name), {SEASON} (season number), {EPIS} (episode number), {EPNAME} (episode name)
+#and {LANG} (used in autosub downloaded subtitle language) a default format is provided below
+#######
 push_title=Download Finished
 push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME} - {LANG}
 
@@ -67,20 +70,20 @@ smtp_pass=
 smtp_port=25
 starttls=0
 
-[Kodi]
+[Kodi] ;Kodi integration, updates the episode in kodi, only used when muxing is used
 use_kodi=0
 host=
 port=
 
 [Autosub]
-muxing=0 ;use muxing to integrate sub and video in .mkv this also disables kodi integration
+muxing=0 ;use muxing to integrate sub and video in .mkv. if this is disabled, this also disables kodi integration
 #pushover: (optional)
 app_token=
 #pushbullet: (optional)
 channeltag=
 
 [Transmission]
-deletetorrents=0
+deletetorrents=0 ;this setting enables the removal of the torrent from transmission torrent list.
 host=localhost
 port=9091
 tordir= ;location where transmission puts your downloads
