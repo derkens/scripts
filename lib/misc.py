@@ -36,15 +36,15 @@ def replace(*args):
 		showname,season,epnum,epname,lang = args
 	pushtitle = config.push_title
 	pushtitle = pushtitle.replace("{SHOW}", showname)
-	pushtitle = pushtitle.replace("{SEASON}", season)
-	pushtitle = pushtitle.replace("{EPIS}", epnum)
+	pushtitle = pushtitle.replace("{SEASON}", str(season))
+	pushtitle = pushtitle.replace("{EPIS}", str(epnum))
 	pushtitle = pushtitle.replace("{EPNAME}", epname)
 	pushtitle = pushtitle.replace("{LANG}", lang)
 
 	pushmsg = config.push_msg
 	pushmsg = pushmsg.replace("{SHOW}", showname)
-	pushmsg = pushmsg.replace("{SEASON}", season)
-	pushmsg = pushmsg.replace("{EPIS}", epnum)
+	pushmsg = pushmsg.replace("{SEASON}", str(season))
+	pushmsg = pushmsg.replace("{EPIS}", str(epnum))
 	pushmsg = pushmsg.replace("{EPNAME}", epname)
 	pushmsg = pushmsg.replace("{LANG}", lang)
 	return pushtitle, pushmsg
