@@ -38,7 +38,7 @@ for i in end :
 		params = {'cmd': 'shows', 'sort': 'name'}
 		res = api.sick_call(params)
 		logger.logging.debug(res)
-		sickid = res['data'][showname]['indexerid']
+		sickid = res['data'][showname][indexer]
 		logger.logging.debug(sickid)
 		params = {'cmd': 'show.pause', indexer: sickid, 'pause': 1}
 		res = api.sick_call(params)
