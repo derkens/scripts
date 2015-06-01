@@ -20,6 +20,28 @@
 loglevel=INFO
 #DEBUG WARN ERROR INFO
 
+#######
+# custom notification format, this supports simple html tags (https://pushover.net/api#html)
+# fields of choice are: {SHOW} (tv show name), {SEASON} (season number), {EPIS} (episode number), {EPNAME} (episode name)
+#and {LANG} (used in autosub downloaded subtitle language) a default format is provided below
+#######
+
+[Sickrage-pp]
+push_title=Download Finished:
+push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME} - {LANG}
+
+[Sickbeard-cancelled]
+push_title=Show Cancelled!:
+push_msg=<i><b>{SHOW}</b> is possibly cancelled...</i>
+
+[Sickbeard-s2w]
+push_title=Set to Wanted:
+push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME}
+
+[Sickbeard-missed]
+push_title=Missed Episode:
+push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME}
+
 [SickBeard] ; or Sickrage info
 #mandatory:
 host=localhost
@@ -35,13 +57,7 @@ use_pushover=0
 user_key=
 #optional:
 push_device= ;specify your device, leave blank for all devices
-#######
-# custom notification format, this supports simple html tags (https://pushover.net/api#html)
-# fields of choice are: {SHOW} (tv show name), {SEASON} (season number), {EPIS} (episode number), {EPNAME} (episode name)
-#and {LANG} (used in autosub downloaded subtitle language) a default format is provided below
-#######
-push_title=Download Finished
-push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME} - {LANG}
+
 
 [NMA]
 use_nma=0
@@ -81,6 +97,8 @@ muxing=0 ;use muxing to integrate sub and video in .mkv. if this is disabled, th
 app_token=
 #pushbullet: (optional)
 channeltag=
+push_title=Download Finished:
+push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME} - {LANG}
 
 [Transmission]
 deletetorrents=0 ;this setting enables the removal of the torrent from transmission torrent list.

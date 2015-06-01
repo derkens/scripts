@@ -56,6 +56,7 @@ def pushover(push_info):
 		logger.logging.info("Pushover notification sent succesfully")
 	else:
 		logger.logging.error("Pushover failed with following error" + str(res["errors"]))
+
 def pushbullet(push_info):
 	pushtitle, pushmsg, config.deviceid, config.channeltag = push_info
 	data = urllib.urlencode({

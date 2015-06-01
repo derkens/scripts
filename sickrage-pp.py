@@ -78,7 +78,9 @@ params = { 'cmd': 'episode', 'tvdbid': tvdbid , 'season': season, 'episode': epn
 t = api.sick_call(params)
 epname = t['data']['name'].encode('utf-8')
 
-pushtitle, pushmsg = misc.replace(showname,season,epnum,epname)
+pushtitle = config.srpp_push_title
+pushmsg = config.srpp_push_msg
+pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,season,epnum,epname)
 
 if config.use_pushover:
 	push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)
