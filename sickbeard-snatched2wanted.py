@@ -11,30 +11,20 @@
 
 import os.path
 import sys
-import httplib, urllib, urllib2, json
 import lib.logger.logger as logger
 import lib.config as config
 import lib.emailer as emailer
 import lib.misc as misc
 import lib.api as api
 
-if config.ssl:
-	protocol = "https://"
-else:
-	protocol = "http://"
 
-url = protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
-
-logger.logging.info ("Opening URL: " + url)
-params = config.urlencode({ 'cmd': 'history', 'type': 'downloaded', 'limit': 20 })
-t = urllib2.urlopen(url + params).read()
-t = json.loads(t)
-down = list(t['data'])
+params = { 'cmd': 'history', 'type': 'downloaded', 'limit': 20 }
+res = api.sick_call(params)
+down = list(res['data'])
 logger.logging.debug (down)
-params = config.urlencode({ 'cmd': 'history', 'type': 'snatched', 'limit': 20 })
-u = urllib2.urlopen(url + params).read()
-u = json.loads(u)
-snat = list(u['data'])
+params = { 'cmd': 'history', 'type': 'snatched', 'limit': 20 }
+res = api.sick_call(params)
+snat = list(res['data'])
 logger.logging.debug(snat)
 
 y = []
@@ -59,17 +49,16 @@ for index, string in enumerate(onlysnat):
 	season = str(temp2[1]) ; logger.logging.debug("season: " + season)
 	epnum = str(temp2[2]) ; logger.logging.debug("episode: " + epnum)
 	tvdbid = str(temp2[3]) ; logger.logging.debug("tvdbid: " + tvdbid)
-	params = urllib.urlencode({'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epnum, })
-	w = urllib2.urlopen(url + params).read()
-	w = json.loads(w)
-	epstatus = str(w['data']['status'])
-	epname = str(w['data']['name'])
+	params = {'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epnum, }
+	res = api.sick_call(params)
+	epstatus = str(res['data']['status'])
+	epname = str(res['data']['name'])
 	if epstatus != "Snatched":
 		pass
 	else:
-		params = urllib.urlencode({'cmd': 'episode.setstatus', 'tvdbid': tvdbid, 'season': season, 'episode': epnum, 'status': 'wanted' })
-		q = urllib2.urlopen(url + params).read()
-		q = json.loads(q) ; logger.logging.debug(q)
+		params = {'cmd': 'episode.setstatus', 'tvdbid': tvdbid, 'season': season, 'episode': epnum, 'status': 'wanted' }
+		res = api.sick_call(params)
+		logger.logging.debug(res)
 		pushtitle = config.sbs2w_push_title
 		pushmsg = config.sbs2w_push_msg
 		pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,season,epnum,epname)
@@ -93,7 +82,7 @@ for index, string in enumerate(onlysnat):
 			text_file.write(message + "\n")
 		else:
 			pass
-if not 'message' in locals():
+if not 'pushmsg' in locals():
 	logger.logging.info("Nothing to be done, exiting")
 else:
 	if config.use_email:

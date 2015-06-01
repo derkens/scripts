@@ -9,30 +9,19 @@
 
 import os.path
 import sys
-import httplib, urllib, urllib2, json
 import lib.logger.logger as logger
 import lib.config as config
 import lib.emailer as emailer
 import lib.misc as misc
 import lib.api as api
 
-if config.ssl:
-	protocol = "https://"
-else:
-	protocol = "http://"
-
 if config.use_email == 1:
 	text_file = open("Output.txt", "w")
 
-url = protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
-
-logger.logging.info ("Opening URL: " + url)
-
-params = config.urlencode({ 'cmd': 'future', 'type': 'missed' })
-t = urllib2.urlopen(url + params).read()
-t = json.loads(t)
-logger.logging.debug(t)
-mis= list(t['data']['missed'])
+params = { 'cmd': 'future', 'type': 'missed' }
+res = api.sick_call(params)
+logger.logging.debug(res)
+mis= list(res['data']['missed'])
 logger.logging.debug(mis)
 if str(mis) == "[]" :
 	logger.logging.info("Nothing to be done, exiting")

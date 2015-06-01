@@ -9,7 +9,6 @@
 
 import os.path
 import sys
-import httplib, urllib, urllib2, json
 import lib.logger.logger as logger
 import lib.config as config
 import lib.emailer as emailer
@@ -19,15 +18,11 @@ import lib.api as api
 if config.use_email:
 	text_file = open("Output.txt", "w")
 
-url = config.protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
+params = {'cmd': 'shows', 'sort': 'name', 'paused': '0'}
+res = api.sick_call(params)
 
-logger.logging.info ("Opening URL: " + url)
-
-params = config.urlencode({'cmd': 'shows', 'sort': 'name', 'paused': '0'})
-t = urllib2.urlopen(url + params).read()
-t = json.loads(t)
-logger.logging.debug(t)
-end = filter( lambda x: x['status']=='Ended', t['data'].values() )
+logger.logging.debug(res)
+end = filter( lambda x: x['status']=='Ended', res['data'].values() )
 logger.logging.debug(end)
 
 if end == []:
@@ -38,15 +33,14 @@ for i in end :
 	stat = i['status'] ; logger.logging.debug("Show status = " + stat)
 	net = i['next_ep_airdate'] ; logger.logging.debug("Next episode date = " + net)
 	if net == '':
-		params = config.urlencode({'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': showname})
-		r = urllib2.urlopen(url + params).read()
-		r = json.loads(r)
-		logger.logging.debug(r)
-		tvdbid = str(r['data']['results'][0]['tvdbid'])
+		params = {'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': showname}
+		res = api.sick_call(params)
+		logger.logging.debug(res)
+		tvdbid = str(res['data']['results'][0]['tvdbid'])
 		logger.logging.debug(tvdbid)
-		params = config.urlencode({'cmd': 'show.pause', 'tvdbid': tvdbid, 'pause': 1})
-		s = urllib2.urlopen(url + params).read()
-		logger.logging.debug(s)
+		params = {'cmd': 'show.pause', 'tvdbid': tvdbid, 'pause': 1}
+		res = api.sick_call(params)
+		logger.logging.debug(res)
 		pushtitle = config.sbca_push_title
 		pushmsg = config.sbca_push_msg
 		season = ""
