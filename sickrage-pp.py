@@ -73,14 +73,15 @@ showname= res['data'][0]['show_name'].encode('utf-8')
 sickid= res['data'][0][indexer]
 season= res['data'][0]['season']
 epnum= res['data'][0]['episode']
-
+qlty= res['data'][0]['quality']
+lang = ""
 params = { 'cmd': 'episode', indexer: sickid , 'season': season, 'episode': epnum }
 res = api.sick_call(params)
 epname = res['data']['name'].encode('utf-8')
 
 pushtitle = config.srpp_push_title
 pushmsg = config.srpp_push_msg
-pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,season,epnum,epname)
+pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,season,epnum,epname,lang,qlty)
 
 if config.use_pushover:
 	push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)

@@ -34,15 +34,19 @@ def replace(*args):
 		pushtitle,pushmsg,showname,season,epnum,epname = args
 	if len(args) == 7:
 		pushtitle,pushmsg,showname,season,epnum,epname,lang = args
+	if len(args) == 8:
+		pushtitle,pushmsg,showname,season,epnum,epname,lang,qlty = args
 	pushtitle = pushtitle.replace("{SHOW}", showname)
-	pushtitle = pushtitle.replace("{SEASON}", str(season))
-	pushtitle = pushtitle.replace("{EPIS}", str(epnum))
+	pushtitle = pushtitle.replace("{SEASON}", str("%02d" % season))
+	pushtitle = pushtitle.replace("{EPIS}", str("%02d" % epnum))
 	pushtitle = pushtitle.replace("{EPNAME}", epname)
 	pushtitle = pushtitle.replace("{LANG}", lang)
+	pushtitle = pushtitle.replace("{QLTY}", qlty)
 
 	pushmsg = pushmsg.replace("{SHOW}", showname)
-	pushmsg = pushmsg.replace("{SEASON}", str(season))
-	pushmsg = pushmsg.replace("{EPIS}", str(epnum))
+	pushmsg = pushmsg.replace("{SEASON}", str("%02d" % season))
+	pushmsg = pushmsg.replace("{EPIS}", str("%02d" % epnum))
 	pushmsg = pushmsg.replace("{EPNAME}", epname)
 	pushmsg = pushmsg.replace("{LANG}", lang)
+	pushmsg = pushmsg.replace("{QLTY}", qlty)
 	return pushtitle, pushmsg

@@ -28,7 +28,7 @@ loglevel=INFO
 
 [Sickrage-pp]
 push_title=Download Finished:
-push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME} - {LANG}
+push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME} - {QLTY}
 
 [Sickbeard-cancelled]
 push_title=Show Cancelled!:
