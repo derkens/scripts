@@ -105,3 +105,5 @@ deletetorrents=0 ;this setting enables the removal of the torrent from transmiss
 host=localhost
 port=9091
 tordir= ;location where transmission puts your downloads
+username=
+password=

@@ -90,6 +90,8 @@ else:
 			aspush_msg = str(config.get("Autosub", "push_msg"))
 			tm_host = config.get("Transmission", "host")
 			tm_port = config.get("Transmission", "port")
+			tm_user = config.get("Transmission", "username")
+			tm_pass = config.get("Transmission", "password")
 			tordir = str(config.get("Transmission", "tordir"))
 			deltorrent = int(config.get("Transmission", "deletetorrents"))
 			srpp_push_title = str(config.get("Sickrage-pp", "push_title"))

@@ -11,6 +11,7 @@ import lib.config as config
 import lib.emailer as emailer
 import lib.api as api
 import lib.misc as misc
+import base64, string
 
 indexer = api.indexer
 
@@ -24,14 +25,16 @@ if config.deltorrent:
 			torname =  os.path.basename(origpath)
 		logger.logging.debug("found name of torrent: " + torname)
 
+		auth = base64.encodestring('%s:%s' % (config.tm_user, config.tm_pass)).replace('\n', '')
 		conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
-		conn.request("GET", path)
+		headers = {"Authorization": "Basic %s" % auth}
+		conn.request("GET", path, None, headers)
 		response = conn.getresponse()
 		response_data = response.read()
 		response.close()
 		conn.close()
 		session_id = str(response_data).split("X-Transmission-Session-Id: ")[-1].split("</code></p>")[0]
-		headers = {'x-transmission-session-id': str(session_id)}
+		headers = {'x-transmission-session-id': str(session_id),"Authorization": "Basic %s" % auth}
 		logger.logging.debug("connection to transmission for session id")
 
 		fields = ['name', 'id']
@@ -59,7 +62,6 @@ if config.deltorrent:
 		conn.close()
 		response = json.loads(response_raw.decode("utf-8"))
 		logger.logging.debug("removing torrent from transmisson list with id: " + str(torid))
-
 
 
 if config.use_email:
