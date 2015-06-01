@@ -76,3 +76,11 @@ def pushbullet(push_info):
 	else:
 		logger.logging.info ("Pushbullet notification sucesfully sent")
 
+params = { 'cmd': 'sb' }
+res = sick_call(params)
+if str(res['data']['sr_version']):
+	logger.logging.debug ("we are using SickRage, version: " + str(res['data']['sr_version']))
+	indexer = 'indexerid'
+else:
+	logger.logging.debug ("we are using SickBeard, version: " + str(res['data']['sb_version']))
+	indexer = 'tvdbid'

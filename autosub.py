@@ -16,6 +16,8 @@ import lib.emailer as emailer
 import lib.api as api
 import lib.misc as misc
 
+indexer = api.indexer
+
 #first, define needed variables
 subandpath= sys.argv[1]
 vidandpath= sys.argv[2]
@@ -31,7 +33,8 @@ pathvid = os.path.dirname(vidandpath)
 getname = re.compile('.eries/(.*?)/Season')
 m = getname.search(subandpath)
 if m:
-   findshow = m.group(1)
+	findshow = m.group(1)
+logger.logging.info ("Autosub delivered: " + show)
 logger.logging.info ("Found showname: " + findshow)
 if config.muxing:
 	#muxing vid and sub in new file (vid.nl.mkv)
@@ -55,10 +58,9 @@ logger.logging.info ("Showname found on thetvdb.com: " + showname)
 logger.logging.debug ("Opening connection to Sickbeard / Sickrage")
 params = { 'cmd': 'shows', 'sort': 'name' }
 res = api.sick_call(params)
-if 'indexerid'in res['data'][showname]: sickid = res['data'][showname]['indexerid'] ; indexerid = 'indexerid'
-else: sickid = tvdbid ; indexerid = 'tvdbid'
+sickid = res['data'][showname][indexer]
 
-params = {'cmd': 'episode', indexerid: sickid, 'season': season, 'episode': epnum}
+params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
 epname = res['data']['name']
 logger.logging.debug ("Episode name is: " + epname)
@@ -89,11 +91,9 @@ if config.use_kodi and config.muxing:
 		params = {'directory' : pathvid }
 		res = api.kodi_call(params, method)
 		logger.logging.debug ("Scanning episode to kodi library: " + res['result'])
-		status = ""
 	except:
 		logger.logging.exception("exception:")
 		logger.logging.debug ("Can't reach Kodi")
-		status = "!"
 
 pushtitle = config.aspush_title
 pushmsg = config.aspush_msg

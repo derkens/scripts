@@ -17,6 +17,7 @@ import lib.emailer as emailer
 import lib.misc as misc
 import lib.api as api
 
+indexer = api.indexer
 
 params = { 'cmd': 'history', 'type': 'downloaded', 'limit': 20 }
 res = api.sick_call(params)
@@ -31,11 +32,11 @@ y = []
 z = []
 
 for index, string in enumerate(down):
-	down2 = str(down[index]['show_name'])+'_'+str(down[index]['season'])+'_'+str(down[index]['episode'])+'_'+str(down[index]['tvdbid'])
+	down2 = str(down[index]['show_name'])+'_'+str(down[index]['season'])+'_'+str(down[index]['episode'])+'_'+str(down[index][indexer])
 	y.append(down2)
 
 for index, string in enumerate(snat):
-	snat2 = str(snat[index]['show_name'])+'_'+str(snat[index]['season'])+'_'+str(snat[index]['episode'])+'_'+str(snat[index]['tvdbid'])
+	snat2 = str(snat[index]['show_name'])+'_'+str(snat[index]['season'])+'_'+str(snat[index]['episode'])+'_'+str(snat[index][indexer])
 	z.append(snat2)
 
 onlysnat = list(set(z) - set(y))
@@ -48,15 +49,15 @@ for index, string in enumerate(onlysnat):
 	showname = str(temp2[0]) ; logger.logging.debug("showname: " + showname)
 	season = str(temp2[1]) ; logger.logging.debug("season: " + season)
 	epnum = str(temp2[2]) ; logger.logging.debug("episode: " + epnum)
-	tvdbid = str(temp2[3]) ; logger.logging.debug("tvdbid: " + tvdbid)
-	params = {'cmd': 'episode', 'tvdbid': tvdbid, 'season': season, 'episode': epnum, }
+	sickid = str(temp2[3]) ; logger.logging.debug("tvdbid: " + sickid)
+	params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum, }
 	res = api.sick_call(params)
 	epstatus = str(res['data']['status'])
 	epname = str(res['data']['name'])
 	if epstatus != "Snatched":
 		pass
 	else:
-		params = {'cmd': 'episode.setstatus', 'tvdbid': tvdbid, 'season': season, 'episode': epnum, 'status': 'wanted' }
+		params = {'cmd': 'episode.setstatus', indexer: sickid, 'season': season, 'episode': epnum, 'status': 'wanted' }
 		res = api.sick_call(params)
 		logger.logging.debug(res)
 		pushtitle = config.sbs2w_push_title

@@ -26,8 +26,6 @@ logger.logging.debug(mis)
 if str(mis) == "[]" :
 	logger.logging.info("Nothing to be done, exiting")
 
-
-
 else:
 	for index, string in enumerate(mis):
 		showname = str(mis[index]['show_name']) ; logger.logging.debug("show = " + showname)

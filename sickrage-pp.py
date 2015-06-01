@@ -12,6 +12,8 @@ import lib.emailer as emailer
 import lib.api as api
 import lib.misc as misc
 
+indexer = api.indexer
+
 path = "/transmission/rpc/"
 # in case of torrent, remove processed torrent from transmission list
 origpath = sys.argv[2]
@@ -20,7 +22,7 @@ if config.deltorrent:
 		torname = os.path.split(os.path.dirname(origpath))[1]
 		if torname in config.tordir:
 			torname =  os.path.basename(origpath)
-			logger.logging.debug("found name of torrent: " + torname)
+		logger.logging.debug("found name of torrent: " + torname)
 
 		conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
 		conn.request("GET", path)
@@ -63,20 +65,16 @@ if config.deltorrent:
 if config.use_email:
 	text_file = open("Output.txt", "w")
 
-url = config.protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
-
-logger.logging.info ("Opening URL: " + url)
-
 params = { 'cmd': 'history', 'limit': 1 , 'type': 'downloaded' }
-t = api.sick_call(params)
-showname= t['data'][0]['show_name'].encode('utf-8')
-tvdbid= t['data'][0]['tvdbid']
-season= t['data'][0]['season']
-epnum= t['data'][0]['episode']
+res = api.sick_call(params)
+showname= res['data'][0]['show_name'].encode('utf-8')
+sickid= res['data'][0][indexer]
+season= res['data'][0]['season']
+epnum= res['data'][0]['episode']
 
-params = { 'cmd': 'episode', 'tvdbid': tvdbid , 'season': season, 'episode': epnum }
-t = api.sick_call(params)
-epname = t['data']['name'].encode('utf-8')
+params = { 'cmd': 'episode', indexer: sickid , 'season': season, 'episode': epnum }
+res = api.sick_call(params)
+epname = res['data']['name'].encode('utf-8')
 
 pushtitle = config.srpp_push_title
 pushmsg = config.srpp_push_msg

@@ -15,6 +15,8 @@ import lib.emailer as emailer
 import lib.misc as misc
 import lib.api as api
 
+indexer = api.indexer
+
 if config.use_email:
 	text_file = open("Output.txt", "w")
 
@@ -33,12 +35,12 @@ for i in end :
 	stat = i['status'] ; logger.logging.debug("Show status = " + stat)
 	net = i['next_ep_airdate'] ; logger.logging.debug("Next episode date = " + net)
 	if net == '':
-		params = {'cmd': 'sb.searchtvdb', 'lang': 'nl', 'name': showname}
+		params = {'cmd': 'shows', 'sort': 'name'}
 		res = api.sick_call(params)
 		logger.logging.debug(res)
-		tvdbid = str(res['data']['results'][0]['tvdbid'])
-		logger.logging.debug(tvdbid)
-		params = {'cmd': 'show.pause', 'tvdbid': tvdbid, 'pause': 1}
+		sickid = res['data'][showname]['indexerid']
+		logger.logging.debug(sickid)
+		params = {'cmd': 'show.pause', indexer: sickid, 'pause': 1}
 		res = api.sick_call(params)
 		logger.logging.debug(res)
 		pushtitle = config.sbca_push_title
