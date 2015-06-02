@@ -34,7 +34,7 @@ getname = re.compile('.eries/(.*?)/Season')
 m = getname.search(subandpath)
 if m:
 	findshow = m.group(1)
-logger.logging.info ("Autosub delivered: " + show)
+logger.logging.debug ("Autosub delivered: " + show)
 logger.logging.info ("Found showname: " + findshow)
 if config.muxing:
 	#muxing vid and sub in new file (vid.nl.mkv)
@@ -55,7 +55,7 @@ logger.logging.debug ("Opening connection to thetvdb.com")
 tvdbid, showname = api.tvdb_call(findshow)
 logger.logging.info ("Showname found on thetvdb.com: " + showname)
 
-logger.logging.debug ("Opening connection to " + api.fork)
+logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'shows', 'sort': 'name' }
 res = api.sick_call(params)
 sickid = res['data'][showname][indexer]
@@ -63,7 +63,7 @@ sickid = res['data'][showname][indexer]
 params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
 epname = res['data']['name']
-logger.logging.debug ("Episode name is: " + epname)
+logger.logging.info ("Episode name is: " + epname)
 if config.use_kodi and config.muxing:
 	logger.logging.debug("Kodi integration is on...")
 	try:
@@ -77,7 +77,7 @@ if config.use_kodi and config.muxing:
 			method = "VideoLibrary.RemoveEpisode"
 			params = {'episodeid' : xbmcepid }
 			res = api.kodi_call(params, method)
-			logger.logging.info ("Removing episode from kodi library: " + res['result'])
+			logger.logging.debug ("Removing episode from kodi library: " + res['result'])
 
 		else :
 			logger.logging.debug ("Episode was not an .mkv")
@@ -90,7 +90,7 @@ if config.use_kodi and config.muxing:
 		method = "VideoLibrary.Scan"
 		params = {'directory' : pathvid }
 		res = api.kodi_call(params, method)
-		logger.logging.debug ("Scanning episode to kodi library: " + res['result'])
+		logger.logging.info ("Scanning episode to kodi library: " + res['result'])
 	except:
 		logger.logging.exception("exception:")
 		logger.logging.debug ("Can't reach Kodi")
