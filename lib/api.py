@@ -81,6 +81,8 @@ res = sick_call(params)
 if str(res['data']['sr_version']):
 	logger.logging.debug ("we are using SickRage, version: " + str(res['data']['sr_version']))
 	indexer = 'indexerid'
+	fork = "SickRage"
 else:
 	logger.logging.debug ("we are using SickBeard, version: " + str(res['data']['sb_version']))
 	indexer = 'tvdbid'
+	fork = "SickBeard"

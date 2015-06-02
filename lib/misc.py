@@ -30,6 +30,7 @@ def access_log_for_all():
 
 def replace(*args):
 	lang = ""
+	qlty = ""
 	if len(args) == 6:
 		pushtitle,pushmsg,showname,season,epnum,epname = args
 	if len(args) == 7:

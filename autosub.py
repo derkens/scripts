@@ -23,8 +23,8 @@ subandpath= sys.argv[1]
 vidandpath= sys.argv[2]
 lang = sys.argv[3]
 show = sys.argv[4]
-epnum = sys.argv[6]
-season = sys.argv[5]
+epnum = int(sys.argv[6])
+season = int(sys.argv[5])
 subandpathnoext = sys.argv[1] [:-7]
 outputfileandpath = subandpathnoext+'.nl.mkv'
 finalfileandpath = subandpathnoext+'.mkv'
@@ -55,7 +55,7 @@ logger.logging.debug ("Opening connection to thetvdb.com")
 tvdbid, showname = api.tvdb_call(findshow)
 logger.logging.info ("Showname found on thetvdb.com: " + showname)
 
-logger.logging.debug ("Opening connection to Sickbeard / Sickrage")
+logger.logging.debug ("Opening connection to " + api.fork)
 params = { 'cmd': 'shows', 'sort': 'name' }
 res = api.sick_call(params)
 sickid = res['data'][showname][indexer]
