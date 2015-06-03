@@ -30,12 +30,17 @@ outputfileandpath = subandpathnoext+'.nl.mkv'
 finalfileandpath = subandpathnoext+'.mkv'
 pathvid = os.path.dirname(vidandpath)
 
-getname = re.compile('.eries/(.*?)/Season')
+params = { 'cmd': 'sb.getrootdirs' }
+u = testfollow.sick_api_call(params)
+for index, string in enumerate(u['data']):
+	if u['data'][index]['location'] in subandpath:
+		rootdir = u['data'][index]['location']
+getname = re.compile(rootdir + '/(.*?)/')
 m = getname.search(subandpath)
 if m:
 	findshow = m.group(1)
-logger.logging.debug ("Autosub delivered: " + show)
 logger.logging.info ("Found showname: " + findshow)
+
 if config.muxing:
 	#muxing vid and sub in new file (vid.nl.mkv)
 	p = subprocess.Popen(['mkvmerge', '-o', outputfileandpath, '--language', '-1:eng', vidandpath , '--language', '0:nld', subandpath],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
