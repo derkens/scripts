@@ -1,5 +1,4 @@
 settings.cfg
 *.pyc
-SickBeardSuite.log
-SickBeardSuite.log.1
+*.log*
 Output.txt

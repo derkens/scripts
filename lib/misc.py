@@ -16,7 +16,7 @@ def find_logfile():
 		if h.__class__.__name__ == 'FileHandler':
 			log_file = h.baseFilename
 			break
-		elif h.__class__.__name__ == 'RotatingFileHandler':
+		elif h.__class__.__name__ == 'myFileHandler':
 			log_file = h.baseFilename
 			break
 
