@@ -18,6 +18,7 @@ import lib.api as api
 if config.use_email == 1:
 	text_file = open("Output.txt", "w")
 
+logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'future', 'type': 'missed' }
 res = api.sick_call(params)
 logger.logging.debug(res)
@@ -40,7 +41,7 @@ else:
 			push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)
 			api.pushover(push_info)
 		if config.use_nma:
-			logger.logging.info ("Sending NMA notification...")
+			logger.logging.debug ("Sending NMA notification...")
 			from lib.pynma import pynma
 			p = pynma.PyNMA(config.nma_api)
 			res = p.push(config.app, pushtitle, pushmsg, 0, 1, config.nma_priority )

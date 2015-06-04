@@ -19,6 +19,7 @@ import lib.api as api
 
 indexer = api.indexer
 
+logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'history', 'type': 'downloaded', 'limit': 20 }
 res = api.sick_call(params)
 down = list(res['data'])

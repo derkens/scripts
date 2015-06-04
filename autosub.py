@@ -30,6 +30,7 @@ outputfileandpath = subandpathnoext+'.nl.mkv'
 finalfileandpath = subandpathnoext+'.mkv'
 pathvid = os.path.dirname(vidandpath)
 
+logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'sb.getrootdirs' }
 u = testfollow.sick_api_call(params)
 for index, string in enumerate(u['data']):
@@ -58,9 +59,8 @@ if config.muxing:
 
 logger.logging.debug ("Opening connection to thetvdb.com")
 tvdbid, showname = api.tvdb_call(findshow)
-logger.logging.info ("Showname found on thetvdb.com: " + showname)
+logger.logging.debug ("Showname found on thetvdb.com: " + showname)
 
-logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'shows', 'sort': 'name' }
 res = api.sick_call(params)
 sickid = res['data'][showname][indexer]
@@ -107,15 +107,21 @@ pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,season,epnum,epname
 if config.use_pushover:
 	if not config.asapp_token:
 		config.asapp_token = config.app_token
+		logger.logging.info ("No separate app token found for Autosub, using the default. (See Pushover.net how to add your own app token)")
 	push_info = (config.user_key, config.asapp_token, config.push_device, pushtitle, pushmsg)
 	api.pushover(push_info)
 if config.use_pushbullet:
 	push_info = pushtitle, pushmsg, config.deviceid, config.aschanneltag
 	api.pushbullet(push_info)
 if config.use_nma:
-	logger.logging.info ("Sending NMA notification...")
+	logger.logging.debug ("Sending NMA notification...")
 	from lib.pynma import pynma
 	p = pynma.PyNMA(nma_api)
 	p.push(app, show, pushmsg, 0, 1, nma_priority )
+	if res[config.nma_api][u'code'] == u'200':
+		logger.logging.info ("NMA Notification succesfully send")
+	else:
+		error = res[config.nma_api]['message'].encode('ascii')
+		logger.logging.error ("NMA Notification failed: " + error)
 
 misc.access_log_for_all()

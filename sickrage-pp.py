@@ -25,6 +25,7 @@ if config.deltorrent:
 			torname =  os.path.basename(origpath)
 		logger.logging.debug("found name of torrent: " + torname)
 
+		logger.logging.info ("Opening connection to Transmission")
 		auth = base64.encodestring('%s:%s' % (config.tm_user, config.tm_pass)).replace('\n', '')
 		conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
 		headers = {"Authorization": "Basic %s" % auth}
@@ -61,7 +62,7 @@ if config.deltorrent:
 		response.close()
 		conn.close()
 		response = json.loads(response_raw.decode("utf-8"))
-		logger.logging.debug("removing torrent from transmisson list with id: " + str(torid))
+		logger.logging.info("Removing torrent from Transmisson list with id: " + str(torid))
 
 
 if config.use_email:
@@ -87,7 +88,7 @@ if config.use_pushover:
 	push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)
 	api.pushover(push_info)
 if config.use_nma:
-	logger.logging.info ("Sending NMA notification...")
+	logger.logging.debug ("Sending NMA notification...")
 	from lib.pynma import pynma
 	p = pynma.PyNMA(config.nma_api)
 	res = p.push(config.app, pushtitle, pushmsg, 0, 1, config.nma_priority )

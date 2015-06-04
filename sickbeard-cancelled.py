@@ -20,6 +20,7 @@ indexer = api.indexer
 if config.use_email:
 	text_file = open("Output.txt", "w")
 
+logger.logging.info ("Opening connection to " + api.fork)
 params = {'cmd': 'shows', 'sort': 'name', 'paused': '0'}
 res = api.sick_call(params)
 
@@ -53,7 +54,7 @@ for i in end :
 			push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)
 			api.pushover(push_info)
 		if config.use_nma:
-			logger.logging.info ("Sending NMA notification...")
+			logger.logging.debug ("Sending NMA notification...")
 			from lib.pynma import pynma
 			p = pynma.PyNMA(config.nma_api)
 			res = p.push(config.app, pushtitle, pushmsg, 0, 1, config.nma_priority )

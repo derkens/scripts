@@ -53,7 +53,7 @@ else:
 		api_key = config.get("SickBeard", "api_key")
 		lvl = config.get("General", "loglevel")
 		logger.logging.setLevel(lvl)
-		logger.logging.info ("Loading config from " + config_filename)
+		logger.logging.debug ("Loading config from " + config_filename)
 		if not api_key:
 			logger.logging.error ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
 			sys.exit(1)
