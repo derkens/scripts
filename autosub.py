@@ -32,7 +32,7 @@ pathvid = os.path.dirname(vidandpath)
 
 logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'sb.getrootdirs' }
-u = testfollow.sick_api_call(params)
+u = api.sick_call(params)
 for index, string in enumerate(u['data']):
 	if u['data'][index]['location'] in subandpath:
 		rootdir = u['data'][index]['location']
