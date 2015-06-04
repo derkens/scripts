@@ -24,7 +24,7 @@ logger.logging.info ("Opening connection to " + api.fork)
 params = {'cmd': 'shows', 'sort': 'name', 'paused': '0'}
 res = api.sick_call(params)
 
-logger.logging.debug(res)
+#logger.logging.debug(res)
 end = filter( lambda x: x['status']=='Ended', res['data'].values() )
 logger.logging.debug(end)
 

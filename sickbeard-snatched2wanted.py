@@ -23,11 +23,11 @@ logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'history', 'type': 'downloaded', 'limit': 20 }
 res = api.sick_call(params)
 down = list(res['data'])
-logger.logging.debug (down)
+#logger.logging.debug (down)
 params = { 'cmd': 'history', 'type': 'snatched', 'limit': 20 }
 res = api.sick_call(params)
 snat = list(res['data'])
-logger.logging.debug(snat)
+#logger.logging.debug(snat)
 
 y = []
 z = []
@@ -60,7 +60,7 @@ for index, string in enumerate(onlysnat):
 	else:
 		params = {'cmd': 'episode.setstatus', indexer: sickid, 'season': season, 'episode': epnum, 'status': 'wanted' }
 		res = api.sick_call(params)
-		logger.logging.debug(res)
+		#logger.logging.debug(res)
 		pushtitle = config.sbs2w_push_title
 		pushmsg = config.sbs2w_push_msg
 		pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,season,epnum,epname)

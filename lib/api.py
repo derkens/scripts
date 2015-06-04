@@ -28,13 +28,16 @@ def kodi_call(params, method):
 	logger.logging.debug("Kodi call: "  + str(method) + " " + str(params))
 	res = urllib2.urlopen(req, json.dumps(data))
 	res = json.loads(res.read())
+	logger.logging.debug(json.dumps(res, indent=4))
 	return res
 
 def sick_call(params):
+	logger.logging.debug("sick_call parameters: " + str(params))
 	url = config.protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
 	params = config.urlencode(params)
 	res = urllib2.urlopen(url + params).read()
 	res = json.loads(res)
+	logger.logging.debug("sick_call results: " + json.dumps(res, indent=4))
 	return res
 
 def pushover(push_info):

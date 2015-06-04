@@ -40,7 +40,7 @@ if config.deltorrent:
 
 		fields = ['name', 'id']
 		query = json.dumps({'method': 'torrent-get', 'arguments': {'fields': fields}}).encode('utf-8')
-
+		logger.logging.debug("Transmission parameters: " + json.dumps(query, indent=4))
 		conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
 		conn.request("POST", path, query, headers)
 		response = conn.getresponse()
@@ -48,6 +48,7 @@ if config.deltorrent:
 		response.close()
 		conn.close()
 		response = json.loads(response_raw.decode("utf-8"))
+		logger.logging.debug("Transmission results: " + json.dumps(response, indent=4))
 		for index, string in enumerate(response['arguments']['torrents']):
 			if str(response['arguments']['torrents'][index]['name']) == torname:
 				torid = str(response['arguments']['torrents'][index]['id'])
@@ -55,6 +56,7 @@ if config.deltorrent:
 				logger.logging.debug("transmission torrent id found: " + str(torid))
 
 		query = json.dumps({'method': 'torrent-remove', 'arguments': {'ids': torid}}).encode('utf-8')
+		logger.logging.debug("Transmission parameters: " + json.dumps(query, indent=4))
 		conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
 		conn.request("POST", path, query, headers)
 		response = conn.getresponse()
@@ -62,12 +64,13 @@ if config.deltorrent:
 		response.close()
 		conn.close()
 		response = json.loads(response_raw.decode("utf-8"))
+		logger.logging.debug("Transmission results: " + json.dumps(response, indent=4))
 		logger.logging.info("Removing torrent from Transmisson list with id: " + str(torid))
 
 
 if config.use_email:
 	text_file = open("Output.txt", "w")
-
+logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'history', 'limit': 1 , 'type': 'downloaded' }
 res = api.sick_call(params)
 showname= res['data'][0]['show_name'].encode('utf-8')

@@ -15,15 +15,15 @@ import lib.emailer as emailer
 import lib.misc as misc
 import lib.api as api
 
-if config.use_email == 1:
+if config.use_email:
 	text_file = open("Output.txt", "w")
 
 logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'future', 'type': 'missed' }
 res = api.sick_call(params)
-logger.logging.debug(res)
+#logger.logging.debug(res)
 mis= list(res['data']['missed'])
-logger.logging.debug(mis)
+#logger.logging.debug(mis)
 if str(mis) == "[]" :
 	logger.logging.info("Nothing to be done, exiting")
 
