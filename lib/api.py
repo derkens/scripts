@@ -28,7 +28,7 @@ def kodi_call(params, method):
 	logger.logging.debug("Kodi call: "  + str(method) + " " + str(params))
 	res = urllib2.urlopen(req, json.dumps(data))
 	res = json.loads(res.read())
-	logger.logging.debug(json.dumps(res, indent=4))
+	logger.logging.debug("Kodi results: " + json.dumps(res, indent=4))
 	return res
 
 def sick_call(params):
@@ -37,7 +37,10 @@ def sick_call(params):
 	params = config.urlencode(params)
 	res = urllib2.urlopen(url + params).read()
 	res = json.loads(res)
-	logger.logging.debug("sick_call results: " + json.dumps(res, indent=4))
+	if not 'shows' in params:
+		 logger.logging.debug("sick_call results: " + json.dumps(res, indent=4))
+	else:
+		logger.logging.debug("sick_call output suppressed, long showlist")
 	return res
 
 def pushover(push_info):
@@ -82,10 +85,10 @@ def pushbullet(push_info):
 params = { 'cmd': 'sb' }
 res = sick_call(params)
 if str(res['data']['sr_version']):
-	logger.logging.debug ("we are using SickRage, version: " + str(res['data']['sr_version']))
+	logger.logging.debug ("We are connecting to SickRage, version: " + str(res['data']['sr_version']))
 	indexer = 'indexerid'
 	fork = "SickRage"
 else:
-	logger.logging.debug ("we are using SickBeard, version: " + str(res['data']['sb_version']))
+	logger.logging.debug ("We are connecting to SickBeard, version: " + str(res['data']['sb_version']))
 	indexer = 'tvdbid'
 	fork = "SickBeard"

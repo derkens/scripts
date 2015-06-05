@@ -23,11 +23,9 @@ logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'history', 'type': 'downloaded', 'limit': 20 }
 res = api.sick_call(params)
 down = list(res['data'])
-#logger.logging.debug (down)
 params = { 'cmd': 'history', 'type': 'snatched', 'limit': 20 }
 res = api.sick_call(params)
 snat = list(res['data'])
-#logger.logging.debug(snat)
 
 y = []
 z = []
@@ -41,7 +39,7 @@ for index, string in enumerate(snat):
 	z.append(snat2)
 
 onlysnat = list(set(z) - set(y))
-logger.logging.debug("onlysnat: " + str(onlysnat))
+logger.logging.debug("Result from Downloaded and Snatched crosscheck: " + str(onlysnat))
 if config.use_email:
 	text_file = open("Output.txt", "w+")
 for index, string in enumerate(onlysnat):
@@ -50,14 +48,17 @@ for index, string in enumerate(onlysnat):
 	showname = str(temp2[0]) ; logger.logging.debug("showname: " + showname)
 	season = str(temp2[1]) ; logger.logging.debug("season: " + season)
 	epnum = str(temp2[2]) ; logger.logging.debug("episode: " + epnum)
-	sickid = str(temp2[3]) ; logger.logging.debug("tvdbid: " + sickid)
+	sickid = str(temp2[3]) ; logger.logging.debug(indexer + ": " + sickid)
 	params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum, }
 	res = api.sick_call(params)
+
 	epstatus = str(res['data']['status'])
 	epname = str(res['data']['name'])
 	if epstatus != "Snatched":
+		logger.logging.debug("Found episode has status : " + epstatus + " , not snatched.")
 		pass
 	else:
+		logger.logging.debug("Setting " + showname + " " + season + "x" + epnum + "to wanted.." )
 		params = {'cmd': 'episode.setstatus', indexer: sickid, 'season': season, 'episode': epnum, 'status': 'wanted' }
 		res = api.sick_call(params)
 		#logger.logging.debug(res)

@@ -8,7 +8,7 @@
 # URL: http://code.google.com/p/sickbeard/
 
 import os.path
-import sys
+import sys, json
 import lib.logger.logger as logger
 import lib.config as config
 import lib.emailer as emailer
@@ -26,7 +26,7 @@ res = api.sick_call(params)
 
 #logger.logging.debug(res)
 end = filter( lambda x: x['status']=='Ended', res['data'].values() )
-logger.logging.debug(end)
+logger.logging.debug(json.dumps(end, indent=4))
 
 if end == []:
 	logger.logging.info("Nothing to be done, exiting")
@@ -35,19 +35,18 @@ for i in end :
 	showname = i['show_name'] ; logger.logging.debug("Showname = " + showname)
 	stat = i['status'] ; logger.logging.debug("Show status = " + stat)
 	net = i['next_ep_airdate'] ; logger.logging.debug("Next episode date = " + net)
+	logger.logging.info(showname + " has status: " + stat)
 	if net == '':
 		params = {'cmd': 'shows', 'sort': 'name'}
 		res = api.sick_call(params)
-		logger.logging.debug(res)
 		sickid = res['data'][showname][indexer]
-		logger.logging.debug(sickid)
+		logger.logging.debug(showname + " has " + indexer + " " + str(sickid))
 		params = {'cmd': 'show.pause', indexer: sickid, 'pause': 1}
 		res = api.sick_call(params)
-		logger.logging.debug(res)
 		pushtitle = config.sbca_push_title
 		pushmsg = config.sbca_push_msg
-		season = ""
-		epnum = ""
+		season = 0
+		epnum = 0
 		epname = ""
 		pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,season,epnum,epname)
 		if config.use_pushover:

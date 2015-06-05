@@ -21,9 +21,7 @@ if config.use_email:
 logger.logging.info ("Opening connection to " + api.fork)
 params = { 'cmd': 'future', 'type': 'missed' }
 res = api.sick_call(params)
-#logger.logging.debug(res)
 mis= list(res['data']['missed'])
-#logger.logging.debug(mis)
 if str(mis) == "[]" :
 	logger.logging.info("Nothing to be done, exiting")
 

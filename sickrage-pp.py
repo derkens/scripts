@@ -36,7 +36,7 @@ if config.deltorrent:
 		conn.close()
 		session_id = str(response_data).split("X-Transmission-Session-Id: ")[-1].split("</code></p>")[0]
 		headers = {'x-transmission-session-id': str(session_id),"Authorization": "Basic %s" % auth}
-		logger.logging.debug("connection to transmission for session id")
+		logger.logging.debug("Retreived session id: " + session_id)
 
 		fields = ['name', 'id']
 		query = json.dumps({'method': 'torrent-get', 'arguments': {'fields': fields}}).encode('utf-8')
@@ -53,7 +53,7 @@ if config.deltorrent:
 			if str(response['arguments']['torrents'][index]['name']) == torname:
 				torid = str(response['arguments']['torrents'][index]['id'])
 				torid = int(torid)
-				logger.logging.debug("transmission torrent id found: " + str(torid))
+				logger.logging.debug("Transmission torrent id found: " + str(torid))
 
 		query = json.dumps({'method': 'torrent-remove', 'arguments': {'ids': torid}}).encode('utf-8')
 		logger.logging.debug("Transmission parameters: " + json.dumps(query, indent=4))
