@@ -52,6 +52,10 @@ api_key=
 web_root=/
 ssl=0
 app_token=OKCXmkvHN1syU2e8xvpefTnyvVWGv5 ;pushover app token, this is the sickbeard default.
+# used in tmToPVR cannot be empty when using this script
+tv_download_dir=
+web_username=
+web_password=
 
 [Pushover]
 use_pushover=0

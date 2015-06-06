@@ -102,6 +102,9 @@ else:
 			sbs2w_push_msg = str(config.get("Sickbeard-s2w", "push_msg"))
 			sbmis_push_title = str(config.get("Sickbeard-missed", "push_title"))
 			sbmis_push_msg = str(config.get("Sickbeard-missed", "push_msg"))
+			tv_dir = str(config.get("SickBeard", "tv_download_dir"))
+			username = config.get("SickBeard", "web_username")
+			password = config.get("SickBeard", "web_password")
 
 		except (configparser.NoOptionError, ValueError):
 			logger.logging.exception("exception:")
