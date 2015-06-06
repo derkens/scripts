@@ -29,7 +29,7 @@ def main():
 	dirName, nzbName = eval(locals()['torrent_method'])()
 	
 	if not config.tv_dir:
-		logger.logging.error('Fill in [SickbBeard] tv_download_dir in settings.cfg to use this Script. Aborting!')
+		logger.logging.error('Fill in [SickBeard] tv_download_dir in settings.cfg to use this Script. Aborting!')
 		time.sleep(3)
 		sys.exit()
 
@@ -59,8 +59,8 @@ def main():
 	if nzbName != None:
 		params['nzbName'] = nzbName
 	
-	url = config.protocol + config.host + ":" + config.port + config.web_root + "/home/postprocess/processEpisode"
-	login_url = config.protocol + config.host + ":" + config.port + config.web_root + "/login"
+	url = config.protocol + config.host + ":" + config.port + config.web_root + "home/postprocess/processEpisode"
+	login_url = config.protocol + config.host + ":" + config.port + config.web_root + "login"
 	
 	logger.logging.debug("Opening URL: " + url + ' with params=' + str(params))   
 	
