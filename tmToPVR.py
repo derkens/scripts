@@ -18,8 +18,7 @@ def transmission():
 	return (dirName, nzbName)
 	
 def main():
-	logger.logging.info('Starting external PostProcess script ' + __file__)
-	
+	logger.logging.info('Script triggered from transmission, starting tmToPVR...')
 	torrent_method = 'transmission'
 	if not torrent_method in ['utorrent', 'transmission', 'deluge', 'blackhole']:
 		logger.logging.error('Unknown Torrent Method. Aborting!')
@@ -79,7 +78,7 @@ def main():
 		sys.exit()
 	
 	if response.status_code == 200:
-		logger.logging.info('Script ' + __file__ + ' Succesfull')
+		logger.logging.info('The tmToPVR script completed successfully.')
 		time.sleep(3)
 		sys.exit()
 		
