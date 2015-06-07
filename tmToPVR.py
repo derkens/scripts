@@ -69,7 +69,7 @@ def main():
 		sess.post(login_url, data={'username': config.username, 'password': config.password}, stream=True, verify=False)
 		response = sess.get(url, auth=(config.username, config.password), params=params, verify=False,  allow_redirects=False)
 	except Exception, e:
-		logger.logging.error(': Unknown exception raised when opening url: ' + str(e))
+		logger.logging.error('Unknown exception raised when opening url: ' + str(e))
 		time.sleep(3)
 		sys.exit()
 	
