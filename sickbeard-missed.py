@@ -33,7 +33,7 @@ else:
 		epname = mis[index]['ep_name'].encode('utf-8') ; logger.logging.debug("episode name = " + epname)
 		pushtitle = config.sbmis_push_title
 		pushmsg = config.sbmis_push_msg
-		pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,season,epnum,epname)
+		pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,int(season),int(epnum),epname)
 		logger.logging.debug("Dumping pushmsg for debug " + pushmsg)
 		if config.use_pushover:
 			push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)
