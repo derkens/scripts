@@ -2,3 +2,4 @@ settings.cfg
 *.pyc
 *.log*
 Output.txt
+last_run

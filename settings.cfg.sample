@@ -113,3 +113,8 @@ port=9091
 tordir= ;location where transmission puts your downloads
 username=
 password=
+
+[Github]
+user=
+#pushover: (optional)
+app_token=

@@ -44,7 +44,12 @@ def sick_call(params):
 	return res
 
 def pushover(push_info):
-	user_key, app_token, push_device, pushtitle, pushmsg = push_info
+	try:
+		user_key, app_token, push_device, pushtitle, pushmsg = push_info
+		url, urltitle = None
+	except ValueError:
+		user_key, app_token, push_device, pushtitle, pushmsg, url, urltitle = push_info
+
 	logger.logging.debug ("Sending Pushover notification...")
 	conn = httplib.HTTPSConnection("api.pushover.net:443")
 	conn.request("POST", "/1/messages.json",
@@ -54,6 +59,8 @@ def pushover(push_info):
 			"message": pushmsg,
 			"title" : pushtitle,
 			"device" : push_device,
+			"url": url,
+			"url_title": urltitle,
 			"html": "1"
 		}), { "Content-type": "application/x-www-form-urlencoded" })
 	res = conn.getresponse()

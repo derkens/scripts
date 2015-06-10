@@ -105,6 +105,8 @@ else:
 			tv_dir = str(config.get("SickBeard", "tv_download_dir"))
 			username = str(config.get("SickBeard", "web_username"))
 			password = str(config.get("SickBeard", "web_password"))
+			githubuser = str(config.get("Github", "user"))
+			githubapp_token = str(config.get("Github", "app_token"))
 
 		except (configparser.NoOptionError, ValueError):
 			logger.logging.exception("exception:")
