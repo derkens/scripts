@@ -58,7 +58,7 @@ for index, value in enumerate(r2):
 			if r2[index]['type'] == 'GollumEvent':
 				for index3,value3 in enumerate(r2[index]['payload']['pages']):
 					pushtitle = r2[index]['actor']['login'] + " " + value3['action'] + " " + r2[index]['repo']['name'].split("/", 1)[1] + " wiki."
-					pushmsg = "Page: " + value3['title'] + " was " + value3['action']
+					pushmsg = "Page: '" + value3['title'] + "' was " + value3['action']
 					url = value3['html_url']
 					urltitle = "View wiki page on Github"
 				if not config.githubapp_token:
