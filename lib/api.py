@@ -4,7 +4,7 @@
 #  api.py
 #
 import xml.etree.cElementTree as etree
-import logging, stat, pwd , grp, os, httplib, urllib, json, urllib2, base64
+import logging, stat, pwd , grp, os, httplib, urllib, json, urllib2, base64, sys
 import lib.logger.logger as logger
 import lib.config as config
 
@@ -88,14 +88,16 @@ def pushbullet(push_info):
 		logger.logging.error ("Pushbullet notification failed")
 	else:
 		logger.logging.info ("Pushbullet notification sucesfully sent")
-
-params = { 'cmd': 'sb' }
-res = sick_call(params)
-if str(res['data']['sr_version']):
-	logger.logging.debug ("We are connecting to SickRage, version: " + str(res['data']['sr_version']))
-	indexer = 'indexerid'
-	fork = "SickRage"
+if 'github_notifier.py' in sys.argv[0]:
+	pass
 else:
-	logger.logging.debug ("We are connecting to SickBeard, version: " + str(res['data']['sb_version']))
-	indexer = 'tvdbid'
-	fork = "SickBeard"
+	params = { 'cmd': 'sb' }
+	res = sick_call(params)
+	if str(res['data']['sr_version']):
+		logger.logging.debug ("We are connecting to SickRage, version: " + str(res['data']['sr_version']))
+		indexer = 'indexerid'
+		fork = "SickRage"
+	else:
+		logger.logging.debug ("We are connecting to SickBeard, version: " + str(res['data']['sb_version']))
+		indexer = 'tvdbid'
+		fork = "SickBeard"
