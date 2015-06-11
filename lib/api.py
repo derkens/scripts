@@ -46,7 +46,7 @@ def sick_call(params):
 def pushover(push_info):
 	try:
 		user_key, app_token, push_device, pushtitle, pushmsg = push_info
-		url, urltitle = None,None
+		url, urltitle = "",""
 	except ValueError:
 		user_key, app_token, push_device, pushtitle, pushmsg, url, urltitle = push_info
 
