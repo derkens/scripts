@@ -31,6 +31,23 @@ def kodi_call(params, method):
 	logger.logging.debug("Kodi results: " + json.dumps(res, indent=4))
 	return res
 
+def sick_call_initial():
+	logger.logging.debug("Checking version of Sickbeard or Sickrage")
+	url = config.protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
+	params = config.urlencode({'cmd': 'sb'})
+	res = urllib2.urlopen(url + params).read()
+	res = json.loads(res)
+	if str(res['data']['sr_version']):
+		logger.logging.debug ("We are connecting to SickRage, version: " + str(res['data']['sr_version']))
+		indexer = 'indexerid'
+		fork = "SickRage"
+		#return indexer, fork
+	else:
+		logger.logging.debug ("We are connecting to SickBeard, version: " + str(res['data']['sb_version']))
+		indexer = 'tvdbid'
+		fork = "SickBeard"
+	return indexer, fork
+
 def sick_call(params):
 	logger.logging.debug("sick_call parameters: " + str(params))
 	url = config.protocol + config.host + ":" + config.port + config.web_root + "api/" + config.api_key + "/?"
@@ -88,16 +105,4 @@ def pushbullet(push_info):
 		logger.logging.error ("Pushbullet notification failed")
 	else:
 		logger.logging.info ("Pushbullet notification sucesfully sent")
-if 'github_notifier.py' in sys.argv[0]:
-	pass
-else:
-	params = { 'cmd': 'sb' }
-	res = sick_call(params)
-	if str(res['data']['sr_version']):
-		logger.logging.debug ("We are connecting to SickRage, version: " + str(res['data']['sr_version']))
-		indexer = 'indexerid'
-		fork = "SickRage"
-	else:
-		logger.logging.debug ("We are connecting to SickBeard, version: " + str(res['data']['sb_version']))
-		indexer = 'tvdbid'
-		fork = "SickBeard"
+

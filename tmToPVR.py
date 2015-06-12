@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+
 import os.path
 import sys
 import os
@@ -10,17 +11,17 @@ import lib.misc as misc
 import lib.api as api
 from lib import requests
 
-def transmission():
 
+def transmission():
 	dirName = os.getenv('TR_TORRENT_DIR')
 	nzbName = os.getenv('TR_TORRENT_NAME')
-
 	return (dirName, nzbName)
+
 
 def main():
 	logger.logging.info('Script triggered from transmission, starting tmToPVR...')
 	torrent_method = 'transmission'
-	if not torrent_method in ['utorrent', 'transmission', 'deluge', 'blackhole']:
+	if torrent_method not in ['utorrent', 'transmission', 'deluge', 'blackhole']:
 		logger.logging.error('Unknown Torrent Method. Aborting!')
 		time.sleep(3)
 		sys.exit()
@@ -55,7 +56,7 @@ def main():
 	params['quiet'] = 1
 
 	params['dir'] = dirName
-	if nzbName != None:
+	if nzbName is not None:
 		params['nzbName'] = nzbName
 
 	url = config.protocol + config.host + ":" + config.port + config.web_root + "home/postprocess/processEpisode"
@@ -66,7 +67,7 @@ def main():
 	try:
 		sess = requests.Session()
 		sess.post(login_url, data={'username': config.username, 'password': config.password}, stream=True, verify=False)
-		response = sess.get(url, auth=(config.username, config.password), params=params, verify=False,  allow_redirects=False)
+		response = sess.get(url, auth=(config.username, config.password), params=params, verify=False, allow_redirects=False)
 	except Exception, e:
 		logger.logging.exception('Exception raised when opening url: ' + str(e))
 		time.sleep(3)

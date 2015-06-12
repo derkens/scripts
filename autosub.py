@@ -16,7 +16,7 @@ import lib.emailer as emailer
 import lib.api as api
 import lib.misc as misc
 
-indexer = api.indexer
+indexer, fork = api.sick_call_initial()
 
 #first, define needed variables
 subandpath= sys.argv[1]
@@ -30,7 +30,7 @@ outputfileandpath = subandpathnoext+'.nl.mkv'
 finalfileandpath = subandpathnoext+'.mkv'
 pathvid = os.path.dirname(vidandpath)
 
-logger.logging.info ("Opening connection to " + api.fork)
+logger.logging.info ("Opening connection to " + fork)
 params = { 'cmd': 'sb.getrootdirs' }
 u = api.sick_call(params)
 for index, string in enumerate(u['data']):

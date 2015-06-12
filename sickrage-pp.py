@@ -13,7 +13,7 @@ import lib.api as api
 import lib.misc as misc
 import base64, string
 
-indexer = api.indexer
+indexer, fork = api.sick_call_initial()
 
 path = "/transmission/rpc/"
 # in case of torrent, remove processed torrent from transmission list
@@ -25,7 +25,7 @@ if config.deltorrent:
 			torname =  os.path.basename(origpath)
 		logger.logging.debug("found name of torrent: " + torname)
 
-		logger.logging.info ("Opening connection to Transmission")
+		logger.logging.info("Opening connection to Transmission")
 		auth = base64.encodestring('%s:%s' % (config.tm_user, config.tm_pass)).replace('\n', '')
 		conn = httplib.HTTPConnection(config.tm_host, config.tm_port)
 		headers = {"Authorization": "Basic %s" % auth}
@@ -35,7 +35,7 @@ if config.deltorrent:
 		response.close()
 		conn.close()
 		session_id = str(response_data).split("X-Transmission-Session-Id: ")[-1].split("</code></p>")[0]
-		headers = {'x-transmission-session-id': str(session_id),"Authorization": "Basic %s" % auth}
+		headers = {'x-transmission-session-id': str(session_id), "Authorization": "Basic %s" % auth}
 		logger.logging.debug("Retreived session id: " + session_id)
 
 		fields = ['name', 'id']
@@ -70,36 +70,36 @@ if config.deltorrent:
 
 if config.use_email:
 	text_file = open("Output.txt", "w")
-logger.logging.info ("Opening connection to " + api.fork)
-params = { 'cmd': 'history', 'limit': 1 , 'type': 'downloaded' }
+logger.logging.info("Opening connection to " + fork)
+params = {'cmd': 'history', 'limit': 1, 'type': 'downloaded'}
 res = api.sick_call(params)
-showname= res['data'][0]['show_name'].encode('utf-8')
-sickid= res['data'][0][indexer]
-season= res['data'][0]['season']
-epnum= res['data'][0]['episode']
-qlty= res['data'][0]['quality']
+showname = res['data'][0]['show_name'].encode('utf-8')
+sickid = res['data'][0][indexer]
+season = res['data'][0]['season']
+epnum = res['data'][0]['episode']
+qlty = res['data'][0]['quality']
 lang = ""
-params = { 'cmd': 'episode', indexer: sickid , 'season': season, 'episode': epnum }
+params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
 epname = res['data']['name'].encode('utf-8')
 
 pushtitle = config.srpp_push_title
 pushmsg = config.srpp_push_msg
-pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,season,epnum,epname,lang,qlty)
+pushtitle, pushmsg = misc.replace(pushtitle, pushmsg, showname, season, epnum, epname, lang, qlty)
 
 if config.use_pushover:
 	push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)
 	api.pushover(push_info)
 if config.use_nma:
-	logger.logging.debug ("Sending NMA notification...")
+	logger.logging.debug("Sending NMA notification...")
 	from lib.pynma import pynma
 	p = pynma.PyNMA(config.nma_api)
-	res = p.push(config.app, pushtitle, pushmsg, 0, 1, config.nma_priority )
+	res = p.push(config.app, pushtitle, pushmsg, 0, 1, config.nma_priority)
 	if res[config.nma_api][u'code'] == u'200':
-		logger.logging.info ("NMA Notification succesfully send")
+		logger.logging.info("NMA Notification succesfully send")
 	else:
 		error = res[config.nma_api]['message'].encode('ascii')
-		logger.logging.error ("NMA Notification failed: " + error)
+		logger.logging.error("NMA Notification failed: " + error)
 if config.use_pushbullet:
 	push_info = pushtitle, pushmsg, config.deviceid, config.channeltag
 	api.pushbullet(push_info)
@@ -109,7 +109,7 @@ if config.use_email:
 else:
 	if config.use_email:
 		text_file.close()
-		logger.logging.info ("Sending Email notification...")
+		logger.logging.info("Sending Email notification...")
 		emailer.SendEmail(pushtitle)
 		os.remove("Output.txt")
 
