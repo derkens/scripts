@@ -22,7 +22,7 @@ if config.deltorrent:
 	if config.tordir in origpath:
 		torname = os.path.split(os.path.dirname(origpath))[1]
 		if torname in config.tordir:
-			torname =  os.path.basename(origpath)
+			torname = os.path.basename(origpath)
 		logger.logging.debug("found name of torrent: " + torname)
 
 		logger.logging.info("Opening connection to Transmission")
@@ -77,15 +77,14 @@ showname = res['data'][0]['show_name'].encode('utf-8')
 sickid = res['data'][0][indexer]
 season = res['data'][0]['season']
 epnum = res['data'][0]['episode']
-qlty = res['data'][0]['quality']
+qlty = res['data'][0]['quality'].encode('utf-8')
 lang = ""
 params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
 epname = res['data']['name'].encode('utf-8')
 
-pushtitle = config.srpp_push_title
-pushmsg = config.srpp_push_msg
-pushtitle, pushmsg = misc.replace(pushtitle, pushmsg, showname, season, epnum, epname, lang, qlty)
+args = {'showname': showname, 'season': int(season), 'epnum': int(epnum), 'epname': epname, 'lang': lang, 'qlty': qlty}
+pushtitle, pushmsg = misc.replace(config.srpp_push_title, config.srpp_push_msg, **args)
 
 if config.use_pushover:
 	push_info = {'potitle': pushtitle, 'pomsg': pushmsg}

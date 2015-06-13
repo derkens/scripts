@@ -33,10 +33,11 @@ else:
 		season = str(mis[index]['season']); logger.logging.debug("season = " + season)
 		epnum = str(mis[index]['episode']); logger.logging.debug("episode = " + epnum)
 		epname = mis[index]['ep_name'].encode('utf-8'); logger.logging.debug("episode name = " + epname)
-		pushtitle = config.sbmis_push_title
-		pushmsg = config.sbmis_push_msg
-		pushtitle, pushmsg = misc.replace(pushtitle, pushmsg, showname, int(season), int(epnum), epname)
+
+		args = {'showname': showname, 'season': int(season), 'epnum': int(epnum), 'epname': epname}
+		pushtitle, pushmsg = misc.replace(config.sbmis_push_title, config.sbmis_push_msg, **args)
 		logger.logging.debug("Dumping pushmsg for debug " + pushmsg)
+
 		if config.use_pushover:
 			push_info = {'potitle': pushtitle, 'pomsg': pushmsg}
 			api.pushover(config.user_key, config.app_token, config.push_device, **push_info)

@@ -53,7 +53,7 @@ for index, string in enumerate(onlysnat):
 	res = api.sick_call(params)
 
 	epstatus = str(res['data']['status'])
-	epname = str(res['data']['name'])
+	epname = res['data']['name'].encode('utf-8')
 	if epstatus != "Snatched":
 		logger.logging.debug("Found episode has status : " + epstatus + " , not snatched.")
 		pass
@@ -61,9 +61,8 @@ for index, string in enumerate(onlysnat):
 		logger.logging.debug("Setting " + showname + " " + season + "x" + epnum + "to wanted..")
 		params = {'cmd': 'episode.setstatus', indexer: sickid, 'season': season, 'episode': epnum, 'status': 'wanted'}
 		res = api.sick_call(params)
-		pushtitle = config.sbs2w_push_title
-		pushmsg = config.sbs2w_push_msg
-		pushtitle, pushmsg = misc.replace(pushtitle, pushmsg, showname, season, epnum, epname)
+		args = {'showname': showname, 'season': int(season), 'epnum': int(epnum), 'epname': epname}
+		pushtitle, pushmsg = misc.replace(config.sbs2w_push_title, config.sbs2w_push_msg, **args)
 		if config.use_pushover:
 			push_info = {'potitle': pushtitle, 'pomsg': pushmsg}
 			api.pushover(config.user_key, config.app_token, config.push_device, **push_info)

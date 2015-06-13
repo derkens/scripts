@@ -9,6 +9,7 @@ import lib.config as config
 import stat
 import os
 
+
 def find_logfile():
 	log_file = None
 	logger = logging.getLogger('logger')
@@ -22,32 +23,26 @@ def find_logfile():
 
 	return log_file
 
+
 def access_log_for_all():
 	log_file = find_logfile()
 	if not oct(stat.S_IMODE(os.stat(find_logfile()).st_mode)) == "0777":
 		logger.logging.debug ("Changing logfile permissions")
 		os.chmod(log_file, 0777)
 
-def replace(*args):
-	lang = ""
-	qlty = ""
-	if len(args) == 6:
-		pushtitle,pushmsg,showname,season,epnum,epname = args
-	if len(args) == 7:
-		pushtitle,pushmsg,showname,season,epnum,epname,lang = args
-	if len(args) == 8:
-		pushtitle,pushmsg,showname,season,epnum,epname,lang,qlty = args
-	pushtitle = pushtitle.replace("{SHOW}", showname)
-	pushtitle = pushtitle.replace("{SEASON}", str("%02d" % season))
-	pushtitle = pushtitle.replace("{EPIS}", str("%02d" % epnum))
-	pushtitle = pushtitle.replace("{EPNAME}", epname)
-	pushtitle = pushtitle.replace("{LANG}", lang)
-	pushtitle = pushtitle.replace("{QLTY}", qlty)
 
-	pushmsg = pushmsg.replace("{SHOW}", showname)
-	pushmsg = pushmsg.replace("{SEASON}", str("%02d" % season))
-	pushmsg = pushmsg.replace("{EPIS}", str("%02d" % epnum))
-	pushmsg = pushmsg.replace("{EPNAME}", epname)
-	pushmsg = pushmsg.replace("{LANG}", lang)
-	pushmsg = pushmsg.replace("{QLTY}", qlty)
+def replace(pushtitle, pushmsg, **args):
+	pushtitle = pushtitle.replace("{SHOW}", args['showname'])
+	pushtitle = pushtitle.replace("{SEASON}", str("%02d" % args.get('season', 0)))
+	pushtitle = pushtitle.replace("{EPIS}", str("%02d" % args.get('epnum', 0)))
+	pushtitle = pushtitle.replace("{EPNAME}", args.get('epname', ''))
+	pushtitle = pushtitle.replace("{LANG}", args.get('lang', ''))
+	pushtitle = pushtitle.replace("{QLTY}", args.get('qlty', ''))
+
+	pushmsg = pushmsg.replace("{SHOW}", args['showname'])
+	pushmsg = pushmsg.replace("{SEASON}", str("%02d" % args.get('seas', 0)))
+	pushmsg = pushmsg.replace("{EPIS}", str("%02d" % args.get('epnum', 0)))
+	pushmsg = pushmsg.replace("{EPNAME}", args.get('epname', ''))
+	pushmsg = pushmsg.replace("{LANG}", args.get('lang', ''))
+	pushmsg = pushmsg.replace("{QLTY}", args.get('qlty', ''))
 	return pushtitle, pushmsg

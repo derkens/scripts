@@ -42,12 +42,10 @@ for i in end:
 		logger.logging.debug(showname + " has " + indexer + " " + str(sickid))
 		params = {'cmd': 'show.pause', indexer: sickid, 'pause': 1}
 		res = api.sick_call(params)
-		pushtitle = config.sbca_push_title
-		pushmsg = config.sbca_push_msg
-		season = 0
-		epnum = 0
-		epname = ""
-		pushtitle, pushmsg = misc.replace(pushtitle, pushmsg, showname, season, epnum, epname)
+
+		args = {'showname': showname}
+		pushtitle, pushmsg = misc.replace(config.sbca_push_title, config.sbca_push_msg, **args)
+
 		if config.use_pushover:
 			push_info = {'potitle': pushtitle, 'pomsg': pushmsg}
 			api.pushover(config.user_key, config.app_token, config.push_device, **push_info)

@@ -100,9 +100,8 @@ if config.use_kodi and config.muxing:
 		logger.logging.exception("exception:")
 		logger.logging.debug ("Can't reach Kodi")
 
-pushtitle = config.aspush_title
-pushmsg = config.aspush_msg
-pushtitle, pushmsg = misc.replace(pushtitle,pushmsg,showname,season,epnum,epname,lang)
+args = {'showname': showname, 'season': int(season), 'epnum': int(epnum), 'epname': epname, 'lang': lang}
+pushtitle, pushmsg = misc.replace(config.aspush_title, config.aspush_msg, **args)
 
 if config.use_pushover:
 	if not config.asapp_token:
