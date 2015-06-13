@@ -64,6 +64,6 @@ for index, value in enumerate(r2):
 				if not config.githubapp_token:
 					config.githubapp_token = config.app_token
 				push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'pourl': url, 'pourltitle': urltitle}
-				api.pushover(config.user_key, config.app_token, config.push_device, **push_info)
+				api.pushover(config.user_key, config.githubapp_token, config.push_device, **push_info)
 
 misc.access_log_for_all()
