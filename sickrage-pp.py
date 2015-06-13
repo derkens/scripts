@@ -88,8 +88,8 @@ pushmsg = config.srpp_push_msg
 pushtitle, pushmsg = misc.replace(pushtitle, pushmsg, showname, season, epnum, epname, lang, qlty)
 
 if config.use_pushover:
-	push_info = (config.user_key, config.app_token, config.push_device, pushtitle, pushmsg)
-	api.pushover(push_info)
+	push_info = {'potitle': pushtitle, 'pomsg': pushmsg}
+	api.pushover(config.user_key, config.app_token, config.push_device, **push_info)
 if config.use_nma:
 	logger.logging.debug("Sending NMA notification...")
 	from lib.pynma import pynma
