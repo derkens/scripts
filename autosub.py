@@ -66,7 +66,7 @@ sickid = res['data'][showname][indexer]
 
 params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
-epname = res['data']['name']
+epname = res['data']['name'].encode('utf-8')
 logger.logging.info("Episode name is: " + epname)
 if config.use_kodi and config.muxing:
 	logger.logging.debug("Kodi integration is on...")
