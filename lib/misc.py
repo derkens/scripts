@@ -40,7 +40,7 @@ def replace(pushtitle, pushmsg, **args):
 	pushtitle = pushtitle.replace("{QLTY}", args.get('qlty', ''))
 
 	pushmsg = pushmsg.replace("{SHOW}", args['showname'])
-	pushmsg = pushmsg.replace("{SEASON}", str("%02d" % args.get('seas', 0)))
+	pushmsg = pushmsg.replace("{SEASON}", str("%02d" % args.get('season', 0)))
 	pushmsg = pushmsg.replace("{EPIS}", str("%02d" % args.get('epnum', 0)))
 	pushmsg = pushmsg.replace("{EPNAME}", args.get('epname', ''))
 	pushmsg = pushmsg.replace("{LANG}", args.get('lang', ''))
