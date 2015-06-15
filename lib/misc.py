@@ -27,7 +27,7 @@ def find_logfile():
 def access_log_for_all():
 	log_file = find_logfile()
 	if not oct(stat.S_IMODE(os.stat(find_logfile()).st_mode)) == "0777":
-		logger.logging.debug ("Changing logfile permissions")
+		logger.logging.debug("Changing logfile permissions")
 		os.chmod(log_file, 0777)
 
 

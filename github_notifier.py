@@ -54,7 +54,7 @@ for index, value in enumerate(r2):
 				if not config.githubapp_token:
 					config.githubapp_token = config.app_token
 				push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'pourl': url, 'pourltitle': urltitle}
-				api.pushover(config.user_key, config.app_token, config.push_device, **push_info)
+				api.pushover(config.user_key, config.githubapp_token, config.push_device, **push_info)
 			if r2[index]['type'] == 'GollumEvent':
 				for index3, value3 in enumerate(r2[index]['payload']['pages']):
 					pushtitle = r2[index]['actor']['login'] + " " + value3['action'] + " " + r2[index]['repo']['name'].split("/", 1)[1] + " wiki."

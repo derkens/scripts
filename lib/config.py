@@ -8,15 +8,15 @@ import lib.logger.logger as logger
 
 # Try importing Python 2 modules using new names
 try:
-    import ConfigParser as configparser
-    import urllib2
-    from urllib import urlencode
+	import ConfigParser as configparser
+	import urllib2
+	from urllib import urlencode
 
 # On error import Python 3 modules
 except ImportError:
-    import configparser
-    import urllib.request as urllib2
-    from urllib.parse import urlencode
+	import configparser
+	import urllib.request as urllib2
+	from urllib.parse import urlencode
 
 # Default values Sickbeard
 host = "localhost"
@@ -37,8 +37,8 @@ config = configparser.RawConfigParser()
 config_filename = os.path.join(os.path.dirname(sys.argv[0]), "settings.cfg")
 
 if not os.path.isfile(config_filename):
-	logger.logging.error (config_filename + " doesn\'t exist")
-	logger.logging.error ("copy /rename " + config_filename + ".sample and edit")
+	logger.logging.error(config_filename + " doesn\'t exist")
+	logger.logging.error("copy /rename " + config_filename + ".sample and edit")
 	sys.exit(1)
 
 
@@ -53,15 +53,15 @@ else:
 		api_key = config.get("SickBeard", "api_key")
 		lvl = config.get("General", "loglevel")
 		logger.logging.setLevel(lvl)
-		logger.logging.debug ("Loading config from " + config_filename)
+		logger.logging.debug("Loading config from " + config_filename)
 		if not api_key:
-			logger.logging.error ("Sick Beard api key setting is empty, please fill this field in settings.cfg")
+			logger.logging.error("Sick Beard api key setting is empty, please fill this field in settings.cfg")
 			sys.exit(1)
 
 		try:
 			ssl = int(config.get("SickBeard", "ssl"))
 			use_pushover = int(config.get("Pushover", "use_pushover"))
-			push_device = config.get("Pushover" , "push_device")
+			push_device = config.get("Pushover", "push_device")
 			app_token = config.get("SickBeard", "app_token")
 			user_key = config.get("Pushover", "user_key")
 			use_nma = int(config.get("NMA", "use_nma"))
@@ -125,7 +125,7 @@ else:
 
 	except EnvironmentError:
 		e = sys.exc_info()[1]
-		logger.logging.error ("Could not read configuration file: " + str(e))
+		logger.logging.error("Could not read configuration file: " + str(e))
 		# There was a config_file, don't use default values but exit
 		sys.exit(1)
 
