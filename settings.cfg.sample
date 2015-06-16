@@ -118,3 +118,4 @@ password=
 user=
 #pushover: (optional)
 app_token=
+logging=1

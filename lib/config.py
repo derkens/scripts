@@ -53,6 +53,9 @@ else:
 		api_key = config.get("SickBeard", "api_key")
 		lvl = config.get("General", "loglevel")
 		logger.logging.setLevel(lvl)
+		githublogging = int(config.get("Github", "logging"))
+		if 'github' in sys.argv[0] and not githublogging:
+			logger.logging.setLevel("CRITICAL")
 		logger.logging.debug("Loading config from " + config_filename)
 		if not api_key:
 			logger.logging.error("Sick Beard api key setting is empty, please fill this field in settings.cfg")
@@ -107,6 +110,7 @@ else:
 			password = str(config.get("SickBeard", "web_password"))
 			githubuser = str(config.get("Github", "user"))
 			githubapp_token = str(config.get("Github", "app_token"))
+
 
 		except (configparser.NoOptionError, ValueError):
 			logger.logging.exception("exception:")

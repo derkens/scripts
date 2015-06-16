@@ -5,7 +5,7 @@
 #
 # github notifications
 
-import os.path, httplib, urllib, urllib2
+import os.path, httplib, urllib, urllib2, logging
 import sys
 import json
 import lib.logger.logger as logger
@@ -14,6 +14,8 @@ import lib.api as api
 import lib.misc as misc
 sys.excepthook = misc.log_uncaught_exceptions
 
+if not config.githublogging:
+	logger.logging.setLevel(logging.CRITICAL)
 file_name = os.path.join(os.path.dirname(sys.argv[0]), "last_run")
 url = 'https://api.github.com/users/' + config.githubuser + '/received_events'
 
