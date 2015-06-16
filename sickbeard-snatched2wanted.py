@@ -58,7 +58,7 @@ for index, string in enumerate(onlysnat):
 		logger.logging.debug("Found episode has status : " + epstatus + " , not snatched.")
 		pass
 	else:
-		logger.logging.debug("Setting " + showname + " " + season + "x" + epnum + "to wanted..")
+		logger.logging.debug("Setting " + showname + " " + season + "x" + epnum + " to wanted..")
 		params = {'cmd': 'episode.setstatus', indexer: sickid, 'season': season, 'episode': epnum, 'status': 'wanted'}
 		res = api.sick_call(params)
 		args = {'showname': showname, 'season': int(season), 'epnum': int(epnum), 'epname': epname}
