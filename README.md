@@ -44,10 +44,10 @@ Currently the only notifiers to choose are [pushover](http://www.pushover.net), 
 Gets the pushes and wiki edits from your personal stream (pushes and wiki edits from repos you follow) and notifies with pushover.
 
 ####ToDo####
-[ ] check for presence of external tools (mkvmerge)
-[ ] obfuscate api keys in logfile (in progress)
-[ ] implement sound choice for pushover
-[ ] reorganize settings.cfg
-[ ] merge movie scripts
+- [ ] check for presence of external tools (mkvmerge)
+- [ ] obfuscate api keys in logfile (in progress)
+- [ ] implement sound choice for pushover
+- [ ] reorganize settings.cfg
+- [ ] merge movie scripts
 
 * thanks for contributing @Mickroz
