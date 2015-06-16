@@ -12,6 +12,8 @@ import lib.logger.logger as logger
 import lib.config as config
 import lib.api as api
 import lib.misc as misc
+sys.excepthook = misc.log_uncaught_exceptions
+
 file_name = os.path.join(os.path.dirname(sys.argv[0]), "last_run")
 url = 'https://api.github.com/users/' + config.githubuser + '/received_events'
 

@@ -14,6 +14,7 @@ import lib.config as config
 import lib.emailer as emailer
 import lib.misc as misc
 import lib.api as api
+sys.excepthook = misc.log_uncaught_exceptions
 
 if config.use_email:
 	text_file = open("Output.txt", "w")

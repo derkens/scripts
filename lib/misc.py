@@ -8,7 +8,7 @@ import lib.logger.logger as logger
 import lib.config as config
 import stat
 import os
-
+import traceback
 
 def find_logfile():
 	log_file = None
@@ -46,3 +46,8 @@ def replace(pushtitle, pushmsg, **args):
 	pushmsg = pushmsg.replace("{LANG}", args.get('lang', ''))
 	pushmsg = pushmsg.replace("{QLTY}", args.get('qlty', ''))
 	return pushtitle, pushmsg
+
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+	logger.logging.critical(''.join(traceback.format_tb(tb)))
+	logger.logging.critical('{0}: {1}'.format(ex_cls, ex))

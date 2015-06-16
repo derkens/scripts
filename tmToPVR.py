@@ -10,7 +10,7 @@ import lib.emailer as emailer
 import lib.misc as misc
 import lib.api as api
 from lib import requests
-
+sys.excepthook = misc.log_uncaught_exceptions
 
 def transmission():
 	dirName = os.getenv('TR_TORRENT_DIR')

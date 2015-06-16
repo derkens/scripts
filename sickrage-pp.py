@@ -12,6 +12,7 @@ import lib.emailer as emailer
 import lib.api as api
 import lib.misc as misc
 import base64, string
+sys.excepthook = misc.log_uncaught_exceptions
 
 indexer, fork = api.sick_call_initial()
 
