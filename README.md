@@ -46,7 +46,7 @@ Gets the pushes and wiki edits from your personal stream (pushes and wiki edits 
 ####ToDo####
 - [ ] check for presence of external tools (mkvmerge)
 - [ ] obfuscate api keys in logfile (in progress)
-- [ ] implement sound choice for pushover
+- [x] implement sound choice for pushover
 - [ ] reorganize settings.cfg
 - [ ] merge movie scripts
 

@@ -57,7 +57,7 @@ for index, value in enumerate(r2):
 					urltitle = "View commit on Github"
 				if not config.githubapp_token:
 					config.githubapp_token = config.app_token
-				push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'pourl': url, 'pourltitle': urltitle}
+				push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'pourl': url, 'pourltitle': urltitle, 'sound': config.github_push_sound}
 				api.pushover(config.user_key, config.githubapp_token, config.push_device, **push_info)
 			if r2[index]['type'] == 'GollumEvent':
 				for index3, value3 in enumerate(r2[index]['payload']['pages']):
@@ -67,7 +67,7 @@ for index, value in enumerate(r2):
 					urltitle = "View wiki page on Github"
 				if not config.githubapp_token:
 					config.githubapp_token = config.app_token
-				push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'pourl': url, 'pourltitle': urltitle}
+				push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'pourl': url, 'pourltitle': urltitle, 'sound': config.github_push_sound}
 				api.pushover(config.user_key, config.githubapp_token, config.push_device, **push_info)
 
 misc.access_log_for_all()

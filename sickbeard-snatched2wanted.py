@@ -65,7 +65,7 @@ for index, string in enumerate(onlysnat):
 		args = {'showname': showname, 'season': int(season), 'epnum': int(epnum), 'epname': epname}
 		pushtitle, pushmsg = misc.replace(config.sbs2w_push_title, config.sbs2w_push_msg, **args)
 		if config.use_pushover:
-			push_info = {'potitle': pushtitle, 'pomsg': pushmsg}
+			push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'sound': config.sbs2w_push_sound}
 			api.pushover(config.user_key, config.app_token, config.push_device, **push_info)
 		if config.use_nma:
 			logger.logging.debug("Sending NMA notification...")

@@ -88,7 +88,7 @@ args = {'showname': showname, 'season': int(season), 'epnum': int(epnum), 'epnam
 pushtitle, pushmsg = misc.replace(config.srpp_push_title, config.srpp_push_msg, **args)
 
 if config.use_pushover:
-	push_info = {'potitle': pushtitle, 'pomsg': pushmsg}
+	push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'sound': config.srpp_push_sound}
 	api.pushover(config.user_key, config.app_token, config.push_device, **push_info)
 if config.use_nma:
 	logger.logging.debug("Sending NMA notification...")

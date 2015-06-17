@@ -76,6 +76,7 @@ def pushover(user_key, apptoken, pushdevice, **push_info):
 		"device": pushdevice,
 		"url": push_info.get('pourl', ''),
 		"url_title": push_info.get('pourltitle', ''),
+		"sound": push_info.get('sound', ''),
 		"html": "1"
 	}), {"Content-type": "application/x-www-form-urlencoded"})
 	res = conn.getresponse()

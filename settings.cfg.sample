@@ -26,23 +26,31 @@ logfile=scripts.log
 # custom notification format, this supports simple html tags (https://pushover.net/api#html)
 # fields of choice are: {SHOW} (tv show name), {SEASON} (season number), {EPIS} (episode number), {EPNAME} (episode name)
 #and {LANG} (used in autosub downloaded subtitle language) a default format is provided below
+#
+#push_sound, see https://pushover.net/api#sounds for more info,
+#leave blank to use your own sound settings as set in the pushover app.
+#example: push_sound=bike
 #######
 
 [Sickrage-pp]
 push_title=Download Finished:
 push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME} - {QLTY}
+push_sound=
 
 [Sickbeard-cancelled]
 push_title=Show Cancelled!:
 push_msg=<i><b>{SHOW}</b> is possibly cancelled...</i>
+push_sound=
 
 [Sickbeard-s2w]
 push_title=Set to Wanted:
 push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME}
+push_sound=
 
 [Sickbeard-missed]
 push_title=Missed Episode:
 push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME}
+push_sound=
 
 [SickBeard] ; or Sickrage info
 #mandatory:
@@ -105,6 +113,7 @@ app_token=
 channeltag=
 push_title=Download Finished:
 push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME} - {LANG}
+push_sound=
 
 [Transmission]
 deletetorrents=0 ;this setting enables the removal of the torrent from transmission torrent list.
@@ -119,3 +128,4 @@ user=
 #pushover: (optional)
 app_token=
 logging=1
+push_sound=
