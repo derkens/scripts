@@ -105,7 +105,7 @@ if config.use_pushover:
 	if not config.asapp_token:
 		config.asapp_token = config.app_token
 		logger.logging.info("No separate app token found for Autosub, using the default. (See Pushover.net how to add your own app token)")
-	push_info = {'potitle': pushtitle, 'pomsg': pushmsg}
+	push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'sound': config.aspush_sound}
 	api.pushover(config.user_key, config.asapp_token, config.push_device, **push_info)
 if config.use_pushbullet:
 	push_info = pushtitle, pushmsg, config.deviceid, config.aschanneltag
