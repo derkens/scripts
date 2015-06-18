@@ -30,12 +30,13 @@ subandpathnoext = sys.argv[1][:-7]
 outputfileandpath = subandpathnoext + '.nl.mkv'
 finalfileandpath = subandpathnoext + '.mkv'
 pathvid = os.path.dirname(vidandpath)
+print subandpath
 
 logger.logging.info("Opening connection to " + fork)
 params = {'cmd': 'sb.getrootdirs'}
 u = api.sick_call(params)
 for index, string in enumerate(u['data']):
-	if u['data'][index]['location'] in subandpath:
+	if u['data'][index]['location'].encode('utf-8') in subandpath:
 		rootdir = u['data'][index]['location']
 getname = re.compile(rootdir + '/(.*?)/')
 m = getname.search(subandpath)
