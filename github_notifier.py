@@ -16,19 +16,15 @@ sys.excepthook = misc.log_uncaught_exceptions
 
 if not config.githublogging:
 	logger.logging.setLevel(logging.CRITICAL)
-file_name = os.path.join(os.path.dirname(sys.argv[0]), "last_run")
+
 url = 'https://api.github.com/users/' + config.githubuser + '/received_events'
 
 logger.logging.info("Opening URL: " + url)
-
-if os.path.exists(file_name):
-	with open(file_name, "r") as lastrun:
-		stopid = lastrun.read().replace('\n', '')
-		logger.logging.debug("Found " + file_name + " lastid = " + stopid)
-
+stopid = misc.openpick('github_notifier')
+if stopid:
+	logger.logging.debug("Found lastid = " + stopid)
 else:
-	stopid = None
-	logger.logging.debug(file_name + " does not exist, using lastid = " + str(stopid))
+	logger.logging.debug("Found lastid = " + str(stopid) + "First run?")
 firstid = None
 req = urllib2.Request(url)
 req.add_header('Content-Type', 'application/json')
@@ -42,10 +38,7 @@ for index, value in enumerate(r2):
 		else:
 			if firstid is None:
 				firstid = r2[index]['id']
-				f = open(file_name, 'w')
-				f.truncate()
-				f.write(firstid + '\n')
-				f.close()
+				misc.dumppick('github_notifier', firstid)
 			if r2[index]['type'] == 'PushEvent':
 				for index2, value2 in enumerate(r2[index]['payload']['commits']):
 					pushtitle = value2['author']['name'] + " pushed to " + r2[index]['repo']['name']

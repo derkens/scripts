@@ -3,3 +3,5 @@ settings.cfg
 *.log*
 Output.txt
 last_run
+save.p
+.goutputstream*

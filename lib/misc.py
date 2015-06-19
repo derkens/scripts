@@ -9,6 +9,8 @@ import lib.config as config
 import stat
 import os
 import traceback
+import pickle
+import sys
 
 def find_logfile():
 	log_file = None
@@ -49,5 +51,27 @@ def replace(pushtitle, pushmsg, **args):
 
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
-	logger.logging.critical(''.join(traceback.format_tb(tb)))
+	logger.logging.debug(''.join(traceback.format_tb(tb)))
 	logger.logging.critical('{0}: {1}'.format(ex_cls, ex))
+
+def openpick(key):
+	file_name = os.path.join(os.path.dirname(sys.argv[0]), "save.p")
+	if os.path.exists(file_name):
+		pcklfile = pickle.load(open(file_name, "rb"))
+		value = pcklfile.get(key, "novalue")
+		return value
+	else:
+		logger.logging.debug("No pickle file found... Creating...")
+		pair = dumppick(key, "novalue")
+		return pair
+
+def dumppick(key,value):
+	file_name = os.path.join(os.path.dirname(sys.argv[0]), "save.p")
+	if os.path.exists(file_name):
+		pcklfile = pickle.load(open(file_name, "rb"))
+		pcklfile[key] = value
+		pickle.dump(pcklfile , open( file_name, "wb" ) )
+	else:
+		pcklfile = {}
+		pcklfile[key] = "novalue"
+		pickle.dump(pcklfile , open( file_name, "wb" ) )
