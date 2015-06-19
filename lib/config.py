@@ -116,6 +116,7 @@ else:
 			githubuser = str(config.get("Github", "user"))
 			githubapp_token = str(config.get("Github", "app_token"))
 			github_push_sound = str(config.get("Github", "push_sound"))
+			analyzeapptoken = config.get("Analyze-log", "apptoken")
 
 
 		except (configparser.NoOptionError, ValueError):

@@ -52,6 +52,9 @@ push_title=Missed Episode:
 push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME}
 push_sound=
 
+[Analyze-log]
+apptoken = aWB5Wn31hSjcLg3n4thCKufdEu5Z6L
+
 [SickBeard] ; or Sickrage info
 #mandatory:
 host=localhost
