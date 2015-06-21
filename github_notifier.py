@@ -21,10 +21,11 @@ url = 'https://api.github.com/users/' + config.githubuser + '/received_events'
 
 logger.logging.info("Opening URL: " + url)
 stopid = misc.openpick('github_notifier')
-if stopid:
-	logger.logging.debug("Found lastid = " + stopid)
+if stopid == "novalue":
+	logger.logging.debug("Didn't find 'lastid' is this a first run?")
 else:
-	logger.logging.debug("Found lastid = " + str(stopid) + "First run?")
+	logger.logging.debug("Found lastid = " + stopid)
+
 firstid = None
 req = urllib2.Request(url)
 req.add_header('Content-Type', 'application/json')

@@ -5,14 +5,11 @@
 #
 
 
-import os.path, httplib, urllib, urllib2, logging
 import sys
-import json
 import lib.logger.logger as logger
 import lib.config as config
 import lib.api as api
 import lib.misc as misc
-import pickle
 
 sys.excepthook = misc.log_uncaught_exceptions
 logfile = misc.find_logfile()
@@ -30,7 +27,7 @@ if 'times' in locals():
 	misc.dumppick('analyzelog', times)
 if error:
 	pushtitle = "ScriptSuite checker"
-	pushmsg =  "Found an ERROR in the logfile @: " + time + ", one of the scripts failed."
+	pushmsg =  "Found an ERROR in the logfile @: " + times + ", one of the scripts failed."
 	logger.logging.debug(pushmsg)
 	push_info = {'potitle': pushtitle.encode('utf-8'), 'pomsg': pushmsg.encode('utf-8'), 'sound': config.github_push_sound}
 	api.pushover(config.user_key, config.analyzeapptoken, config.push_device, **push_info)
