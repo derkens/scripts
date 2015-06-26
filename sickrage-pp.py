@@ -15,7 +15,7 @@ import base64, string
 sys.excepthook = misc.log_uncaught_exceptions
 
 indexer, fork = api.sick_call_initial()
-'''
+
 path = "/transmission/rpc/"
 # in case of torrent, remove processed torrent from transmission list
 origpath = sys.argv[2]
@@ -68,17 +68,16 @@ if config.deltorrent:
 		logger.logging.debug("Transmission results: " + json.dumps(response, indent=4))
 		logger.logging.info("Removing torrent from Transmisson list with id: " + str(torid))
 
-'''
 if config.use_email:
 	text_file = open("Output.txt", "w")
 logger.logging.info("Opening connection to " + fork)
-params = {'cmd': 'history', 'limit': 4, 'type': 'downloaded'}
+params = {'cmd': 'history', 'limit': 1, 'type': 'downloaded'}
 res = api.sick_call(params)
-showname = res['data'][3]['show_name'].encode('utf-8')
-sickid = res['data'][3][indexer]
-season = res['data'][3]['season']
-epnum = res['data'][3]['episode']
-qlty = res['data'][3]['quality'].encode('utf-8')
+showname = res['data'][0]['show_name'].encode('utf-8')
+sickid = res['data'][0][indexer]
+season = res['data'][0]['season']
+epnum = res['data'][0]['episode']
+qlty = res['data'][0]['quality'].encode('utf-8')
 lang = ""
 params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
