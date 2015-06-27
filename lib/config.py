@@ -54,10 +54,11 @@ else:
 		lvl = config.get("General", "loglevel")
 		logger.logging.setLevel(lvl)
 		githublogging = int(config.get("Github", "logging"))
+		use_sickbeard = int(config.get("General", "use_sickbeard"))
 		if 'github' in sys.argv[0] and not githublogging:
 			logger.logging.setLevel("CRITICAL")
 		logger.logging.debug("Loading config from " + config_filename)
-		if not api_key:
+		if use_sickbeard and not api_key:
 			logger.logging.error("Sick Beard api key setting is empty, please fill this field in settings.cfg")
 			sys.exit(1)
 

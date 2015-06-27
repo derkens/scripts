@@ -21,6 +21,8 @@ loglevel=INFO
 #DEBUG WARN ERROR INFO
 logpath=
 logfile=scripts.log
+# set this to 0 if you only want to use github_notifier
+use_sickbeard=1
 
 #######
 # custom notification format, this supports simple html tags (https://pushover.net/api#html)
