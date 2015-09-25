@@ -30,6 +30,7 @@ subandpathnoext = sys.argv[1][:-7]
 outputfileandpath = subandpathnoext + '.nl.mkv'
 finalfileandpath = subandpathnoext + '.mkv'
 pathvid = os.path.dirname(vidandpath)
+status = ""
 print subandpath
 
 logger.logging.info("Opening connection to " + fork)
@@ -52,11 +53,15 @@ if config.muxing:
 		logger.logging.debug(stdout)
 	if stderr:
 		logger.logging.error(stderr)
-
-	os.remove(vidandpath)
-	os.rename(outputfileandpath, finalfileandpath)
-	os.chmod(finalfileandpath, 0775)
-	os.chmod(subandpath, 0775)
+	if os.path.exists(outputfileandpath):
+		os.remove(vidandpath)
+		os.rename(outputfileandpath, finalfileandpath)
+		os.chmod(finalfileandpath, 0775)
+		os.chmod(subandpath, 0775)
+	else:
+		os.remove(subandpath)
+		logger.logging.error("subtitle muxing failed, removing possibly faulty subtitle...")
+		status = "Failed to mux "
 
 logger.logging.debug("Opening connection to thetvdb.com")
 tvdbid, showname = api.tvdb_call(findshow)
@@ -70,7 +75,7 @@ params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
 epname = res['data']['name'].encode('utf-8')
 logger.logging.info("Episode name is: " + epname)
-if config.use_kodi and config.muxing:
+if config.use_kodi and config.muxing and status is "":
 	logger.logging.debug("Kodi integration is on...")
 	try:
 		if vidandpath.endswith('.mkv'):
@@ -99,7 +104,7 @@ if config.use_kodi and config.muxing:
 		logger.logging.exception("exception:")
 		logger.logging.debug("Can't reach Kodi")
 
-args = {'showname': showname, 'season': int(season), 'epnum': int(epnum), 'epname': epname, 'lang': lang}
+args = {'showname': status + showname, 'season': int(season), 'epnum': int(epnum), 'epname': epname, 'lang': lang}
 pushtitle, pushmsg = misc.replace(config.aspush_title, config.aspush_msg, **args)
 
 if config.use_pushover:
