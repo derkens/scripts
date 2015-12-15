@@ -32,7 +32,7 @@ if end == []:
 	logger.logging.info("Nothing to be done, exiting")
 
 for i in end:
-	showname = i['show_name']; logger.logging.debug("Showname = " + showname)
+	showname = i['show_name'].encode('utf-8'); logger.logging.debug("Showname = " + showname)
 	stat = i['status']; logger.logging.debug("Show status = " + stat)
 	net = i['next_ep_airdate']; logger.logging.debug("Next episode date = " + net)
 	logger.logging.info(showname + " has status: " + stat)
