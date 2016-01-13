@@ -69,7 +69,8 @@ logger.logging.debug("Showname found on thetvdb.com: " + showname)
 
 params = {'cmd': 'shows', 'sort': 'name'}
 res = api.sick_call(params)
-sickid = res['data'][showname][indexer]
+res = eval(repr(res).lower())
+sickid = res['data'][showname.lower()][indexer]
 
 params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
