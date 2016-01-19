@@ -31,6 +31,7 @@ req = urllib2.Request(url)
 req.add_header('Content-Type', 'application/json')
 r2 = urllib2.urlopen(req)
 r2 = json.loads(r2.read())
+print r2
 for index, value in enumerate(r2):
 	if r2[index]['type'] == 'PushEvent' or 'GollumEvent':
 		if r2[index]['id'] == stopid:

@@ -84,6 +84,8 @@ if config.use_kodi and config.muxing and status is "":
 			params = {"sort": {'order': "ascending", 'method': "title"}, "filter": {'operator': "contains", 'field': "title", 'value': epname}, 'properties': ["file"]}
 			res = api.kodi_call(params, method)
 			xbmcepid = res['result']['episodes'][0]['episodeid']
+			loc = res['result']['episodes'][0]['file']
+			scanloc = os.path.dirname(os.path.dirname(loc))
 			logger.logging.debug("Episode id in Kodi is: " + str(xbmcepid))
 
 			method = "VideoLibrary.RemoveEpisode"
@@ -98,7 +100,7 @@ if config.use_kodi and config.muxing and status is "":
 		logger.logging.debug("Episode removal from Kodi failed")
 	try:
 		method = "VideoLibrary.Scan"
-		params = {'directory': pathvid}
+		params = {'directory': scanloc}
 		res = api.kodi_call(params, method)
 		logger.logging.info("Scanning episode to kodi library: " + res['result'])
 	except:
