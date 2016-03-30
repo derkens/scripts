@@ -69,13 +69,29 @@ logger.logging.debug("Showname found on thetvdb.com: " + showname)
 
 params = {'cmd': 'shows', 'sort': 'name'}
 res = api.sick_call(params)
-res = eval(repr(res).lower())
+res = misc.lower_keys(res)
 sickid = res['data'][showname.lower()][indexer]
 
 params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
 epname = res['data']['name'].encode('utf-8')
 logger.logging.info("Episode name is: " + epname)
+
+if config.use_symlinks:
+	logger.logging.info("making symlinks is on...")
+	symloc = os.path.join(config.symdir ,showname, "Season " + str("%02d" % season), '')
+	if not os.path.exists(symloc):
+		os.makedirs(symloc)
+		logger.logging.debug("No directories yet, making them now..")
+	if not os.path.exists(symloc + os.path.basename(finalfileandpath)):
+		os.symlink(finalfileandpath, symloc + os.path.basename(finalfileandpath))
+		logger.logging.debug("Making symlink " + symloc + os.path.basename(finalfileandpath))
+	if not os.path.exists(symloc + os.path.basename(subandpath)):
+		os.symlink(subandpath, symloc + os.path.basename(subandpath))
+		logger.logging.debug("Making symlink " + symloc + os.path.basename(subandpath))
+	else:
+		logger.logging.debug("Symlinks existed, are you re-downloading a subtitle?")
+
 if config.use_kodi and config.muxing and status is "":
 	logger.logging.debug("Kodi integration is on...")
 	try:

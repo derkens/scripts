@@ -34,7 +34,6 @@ def kodi_call(params, method):
 		 logger.logging.debug("Kodi call: " + json.dumps(res, indent=4))
 	else:
 		logger.logging.debug("kodi_call output suppressed, long showlist")
-	#logger.logging.debug("Kodi results: " + json.dumps(res, indent=4))
 	return res
 
 

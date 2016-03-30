@@ -110,6 +110,10 @@ use_kodi=0
 host=
 port=
 
+[Symlinks] ;Make symlink in a directory, you can add this in kodi to have only shows that have subtitles
+use_symlinks=0
+symdir= ;set the path where you want symlinks to video and subtitle file
+
 [Autosub]
 muxing=0 ;use muxing to integrate sub and video in .mkv. if this is disabled, this also disables kodi integration
 #pushover: (optional)

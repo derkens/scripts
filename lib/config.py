@@ -118,6 +118,8 @@ else:
 			githubapp_token = str(config.get("Github", "app_token"))
 			github_push_sound = str(config.get("Github", "push_sound"))
 			analyzeapptoken = config.get("Analyze-log", "apptoken")
+			use_symlinks = int(config.get("Symlinks", "use_symlinks"))
+			symdir = str(config.get("Symlinks", "symdir"))
 
 
 		except (configparser.NoOptionError, ValueError):

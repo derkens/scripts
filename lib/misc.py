@@ -75,3 +75,11 @@ def dumppick(key,value):
 		pcklfile = {}
 		pcklfile[key] = "novalue"
 		pickle.dump(pcklfile , open( file_name, "wb" ) )
+
+def lower_keys(x):
+	if isinstance(x, list):
+		return [lower_keys(v) for v in x]
+	elif isinstance(x, dict):
+		return dict((k.lower(), lower_keys(v)) for k, v in x.iteritems())
+	else:
+		return x
