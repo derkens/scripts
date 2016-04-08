@@ -32,7 +32,7 @@ if end == []:
 	logger.logging.info("Nothing to be done, exiting")
 
 for i in end:
-	showname = i['show_name'].encode('utf-8'); logger.logging.debug("Showname = " + showname)
+	showname = i['show_name']; logger.logging.debug("Showname = " + showname)
 	sickid = i['indexerid']
 	params = {'cmd': 'show.stats', 'indexerid': sickid}
 	res = api.sick_call(params)
