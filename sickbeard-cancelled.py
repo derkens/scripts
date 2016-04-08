@@ -33,13 +33,21 @@ if end == []:
 
 for i in end:
 	showname = i['show_name'].encode('utf-8'); logger.logging.debug("Showname = " + showname)
+	sickid = i['indexerid']
+	params = {'cmd': 'show.stats', 'indexerid': sickid}
+	res = api.sick_call(params)
+	total = res['data']['total']
+	totaldwl = res['data']['downloaded']['total']
+	totalsnt = res['data']['snatched']['total']
+	unaired = res['data']['unaired']
+
 	stat = i['status']; logger.logging.debug("Show status = " + stat)
-	net = i['next_ep_airdate']; logger.logging.debug("Next episode date = " + net)
 	logger.logging.info(showname + " has status: " + stat)
-	if net == '':
-		params = {'cmd': 'shows', 'sort': 'name'}
-		res = api.sick_call(params)
-		sickid = res['data'][showname][indexer]
+	if unaired > 0:
+		logger.logging.info(showname + " has status Ended, but not all episodes have aired.")
+	if unaired == 0 and (total - totaldwl > 0):
+		logger.logging.info(showname + " has status Ended, but not all episodes are downloaded")
+	if unaired == 0 and (total - totaldwl == 0) and totalsnt == 0:
 		logger.logging.debug(showname + " has " + indexer + " " + str(sickid))
 		params = {'cmd': 'show.pause', indexer: sickid, 'pause': 1}
 		res = api.sick_call(params)
