@@ -3,8 +3,6 @@
 #
 #  analyse-log.py
 #
-
-
 import sys
 import lib.logger.logger as logger
 import lib.config as config
@@ -34,4 +32,3 @@ if error:
 else:
 	logger.logging.debug("No errors found...")
 misc.access_log_for_all()
-

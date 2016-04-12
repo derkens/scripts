@@ -31,7 +31,6 @@ outputfileandpath = subandpathnoext + '.nl.mkv'
 finalfileandpath = subandpathnoext + '.mkv'
 pathvid = os.path.dirname(vidandpath)
 status = ""
-print subandpath
 
 logger.logging.info("Opening connection to " + fork)
 params = {'cmd': 'sb.getrootdirs'}

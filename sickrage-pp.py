@@ -87,7 +87,6 @@ if "PROPER" in str(res['data']['release_name']) or "REPACK" in str(res['data']['
 	proper = " (proper)"
 else:
 	proper = ""
-print proper
 args = {'showname': showname, 'season': int(season), 'epnum': int(epnum), 'epname': epname, 'lang': lang, 'qlty': qlty}
 pushtitle, pushmsg = misc.replace(config.srpp_push_title, config.srpp_push_msg, **args)
 
