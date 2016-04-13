@@ -52,7 +52,7 @@ for i in end:
 		params = {'cmd': 'show.pause', indexer: sickid, 'pause': 1}
 		res = api.sick_call(params)
 
-		args = {'showname': showname}
+		args = {'showname': showname.encode("utf-8")}
 		pushtitle, pushmsg = misc.replace(config.sbca_push_title, config.sbca_push_msg, **args)
 
 		if config.use_pushover:
