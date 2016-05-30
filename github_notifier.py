@@ -31,8 +31,9 @@ try:
 	req = urllib2.Request(url)
 	req.add_header('Content-Type', 'application/json')
 except urllib2.URLError, e:
-    logger.logging.error('URLError = ' + str(e.reason))
+	logger.logging.error('URLError = ' + str(e.reason))
 	sys.exit()
+
 r2 = urllib2.urlopen(req)
 r2 = json.loads(r2.read())
 
