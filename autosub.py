@@ -66,10 +66,17 @@ logger.logging.debug("Opening connection to thetvdb.com")
 tvdbid, showname = api.tvdb_call(findshow)
 logger.logging.debug("Showname found on thetvdb.com: " + showname)
 
-params = {'cmd': 'shows', 'sort': 'name'}
-res = api.sick_call(params)
-res = misc.lower_keys(res)
-sickid = res['data'][showname.lower()][indexer]
+try:
+	params = {'cmd': 'shows', 'sort': 'name'}
+	res = api.sick_call(params)
+	res = misc.lower_keys(res)
+	sickid = res['data'][showname.lower()][indexer]
+except:
+	showname = findshow
+	params = {'cmd': 'shows', 'sort': 'name'}
+	res = api.sick_call(params)
+	res = misc.lower_keys(res)
+	sickid = res['data'][showname.lower()][indexer]
 
 params = {'cmd': 'episode', indexer: sickid, 'season': season, 'episode': epnum}
 res = api.sick_call(params)
