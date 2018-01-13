@@ -7,6 +7,7 @@ import xml.etree.cElementTree as etree
 import logging, stat, pwd, grp, os, httplib, urllib, json, urllib2, base64, sys
 import lib.logger.logger as logger
 import lib.config as config
+import requests
 
 
 def tvdb_call(params):
@@ -69,9 +70,12 @@ def sick_call(params):
 
 def pushover(user_key, apptoken, pushdevice, **push_info):
 	logger.logging.debug("Sending Pushover notification...")
-	conn = httplib.HTTPSConnection("api.pushover.net:443")
-	conn.request("POST", "/1/messages.json",
-	urllib.urlencode({
+	url = "https://api.pushover.net/1/messages.json"
+	try:
+		files = {'attachment': open(push_info.get('image',''), 'rb')}
+	except:
+		files = ''
+	payload={
 		"token": apptoken,
 		"user": user_key,
 		"message": push_info['pomsg'],
@@ -80,10 +84,10 @@ def pushover(user_key, apptoken, pushdevice, **push_info):
 		"url": push_info.get('pourl', ''),
 		"url_title": push_info.get('pourltitle', ''),
 		"sound": push_info.get('sound', ''),
-		"html": "1"
-	}), {"Content-type": "application/x-www-form-urlencoded"})
-	res = conn.getresponse()
-	res = json.loads(res.read())
+        "html": "1"
+	}
+	conn = requests.post(url, params=payload, files=files)
+	res = json.loads(conn.text)
 	if res["status"]:
 		logger.logging.info("Pushover notification sent succesfully")
 	else:
