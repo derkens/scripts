@@ -63,7 +63,7 @@ if config.muxing:
 		status = "Failed to mux "
 
 logger.logging.debug("Opening connection to thetvdb.com")
-tvdbid, showname = api.tvdb_call(findshow)
+tvdbid, showname, imglink = api.tvdb_call(findshow)
 logger.logging.debug("Showname found on thetvdb.com: " + showname)
 
 try:

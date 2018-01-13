@@ -16,7 +16,12 @@ def tvdb_call(params):
 	root = etree.fromstring(res)
 	tvdbid = root[0][0].text
 	serienaam = root[0][2].text
-	return tvdbid, serienaam
+	imglink =  root[0][4].text
+	if ".jpg" in imglink:
+		pass
+	else:
+		imglink = root[0][3].text
+	return tvdbid, serienaam, imglink
 
 
 def kodi_call(params, method):
