@@ -3,26 +3,48 @@
 #
 #  api.py
 #
-import xml.etree.cElementTree as etree
 import logging, stat, pwd, grp, os, httplib, urllib, json, urllib2, base64, sys
 import lib.logger.logger as logger
 import lib.config as config
-import requests
+import lib.misc as misc
+import requests, pickle, time
 
 
-def tvdb_call(params):
-	url = 'http://thetvdb.com/api/GetSeries.php?seriesname='
-	res = urllib.urlopen(url + params).read()
-	root = etree.fromstring(res)
-	tvdbid = root[0][0].text
-	serienaam = root[0][2].text
-	imglink =  root[0][4].text
-	if ".jpg" in imglink:
-		pass
+def tvdb_init():
+	url= "https://api.thetvdb.com/login"
+	headers= {'Content-Type': 'application/json'}
+	payload={
+		"apikey": config.tvdbapi
+		}
+	tvdb_token_age = misc.openpick('tvdb_token_age')
+	if tvdb_token_age == "novalue":
+		misc.dumppick('tvdb_token_age', '1514764800')
+		misc.dumppick('tvdbtoken', 'notoken')
+	elif (int(time.time()) - int(misc.openpick('tvdb_token_age'))) < 86400:
+		logger.logging.debug("Token still valid")
+		tvdb_token = misc.openpick('tvdb_token')    
 	else:
-		imglink = root[0][3].text
-	return tvdbid, serienaam, imglink
+		logger.logging.debug("Token Invalid, get new token")
+		conn = requests.post(url, json=payload, headers=headers)
+		res = json.loads(conn.text)
+		tvdb_token = res["token"]
+		misc.dumppick('tvdb_token', tvdb_token)
+		misc.dumppick('tvdb_token_age',int(time.time()) )
+	return tvdb_token
 
+def tvdb_call(seriesname):
+    tvdb_token = tvdb_init()
+    url= "https://api.thetvdb.com/search/series"
+    headers= {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tvdb_token }
+    payload={
+		"name": seriesname
+        }
+    conn = requests.get(url, params=payload, headers=headers)
+    res = json.loads(conn.text)
+    imglink = res['data'][0]['banner']
+    serienaam = res['data'][0]['seriesName']
+    tvdbid = res['data'][0]['id']
+    return tvdbid, serienaam.encode('utf-8'), imglink
 
 def kodi_call(params, method):
 	data = {

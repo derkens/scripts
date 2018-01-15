@@ -138,3 +138,6 @@ user=
 app_token=
 logging=1
 push_sound=
+
+[Tvdb]
+tvdbapi=

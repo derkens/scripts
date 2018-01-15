@@ -120,6 +120,7 @@ else:
 			analyzeapptoken = config.get("Analyze-log", "apptoken")
 			use_symlinks = int(config.get("Symlinks", "use_symlinks"))
 			symdir = str(config.get("Symlinks", "symdir"))
+			tvdbapi = str(config.get("Tvdb","tvdbapi"))
 
 
 		except (configparser.NoOptionError, ValueError):
