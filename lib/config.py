@@ -93,6 +93,8 @@ else:
 			aspush_title = str(config.get("Autosub", "push_title"))
 			aspush_msg = str(config.get("Autosub", "push_msg"))
 			aspush_sound = str(config.get("Autosub", "push_sound"))
+			use_image_push = int(config.get("Autosub", "use_image_push"))
+			temp_image = str(config.get("Autosub", "temp_image"))
 			tm_host = config.get("Transmission", "host")
 			tm_port = config.get("Transmission", "port")
 			tm_user = config.get("Transmission", "username")

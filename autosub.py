@@ -15,6 +15,8 @@ import lib.config as config
 import lib.emailer as emailer
 import lib.api as api
 import lib.misc as misc
+import requests
+import shutil
 sys.excepthook = misc.log_uncaught_exceptions
 
 indexer, fork = api.sick_call_initial()
@@ -43,7 +45,7 @@ m = getname.search(subandpath)
 if m:
 	findshow = m.group(1)
 logger.logging.info("Found showname: " + findshow)
-
+'''
 if config.muxing:
 	# muxing vid and sub in new file (vid.nl.mkv)
 	p = subprocess.Popen(['mkvmerge', '-o', outputfileandpath, '--language', '-1:eng', vidandpath, '--language', '0:nld', subandpath], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -61,7 +63,7 @@ if config.muxing:
 		os.remove(subandpath)
 		logger.logging.error("subtitle muxing failed, removing possibly faulty subtitle...")
 		status = "Failed to mux "
-
+'''
 logger.logging.debug("Opening connection to thetvdb.com")
 tvdbid, showname, imglink = api.tvdb_call(findshow)
 logger.logging.debug("Showname found on thetvdb.com: " + showname)
@@ -131,12 +133,18 @@ if config.use_kodi and config.muxing and status is "":
 
 args = {'showname': status + showname, 'season': int(season), 'epnum': int(epnum), 'epname': epname, 'lang': lang}
 pushtitle, pushmsg = misc.replace(config.aspush_title, config.aspush_msg, **args)
+if config.use_image_push:
+	r = requests.get("https://www.thetvdb.com/banners/" + imglink, stream=True)
+	if r.status_code == 200:
+		with open(config.temp_image, 'wb') as f:
+			r.raw.decode_content = True
+			shutil.copyfileobj(r.raw, f)
 
 if config.use_pushover:
 	if not config.asapp_token:
 		config.asapp_token = config.app_token
 		logger.logging.info("No separate app token found for Autosub, using the default. (See Pushover.net how to add your own app token)")
-	push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'sound': config.aspush_sound}
+	push_info = {'potitle': pushtitle, 'pomsg': pushmsg, 'sound': config.aspush_sound, "image": config.temp_image}
 	api.pushover(config.user_key, config.asapp_token, config.push_device, **push_info)
 if config.use_pushbullet:
 	push_info = pushtitle, pushmsg, config.deviceid, config.aschanneltag
@@ -151,5 +159,6 @@ if config.use_nma:
 	else:
 		error = res[config.nma_api]['message'].encode('ascii')
 		logger.logging.error("NMA Notification failed: " + error)
-
+if config.use_image_push:
+	os.remove(config.temp_image)
 misc.access_log_for_all()

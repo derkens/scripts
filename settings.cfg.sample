@@ -123,6 +123,8 @@ channeltag=
 push_title=Download Finished:
 push_msg={SHOW} - {SEASON}x{EPIS} - {EPNAME} - {LANG}
 push_sound=
+use_image_push=0
+temp_image=         ;path and name of temp image
 
 [Transmission]
 deletetorrents=0 ;this setting enables the removal of the torrent from transmission torrent list.
