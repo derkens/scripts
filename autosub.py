@@ -15,7 +15,7 @@ import lib.config as config
 import lib.emailer as emailer
 import lib.api as api
 import lib.misc as misc
-import requests
+import lib.requests as requests
 import shutil
 sys.excepthook = misc.log_uncaught_exceptions
 
